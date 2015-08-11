@@ -1,0 +1,5 @@
+/www/application/config/credentials.php
+/www/application/config/database-prod.php
+/www/application/config/database.php
+/www/application/logs/*.php
+Thumbs.db
