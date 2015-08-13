@@ -297,7 +297,7 @@ class Api extends CI_Controller {
 				);
 			}
 			usort($nearby_result, "_nearbytransports_result_compare");
-			$this->Logging_model->logStatistic($apikey, "NEARBYTRANSPORTS", '$start' . sizeof($nearby_result));		
+			$this->Logging_model->logStatistic($apikey, "NEARBYTRANSPORTS", "$start/" . sizeof($nearby_result));		
 			$json_output = array(
 					'status' => 'ok',
 					'nearbytransports' => $nearby_result

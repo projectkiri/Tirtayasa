@@ -3,3 +3,4 @@
 /www/application/config/database.php
 /www/application/logs/*.php
 Thumbs.db
+/www/application/logs/*.gz
