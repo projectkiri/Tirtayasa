@@ -24,14 +24,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				<div class="small-5 columns">
 					<select id="regionselect">
 					<?php foreach ($regions as $key => $value): ?>
-						<option value="<?=$key?>"><?=$value['name']?></option>
+						<option value="<?=$key?>"<?=($region==$key?' selected':'')?>><?=$value['name']?></option>
 					<?php endforeach; ?>
 					</select>
 				</div>
 				<div class="small-7 columns">
 					<select id="localeselect">
 					<?php foreach ($languages as $key => $value): ?>
-						<option value="<?=$key?>"><?=$value['name']?></option>
+						<option value="<?=$key?>"<?=($locale==$key?' selected':'')?>><?=$value['name']?></option>
 					<?php endforeach; ?>
 					</select>
 				</div>
@@ -100,21 +100,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	<script src="/ext/foundation/js/foundation/foundation.alert.js"></script>
 	<script src="/ext/openlayers/ol.js"></script>
 	<script>
-		var input_text = [], coordinates = [];
-		input_text['start'] = null;
-		coordinates['start'] = null;
-		input_text['finish'] = null;
-		coordinates['finish'] = null;
-		var locale='en';
-		var region='bdo';
-		var region = 'bdo';
-		var regions = {
-			bdo: {center: '-6.91474,107.60981', zoom: 12},
-			depok: {center: '-6.3878486,106.8177975', zoom: 13},
-			cgk: {center: '-6.21154,106.84517', zoom: 11},
-			sub: {center: '-7.27421,112.71908', zoom: 12},
-			mlg: {center: '-7.9812985,112.6319264', zoom: 13}
-		};
+		var region='<?=$region?>';
 		$(document).foundation();
 	</script>
 	<script src="/mainpage/js/protocol.js"></script>

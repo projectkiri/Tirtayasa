@@ -1,9 +1,18 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-?>var map;
+?>
+var input_text = {
+	'start': null,
+	'finish': null
+};
+var coordinates = {
+	'start': null,
+	'finish': null
+};
+var regions = <?=json_encode($this->config->item('regions'))?>;
+var map;
 var input = document.getElementById("startInput");
 var output = document.getElementById("finishInput");
-//var resultOverlays = [];
 var trackStrokeStyles = [
 	new ol.style.Style({
 		stroke: new ol.style.Stroke({
@@ -202,7 +211,7 @@ $(document).ready(function() {
 			protocol.findRoute(
 					coordinates['start'],
 					coordinates['finish'],
-					locale,
+					'<?=$locale?>',
 					function(results) {
 						if (results.status === 'ok') {
 							showRoutingResults(results);
@@ -531,7 +540,7 @@ $(document).ready(function() {
 	function updateRegion(newRegion, updateCookie) {
 		region = newRegion;
 		setCookie('region', region);
-		var point = stringToLonLat(regions[region].center);
+		var point = [regions[region].lon, regions[region].lat];
 		map.getView().setCenter(ol.proj.transform(point, 'EPSG:4326', 'EPSG:3857'));
 		map.getView().setZoom(regions[region].zoom);
 	}
