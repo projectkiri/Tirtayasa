@@ -35,7 +35,7 @@ var walkStrokeStyle = new ol.style.Style({
 $(document).ready(function() {
 	var protocol = new CicaheumLedengProtocol("02428203D4526448", function(message) {
 		clearSecondaryAlerts();
-		showAlert(messageConnectionError, 'alert');
+		showAlert('<?=$this->lang->line('Connection problem')?>', 'alert');
 	});
 	
 	var mapLayer = new ol.layer.Tile(
@@ -128,7 +128,7 @@ $(document).ready(function() {
 		});
 		placeSelect.change(function() {
 			clearAlerts();
-			showAlert(messagePleaseWait, 'secondary');
+			showAlert('<img src="images/loading.gif" alt="... "/> ' + '<?=$this->lang->line('Please wait')?>...', 'secondary');
 			coordinates[sfValue] = $(this).val();
 			checkCoordinatesThenRoute(coordinates);
 		});
@@ -208,7 +208,7 @@ $(document).ready(function() {
 							showRoutingResults(results);
 						} else {
 							clearSecondaryAlerts();
-							showAlert(messageConnectionError, 'alert');
+							showAlert('<?=$this->lang->line('Connection problem')?>', 'alert');
 						}
 					});
 		}
@@ -256,13 +256,13 @@ $(document).ready(function() {
 			}
 		});
 		if (cancel) {
-			showAlert(messageFillBoth, 'alert');			
+			showAlert('<?=$this->lang->line('Fill both')?>', 'alert');			
 			return;
 		}
 		
 		clearAlerts();
 		clearRoutingResultsOnTable();
-		showAlert(messagePleaseWait, 'secondary');
+		showAlert('<img src="images/loading.gif" alt="... "/> ' + '<?=$this->lang->line('Please wait')?>...', 'secondary');
 		
 		var completedLatLon = 0;
 		$.each(['start', 'finish'], function(sfIndex, sfValue) {
@@ -295,12 +295,12 @@ $(document).ready(function() {
 									} else {
 										clearSecondaryAlerts();
 										clearRoutingResultsOnMap();
-										showAlert(placeInput.val() + messageNotFound, 'alert');
+										showAlert(placeInput.val() + ' <?=$this->lang->line('not found')?>', 'alert');
 									}
 								} else {
 									clearSecondaryAlerts();
 									clearRoutingResultsOnMap();
-									showAlert(messageConnectionError, 'alert');
+									showAlert('<?=$this->lang->line('Connection problem')?>', 'alert');
 								}
 							});
 				} else {
@@ -373,20 +373,20 @@ $(document).ready(function() {
 		clearRoutingResultsOnTable();
 		clearSecondaryAlerts();
 		var kiriURL = encodeURIComponent('http://kiri.travel?start=' + encodeURIComponent($('#startInput').val()) + '&finish=' + encodeURIComponent($('#finishInput').val()) + '&region=' + region);
-		var kiriMessage = encodeURIComponent(messageITake.replace('%finish%', $('#finishInput').val()).replace('%start%', $('#startInput').val()));
+		var kiriMessage = encodeURIComponent('<?=$this->lang->line("I take public transport")?>'.replace('%finish%', $('#finishInput').val()).replace('%start%', $('#startInput').val()));
 		var sectionContainer = $('<div></div>');
 		var temp1 = $('<dl class="tabs" data-tab=""></dl>');
 		var temp2 = $('<div class="tabs-content"></div>');
 		$('#routingresults').append(sectionContainer);
 		$.each(results.routingresults, function(resultIndex, result) {
 			var resultHTML1 = resultIndex === 0 ? '<dd class="active">' : '<dd class="">';
-			resultHTML1 += '<a href="#panel1-' + (resultIndex + 1) + '">' + (result.traveltime === null ? messageOops : result.traveltime) + '</a></dd>';
+			resultHTML1 += '<a href="#panel1-' + (resultIndex + 1) + '">' + (result.traveltime === null ? '<?=$this->lang->line('Oops')?>' : result.traveltime) + '</a></dd>';
 			var resultHTML2 = '<div id="panel1-' + (resultIndex + 1)+'"';
 			resultHTML2 += resultIndex === 0 ? ' class="content active"><table>' : ' class="content"><table>';
 			$.each(result.steps, function (stepIndex, step) {
 				resultHTML2 += '<tr><td><img src="../images/means/' + step[0]+ '/' + step[1] + '.png" alt="' + step[1] + '"/></td><td>' + step[3];
 				if (step[4] != null) {
-					resultHTML2 += ' <a class="ticket" href="' + step[4] + '" target="_blank">' + messageBuyTicket + '</a></td></tr>';
+					resultHTML2 += ' <a class="ticket" href="' + step[4] + '" target="_blank"><?=$this->lang->line('BUY TICKET')?></a></td></tr>';
 				}
 				if (step[5] != null) {
 					resultHTML2 += ' <a href="' + step[5] + '" target="_blank"><img src="images/edit.png" class="fontsize" alt="edit"/></a></td></tr>';					
@@ -394,7 +394,7 @@ $(document).ready(function() {
 				resultHTML2 += '</td></tr>';
 			});
 			resultHTML2 += "<tr><td class=\"center\" colspan=\"2\">";
-			resultHTML2 += '<a href="https://youtu.be/jDFePujA8Kk" target="_blank" style="font-size: small;">' + messageFixTracks + "</a><br/><br/>\n";
+			resultHTML2 += '<a href="https://youtu.be/jDFePujA8Kk" target="_blank" style="font-size: small;">' + '<?=$this->lang->line("Route broken? Help fix it!")?>' + "</a><br/><br/>\n";
 			resultHTML2 += "<a target=\"_blank\" href=\"https://www.facebook.com/sharer/sharer.php?u=" + kiriURL + "\"><img alt=\"Share to Facebook\" src=\"images/fb-large.png\"/></a> &nbsp; &nbsp; ";
 			resultHTML2 += "<a target=\"_blank\" href=\"https://twitter.com/intent/tweet?via=kiriupdate&text=" + kiriMessage + "+" + kiriURL + "\"><img alt=\"Tweet\" src=\"images/twitter-large.png\"/></a>";
 			resultHTML2 += "</td></tr>\n";

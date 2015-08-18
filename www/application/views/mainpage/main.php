@@ -64,7 +64,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			</div>
 			<div class="row">
 				<div class="small-6 columns">
-					<a href="#" class="small button expand" id="findbutton"><strong>Find!</strong></a>
+					<a href="#" class="small button expand" id="findbutton"><strong><?=$this->lang->line('Find')?>!</strong></a>
 				</div>
 				<div class="small-3 columns">
 					<a href="#" class="small button secondary expand" id="swapbutton"><img src="images/swap.png" alt="swap"></a>
@@ -90,7 +90,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				</div>
 			</div>
 			<div class="row">
-								</div>
+			</div>
 		</div>
 		<div id="map" class="large-9 large-pull-3 columns"></div>
 	</div>
@@ -107,16 +107,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		coordinates['finish'] = null;
 		var locale='en';
 		var region='bdo';
-		var messageBuyTicket = 'BUY TICKET';
-		var messageConnectionError = 'Connection problem';
-		var messageFillBoth = 'Fill both "From" and "To"!';
-		var messageNotFound = ' not found';
-		var messageOops = 'Oops';
-		var messageOrderTicketHere = 'order ticket';
-		var messagePleaseWait = '<img src="images/loading.gif" alt="... "/> ' + 'Please wait...';
-		var messageITake = 'I take public transport from %start% to %finish%!';
-		var messageFixTracks = 'Route broken? Help fix it!';
-		var messagePleaseTakeSurvey = 'Thanks to participate in quality survey #2 (3 minutes)';
 		var region = 'bdo';
 		var regions = {
 			bdo: {center: '-6.91474,107.60981', zoom: 12},
@@ -128,7 +118,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		$(document).foundation();
 	</script>
 	<script src="/mainpage/js/protocol.js"></script>
-	<script src="/mainpage/js/main.js"></script>
+	<script src="/mainpage/js/main.js?locale=<?=$locale?>"></script>
 	<script>
 		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
