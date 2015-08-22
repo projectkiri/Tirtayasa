@@ -21,12 +21,21 @@ class Mainpage extends CI_Controller {
 			$region = $this->_getValidatedRegion($this->input->get('region'));
 			$this->input->set_cookie('region', $region, time() + 3600 * 24 * 365);
 		}
-	
+
+		// Setup Youtube code
+		$youtube_code = $this->input->get('yt');
+		$youtube_label = null;
+		if (!is_null($youtube_code) && !array_key_exists($youtube_code, $this->lang->line('label-youtube'))) {
+			$youtube_code = 'default';
+			$youtube_label = $this->lang->line('label-youtube')[$youtube_code];
+		}
+
 		$data = array(
 			'regions' => $this->config->item('regions'),
 			'region' => $region,
 			'languages' => $this->config->item('languages'),
-			'locale' => $locale
+			'locale' => $locale,
+			'youtube' => is_null($youtube_code) ? null : array('code' => $youtube_code, 'label' => $youtube_label)
 		);
 		$this->load->view('mainpage/main', $data);
 	}

@@ -9,6 +9,10 @@ $lang['url-about'] = 'http://static.kiri.travel/en-about';
 $lang['url-apps'] = 'http://static.kiri.travel/en-apps';
 $lang['url-feedback'] = 'http://static.kiri.travel/en-feedback';
 $lang['url-legal'] = 'http://static.kiri.travel/en-legal';
+$lang['label-youtube'] = array(
+	'cT2ao_r861k' => 'KIRI Smart Ticketing',
+	'jDFePujA8Kk' => 'Angkot.web.id integration',
+	'default' => 'KIRI is not affiliated with this video (but you can watch anyway!)');
 
 $lang['About KIRI'] = 'About KIRI';
 $lang['BUY TICKET'] = 'BUY TICKET';
