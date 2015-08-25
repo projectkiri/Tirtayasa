@@ -30,12 +30,35 @@ class Mainpage extends CI_Controller {
 			$youtube_label = $this->lang->line('label-youtube')[$youtube_code];
 		}
 
+		// Setup start/finish autofill
+		$endpoint = array(
+			'start' => $this->input->get('start'),
+			'finish' => $this->input->get('finish')
+		);
+		foreach (array('start', 'finish') as $endpoint) {
+			$startfinish = $this->input->get($endpoint);
+			if (!is_null($startfinish)) {
+				if (preg_match('/^(.+)\\/(-?[0-9.]+,-?[0-9.]+)$/', $startfinish, $matches)) {
+					$textual_endpoint [$endpoint] = $matches[1];
+					$coordinate_endpoint [$endpoint] = $matches[2];
+				} else {
+					$textual_endpoint [$endpoint] = $startfinish;
+					$coordinate_endpoint [$endpoint] = null;
+				}
+			} else {
+				$textual_endpoint [$endpoint] = null;
+				$coordinate_endpoint [$endpoint] = null;
+			}
+		}
+
 		$data = array(
 			'regions' => $this->config->item('regions'),
 			'region' => $region,
 			'languages' => $this->config->item('languages'),
 			'locale' => $locale,
-			'youtube' => is_null($youtube_code) ? null : array('code' => $youtube_code, 'label' => $youtube_label)
+			'youtube' => is_null($youtube_code) ? null : array('code' => $youtube_code, 'label' => $youtube_label),
+			'inputText' => array('start' => $textual_endpoint['start'], 'finish' => $textual_endpoint['finish']),
+			'inputCoordinate' => array('start' => $coordinate_endpoint['start'], 'finish' => $coordinate_endpoint['finish'])
 		);
 		$this->load->view('mainpage/main', $data);
 	}

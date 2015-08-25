@@ -13,13 +13,13 @@ class Scheduled extends CI_Controller {
 		$this->output->set_header('Cache-control: no-cache');
 		$this->output->set_header('Pragma: no-cache');
 		try {
-			if ($secret == $this->config->item('scheduled-secret')) {
+			if ($secret === $this->config->item('scheduled-secret')) {
 				$yesterday = getdate(time() - 60 * 60 * 24);
 				$day = $yesterday['mday'];
 				$month = $yesterday['mon'];
 				$year = $yesterday['year'];
 				$result = $this->db->query("INSERT INTO apiusagedaily(count, date, verifier, type) SELECT COUNT(verifier) as count, '$year-$month-$day', verifier, type FROM statistics WHERE DAY(timeStamp) = $day AND MONTH(timeStamp) = $month AND YEAR(timeStamp) = $year GROUP BY verifier, type"); 
-				if ($result == FALSE) {
+				if ($result === FALSE) {
 					throw new Exception("Daily: Database insert error");
 				}
 				$this->output->set_output('OK');
@@ -38,7 +38,7 @@ class Scheduled extends CI_Controller {
 		$this->output->set_header('Cache-control: no-cache');
 		$this->output->set_header('Pragma: no-cache');
 		try {
-			if ($secret == $this->config->item('scheduled-secret')) {
+			if ($secret === $this->config->item('scheduled-secret')) {
 				// export last month
 				$today = getdate();
 				$month = $today['mon'] - 1;
@@ -48,7 +48,7 @@ class Scheduled extends CI_Controller {
 					$year--;
 				}
 				$result = $this->db->query("SELECT statisticId, verifier, timeStamp, type, additionalInfo FROM statistics WHERE MONTH(timeStamp)=$month AND YEAR(timeStamp)=$year"); 
-				if ($result == FALSE) {
+				if ($result === FALSE) {
 					throw new Exception("Monthly: select statistics error");
 				}
 				$month = sprintf("%02d", $month);
@@ -69,13 +69,13 @@ class Scheduled extends CI_Controller {
 					$year--;
 				}
 				$result = $this->db->query("DELETE FROM statistics WHERE MONTH(timeStamp)=$month AND YEAR(timeStamp)=$year"); 
-				if ($result == FALSE) {
+				if ($result === FALSE) {
 					throw new Exception("Monthly: delete statistics error");
 				}
 
 				// clean cache
 				$result = $this->db->query("DELETE FROM cache WHERE timestamp < (NOW() - INTERVAL 3 MONTH)"); 
-				if ($result == FALSE) {
+				if ($result === FALSE) {
 					throw new Exception("Monthly: clean cache error");
 				}		
 				$this->output->set_output('OK');

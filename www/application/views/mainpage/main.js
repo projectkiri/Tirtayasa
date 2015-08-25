@@ -1,18 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
-var input_text = {
-	'start': null,
-	'finish': null
-};
-var coordinates = {
-	'start': null,
-	'finish': null
-};
 var regions = <?=json_encode($this->config->item('regions'))?>;
 var map;
-var input = document.getElementById("startInput");
-var output = document.getElementById("finishInput");
 var trackStrokeStyles = [
 	new ol.style.Style({
 		stroke: new ol.style.Stroke({

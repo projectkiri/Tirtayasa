@@ -66,21 +66,21 @@ class Api extends CI_Controller {
 		$results = array();
 		if ($version >= 2) {
 			$alternatives = $this->config->item('routing-alternatives');
-			$count = $presentation == 'mobile' ? 1 : sizeof($alternatives);
+			$count = $presentation === 'mobile' ? 1 : sizeof($alternatives);
 			for ($i = 0; $i < $count; $i++) {
 				$url = $this->config->item('url-menjangan') . "/?start=$start&finish=$finish";
 				$url .= '&' . 'mw' . '=' . $alternatives[$i]['mw'];
 				$url .= '&' . 'wm' . '=' . $alternatives[$i]['wm'];
 				$url .= '&' . 'pt' . '=' . $alternatives[$i]['pt'];
 				$result = file_get_contents($url);
-				if ($result == FALSE) {
+				if ($result === FALSE) {
 					throw new Exception("There's an error while reading the menjangan response.");
 				}
 				$results[$result] = true;
 			}		
 		} else {
 			$result = file_get_contents($this->config->item('url-menjangan') . "/?start=$start&finish=$finish");
-			if ($result == FALSE) {
+			if ($result === FALSE) {
 				throw new Exception("There's an error while reading the menjangan response.");
 			}
 			$results[$result] = true;
@@ -92,13 +92,13 @@ class Api extends CI_Controller {
 			$steps = explode("\n", $result);
 			foreach ($steps as $step) {
 				$step = trim($step);
-				if ($step == '') {
+				if ($step === '') {
 					// Could be the last line, ignore if empty.
 					continue;
 				}
 				// Path is not found
-				if ($step == 'none') {
-					if (sizeof($results) == 1) {
+				if ($step === 'none') {
+					if (sizeof($results) === 1) {
 						// There is not other alternative
 						$route_output[] = array("none", "none", array($start, $finish), $this->lang->line('Route not found'));
 						$travel_time = null;
@@ -117,10 +117,10 @@ class Api extends CI_Controller {
 				$to = $points[sizeof($points) - 1];
 				// Replace keywords with real location, then construct the detailed path
 				for ($i = 0, $size = sizeof($points); $i < $size; $i++) {
-					if ($points[$i] == 'start') {
+					if ($points[$i] === 'start') {
 						$points[$i] = $start;
 					}
-					if ($points[$i] == 'finish') {
+					if ($points[$i] === 'finish') {
 						$points[$i] = $finish;
 					}
 				}
@@ -129,11 +129,11 @@ class Api extends CI_Controller {
 				$humanized_from = $this->Api_model->humanizePoint($from);
 				$humanized_to = $this->Api_model->humanizePoint($to);
 				// Convert whole path to human readable form
-				if ($means == 'walk') {
+				if ($means === 'walk') {
 					// Remove uneccessary information if not needed.
-					if ($humanized_from == $humanized_to) {
+					if ($humanized_from === $humanized_to) {
 						// When we're in mobile, skip this step (not really necessary)
-						if ($presentation == 'mobile') {
+						if ($presentation === 'mobile') {
 							$humanreadable = null;
 						} else {
 							$humanreadable = $this->lang->line('Walk slightly at');
@@ -141,7 +141,7 @@ class Api extends CI_Controller {
 							$humanreadable = str_replace('%distance', $this->Api_model->formatDistance($distance), $humanreadable);
 						}
 					} else {
-						if ($presentation == 'mobile') {
+						if ($presentation === 'mobile') {
 							$humanized_from .= ' %fromicon';
 							$humanized_to .= ' %toicon';
 						}
@@ -157,7 +157,7 @@ class Api extends CI_Controller {
 					$trackDetail = $this->Api_model->getTrackDetails($means, $means_detail);
 
 					// Construct the human readable form of the walk
-					if ($presentation == 'mobile') {
+					if ($presentation === 'mobile') {
 						$humanized_from .= ' %fromicon';
 						$humanized_to .= ' %toicon';
 					}
@@ -174,7 +174,7 @@ class Api extends CI_Controller {
 					} else {
 						$booking_url = null;
 					}
-					if (strpos($trackDetail->internalInfo, 'angkotwebid:') == 0) {
+					if (strpos($trackDetail->internalInfo, 'angkotwebid:') === 0) {
 						$token = explode(':', $trackDetail->internalInfo);
 						$editor_url = $this->config->item('url-angkotwebid-prefix') . $token[1] . $this->config->item('url-angkotwebid-suffix');
 					} else {
@@ -182,7 +182,7 @@ class Api extends CI_Controller {
 					}
 
 					// compatibility patch for older 3rd party apps
-					if ($means == 'bdo_angkot' && $version < 3) {
+					if ($means === 'bdo_angkot' && $version < 3) {
 						$means = 'angkot';
 					}
 				}
@@ -239,14 +239,14 @@ class Api extends CI_Controller {
 			$city_radius = $regions[$region]['radius'];
 			$full_url = $this->config->item('url-searchplace') . '?key=' . $this->config->item('google-server-key') . "&location=$city_lat,$city_lon&radius=$city_radius&keyword=$querystring&types=establishment|route&sensor=true";
 			$result = file_get_contents($full_url);
-			if ($result == FALSE) {
+			if ($result === FALSE) {
 				throw new Exception("There's an error while reading the places response ($full_url).");
 			}
 		
 			$json_result = json_decode($result, true);
-			if ($json_result['status'] == 'OK' || $json_result['status'] == 'ZERO_RESULTS') {
+			if ($json_result['status'] === 'OK' || $json_result['status'] === 'ZERO_RESULTS') {
 				$search_result = array();
-				if ($json_result['status'] == 'ZERO_RESULTS') {
+				if ($json_result['status'] === 'ZERO_RESULTS') {
 					$this->Logging_model->logError('Place search not found: \"$querystring\"');
 					$size = 0;
 				} else {
@@ -284,7 +284,7 @@ class Api extends CI_Controller {
 			$lines = explode("\n", file_get_contents($this->config->item('url-menjangan') . "/?start=$start"));
 			$nearby_result = array();
 			foreach ($lines as $line) {
-				if (strlen(trim($line)) == 0) {
+				if (strlen(trim($line)) === 0) {
 					continue;
 				}
 				list($trackTypeId, $trackId, $distance) = explode("/", $line);

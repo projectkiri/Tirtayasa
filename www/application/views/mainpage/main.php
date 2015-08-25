@@ -114,6 +114,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		<?php if (!is_null($youtube)): ?>
 			$('#youtubepromo').foundation('reveal', 'open');
 		<?php endif; ?>
+		var input_text = <?=json_encode($inputText)?>;
+		var coordinates = <?=json_encode($inputCoordinate)?>;
 	</script>
 	<script src="/mainpage/js/protocol.js"></script>
 	<script src="/mainpage/js/main.js?locale=<?=$locale?>"></script>
