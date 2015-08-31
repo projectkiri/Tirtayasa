@@ -304,7 +304,7 @@ $(document).ready(function() {
 							});
 				} else {
 					// Coordinates are already available, skip searching
-					checkCoordinatesThenRoute(coordinates);
+					completedLatLon++;
 				}
 			}
 		});
