@@ -12,6 +12,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <link rel="stylesheet" href="/ext/foundation/css/foundation.min.css" />
 <link rel="stylesheet" href="/ext/openlayers/ol.css" />
 <link rel="stylesheet" href="/stylesheets/styleIndex.css" />
+<link rel="icon" href="/images/favicon.ico" type="image/x-icon">
 <script src="/ext/foundation/js/vendor/modernizr.js"></script>
 </head>
 <body>
