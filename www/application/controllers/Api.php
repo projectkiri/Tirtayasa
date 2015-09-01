@@ -247,7 +247,7 @@ class Api extends CI_Controller {
 			if ($json_result['status'] === 'OK' || $json_result['status'] === 'ZERO_RESULTS') {
 				$search_result = array();
 				if ($json_result['status'] === 'ZERO_RESULTS') {
-					$this->Logging_model->logError('Place search not found: \"$querystring\"');
+					$this->Logging_model->logError("Place search not found: \"$querystring\"");
 					$size = 0;
 				} else {
 					$size = min(sizeof($json_result['results']), $this->config->item('searchplace-maxresult'));
@@ -270,7 +270,9 @@ class Api extends CI_Controller {
 				//input log statistic
 				$this->Logging_model->logStatistic("$apikey", "SEARCHPLACE",  "$querystring/$size");
 				// Store to cache
-				$this->Cache_model->put('searchplace', "$region/$querystring", json_encode($json_output));
+				if ($size > 0) {
+					$this->Cache_model->put('searchplace', "$region/$querystring", json_encode($json_output));
+				}
 			} else {
 				throw new Exception('Place Search returned error: ' . $json_result['status'] . " (for this request: $full_url)");
 			}
