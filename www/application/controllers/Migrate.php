@@ -6,7 +6,7 @@ class Migrate extends CI_Controller {
         		$this->load->config('migration');
         		if ($this->config->item('migration_enabled') === TRUE) {
 	                $this->load->library('migration');
-
+	                set_time_limit(300);
 	                if ($this->migration->latest() === FALSE) {
 	                	show_error($this->migration->error_string());
 	                } else {
