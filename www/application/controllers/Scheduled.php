@@ -73,11 +73,6 @@ class Scheduled extends CI_Controller {
 					throw new Exception("Monthly: delete statistics error");
 				}
 
-				// clean cache
-				$result = $this->db->query("DELETE FROM cache WHERE timestamp < (NOW() - INTERVAL 3 MONTH)"); 
-				if ($result === FALSE) {
-					throw new Exception("Monthly: clean cache error");
-				}		
 				$this->output->set_output('OK');
 			} else {
 				$this->output->set_status_header('403');
