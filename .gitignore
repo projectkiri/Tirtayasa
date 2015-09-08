@@ -5,3 +5,5 @@
 Thumbs.db
 /www/application/logs/*.gz
 /www/application/cache/*
+/www/application/config/credentials-prod.php
+/www/bukitjarian/log/error.log
