@@ -85,8 +85,8 @@ $(document).ready(function() {
 	geolocation.once('change', function(evt) {
 		var closestKey = null, closestDistance = null;
 		$.each(regions, function(key, value) {
-			var distance = computeDistance(ol.proj.transform(geolocation.getPosition(), 'EPSG:3857', 'EPSG:4326'), stringToLonLat(value.center));
-			if (closestDistance == null || distance < value.radius) {
+			var distance = computeDistance(ol.proj.transform(geolocation.getPosition(), 'EPSG:3857', 'EPSG:4326'), [value.lon, value.lat]);
+			if (closestDistance == null || distance < value.radius / 1000) {
 				closestDistance = distance;
 				closestKey = key;
 			}
