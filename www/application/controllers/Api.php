@@ -28,19 +28,26 @@ class Api extends CI_Controller {
 					$this->_searchplace($version, $apikey);
 					break;
 				case 'reporterror':
-					throw new Exception('This mode is no longer supported.');
+					throw new Exception('501 This mode is no longer supported.');
 				case 'nearbytransports':
 					$this->_nearbytransports($version, $apikey);
 					break;
 				default:
-					throw new Exception('Mode not understood: ' . $mode);
+					throw new Exception('400 Mode not understood: ' . $mode);
 			}
 		} catch (Exception $e) {
-			$this->Logging_model->logError($e->getMessage());
+			$message = $e->getMessage();
+			$this->Logging_model->logError($message);
+			if (preg_match('/^([1-5][0-9][0-9]) (.+)$/', $message, $matches) === 1) {
+				$httpcode = $matches[1];
+				$message = $matches[2];
+			} else {
+				$httpcode = '500';
+			}
 			$this->Api_model->outputJson(array(
 				'status' => 'error',
-				'message' => $e->getMessage()
-			), $version >= 4 ? '500' : '200');
+				'message' => $message
+			), $version >= 4 ? $httpcode : '200');
 		}
 	}
 
@@ -51,7 +58,7 @@ class Api extends CI_Controller {
 
 		$language = $this->config->item('languages')[$locale];
 		if (is_null($language))	{
-			throw new Exception("Locale not found: $locale");
+			throw new Exception("400 Locale not found: $locale");
 		}
 		$this->lang->load('tirtayasa', $language['file']);
 
@@ -304,7 +311,7 @@ class Api extends CI_Controller {
 			);
 			$this->Api_model->outputJson($json_output);
 		} else {
-			throw new Exception("Nearby transit is not supported in version 1");
+			throw new Exception("400 Nearby transit is not supported in version 1. Use higher version");
 		}
 	}
 }
