@@ -26,7 +26,7 @@ class Cache_model extends CI_Model {
 	 * Put into cache, log warning if duplicate.
 	 * @param string $type the cache type
 	 * @param string $key the cache key
-	 * @param string $value cache value
+	 * @param mixed $value cache value
 	 */
 	public function put($type, $key, $value) {
 		if (!$this->cache->save(urlencode($key) . '.' . urlencode($type), $value, 60 * 60 * 24 * 30 * 3)) {

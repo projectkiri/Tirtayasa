@@ -17,14 +17,19 @@ class Api_model extends CI_Model {
 	}
 
 	public function checkApiKey($apikey) {
-		$query = $this->db->query('SELECT verifier, ipFilter FROM apikeys WHERE verifier = ?', array($apikey));
-		if ($query->num_rows() == 0) {
-			throw new Exception("API key is not recognized: $apikey");
-		} else {
-			$row = $query->row();
-			if (!is_null($row->ipFilter) && $this->input->server('REMOTE_ADDR') == $row->ipFilter) {
-				throw new Exception("IP address is not accepted for this API key.");
+		$this->load->model('Cache_model');
+		$row = $this->Cache_model->get('apikey', $apikey);
+		if (is_null($row)) {
+			$this->load->database();		
+			$query = $this->db->query('SELECT verifier, ipFilter FROM apikeys WHERE verifier = ?', array($apikey));
+			if ($query->num_rows() == 0) {
+				throw new Exception("API key is not recognized: $apikey");
 			}
+			$row = $query->row();
+			$this->Cache_model->put('apikey', $apikey, $row);
+		}
+		if (!is_null($row->ipFilter) && $this->input->server('REMOTE_ADDR') == $row->ipFilter) {
+			throw new Exception("IP address is not accepted for this API key.");
 		}
 	}
 
@@ -90,6 +95,7 @@ class Api_model extends CI_Model {
 	}
 
 	public function getTrackDetails($means, $meansDetail) {
+		$this->load->database();		
 		$query = $this->db->query('SELECT tracks.trackname AS trackName, tracktypes.name AS trackTypeName, trackTypes.url as ticketURL, tracks.extraParameters AS extraParameters, tracks.internalInfo AS internalInfo, tracktypes.speed AS speed FROM tracks JOIN tracktypes ON tracktypes.trackTypeId=? AND tracks.trackTypeId=? AND tracks.trackid=?', array($means, $means, $meansDetail));
 		if ($query->num_rows() == 0) {
 			throw new Exception("Can't retrieve the track name from database: $means/$meansDetail");

@@ -5,10 +5,8 @@ class Api extends CI_Controller {
 
 	public function __construct() {
 		parent::__construct();
-		$this->load->database();
 		$this->load->model('Api_model');
 		$this->load->model('Cache_model');
-		$this->load->model('Logging_model');
 		$this->load->config('tirtayasa');
 		$this->load->config('credentials');
 	}

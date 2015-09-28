@@ -6,7 +6,6 @@ class Scheduled extends CI_Controller {
 		parent::__construct();
 		$this->load->database();
 		$this->load->config('credentials');
-		$this->load->model('Logging_model');		
 	}
 
 	public function daily($secret) {
