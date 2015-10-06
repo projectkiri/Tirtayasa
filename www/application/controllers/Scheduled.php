@@ -54,7 +54,7 @@ class Scheduled extends CI_Controller {
 				
 				$csvfile = "application/logs/statistics-$year-$month.csv.gz";
 				$output = gzopen($csvfile, 'w');
-				while ($row = $result->row()) {
+				foreach ($result->result() as $row) {
 					fputcsv($output, array($row->statisticId, $row->verifier, $row->timeStamp, $row->type, $row->additionalInfo));
 				}
 				gzclose($output);
