@@ -46,11 +46,12 @@ class Scheduled extends CI_Controller {
 					$month += 12;
 					$year--;
 				}
-				$result = $this->db->query("SELECT statisticId, verifier, timeStamp, type, additionalInfo FROM statistics WHERE MONTH(timeStamp)=$month AND YEAR(timeStamp)=$year"); 
+				$month = sprintf("%02d", $month);
+                                $localdb = $this->load->database('local', TRUE);
+				$result = $localdb->query("SELECT statisticId, verifier, timeStamp, type, additionalInfo FROM statistics WHERE strftime('%m', timeStamp)='$month' AND strftime('%y', timeStamp)='$year'"); 
 				if ($result === FALSE) {
 					throw new Exception("Monthly: select statistics error");
 				}
-				$month = sprintf("%02d", $month);
 				
 				$csvfile = "application/logs/statistics-$year-$month.csv.gz";
 				$output = gzopen($csvfile, 'w');
@@ -67,7 +68,9 @@ class Scheduled extends CI_Controller {
 					$month += 12;
 					$year--;
 				}
-				$result = $this->db->query("DELETE FROM statistics WHERE MONTH(timeStamp)=$month AND YEAR(timeStamp)=$year"); 
+                                $month = sprintf("%02d", $month);
+
+                                    $result = $localdb->query("DELETE FROM statistics WHERE strftime('%m', timeStamp)='$month' AND strftime('%y', timeStamp)='$year'"); 
 				if ($result === FALSE) {
 					throw new Exception("Monthly: delete statistics error");
 				}

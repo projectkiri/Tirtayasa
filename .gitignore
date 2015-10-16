@@ -7,3 +7,5 @@ Thumbs.db
 /www/application/cache/*
 /www/application/config/credentials-prod.php
 /www/bukitjarian/log/error.log
+/nbproject/private/
+/www/application/logs/statistics.sqlite
