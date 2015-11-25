@@ -83,10 +83,3 @@ $db['default'] = array(
 	'failover' => array(),
 	'save_queries' => TRUE
 );
-
-$db['local'] = array(
-	'database' => 'sqlite:' . APPPATH . 'logs/statistics.sqlite',
-	'dbdriver' => 'sqlite',
-	'char_set' => 'utf8',
-	'dbcollat' => 'utf8_general_ci',
-);

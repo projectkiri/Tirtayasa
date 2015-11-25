@@ -8,4 +8,3 @@ Thumbs.db
 /www/application/config/credentials-prod.php
 /www/bukitjarian/log/error.log
 /nbproject/private/
-/www/application/logs/statistics.sqlite

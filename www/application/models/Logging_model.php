@@ -9,7 +9,8 @@ class Logging_model extends CI_Model {
 	 * @param string $additionaInfo additional information about the event
 	 */
 	public function logStatistic($apikey, $type, $additionalInfo) {
-		$this->load->database('local');
+		// FIXME switch to SQLite for space savings!
+		$this->load->database();		
 		$result = $this->db->query('INSERT INTO statistics(verifier, type, additionalInfo) VALUES(?,?,?)', array($apikey, $type, $additionalInfo));
 		if ($result == FALSE) {
 			$this->logError("Failed to store $apiKey/$type/$additionalInfo into statistic");
