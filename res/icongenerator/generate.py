@@ -131,8 +131,8 @@ def generate_icons(track_type):
     os.remove(filename + '.svg')
 
 # TODO to automatically scan for csv files?
-generate_icons('argowilis')
 generate_icons('bdo_angkot')
+generate_icons('cgk_commuterline')
 generate_icons('cgk_kopaja')
 generate_icons('cgk_mikrolet')
 generate_icons('cgk_transjakarta')
