@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 ?><!DOCTYPE html>
 <html class="no-js" lang="en">
     <head>
-        <title>Login | KIRI Developers</title>
+        <title>Add API Key | KIRI Developers</title>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="author" content="Project Kiri (KIRI)" />
@@ -13,25 +13,29 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <script src="/ext/foundation/js/vendor/modernizr.js"></script>
     </head>
     <body>
+        <?php $this->load->view('dev/template_topbar'); ?>
+        &nbsp;
         <div class="row">
-            <div class="large-3 columns">&nbsp;</div>
-            <div class="large-6 columns">
-                &nbsp;
+            <div class="large-12 columns">
                 <?php $this->load->view('dev/template_flashmessage'); ?>
-                <form data-abide action="/dev/auth" method="POST">
+                <form data-abide action="/dev/apikeys/add" method="POST">
+                    <input type="hidden" name="post" value="true"/>
                     <label>
-                        E-mail:
-                        <input type="email" name="email" required/>
+                        API Key:
+                        <input type="text" name="verifier" disabled value="To be generated"/>
                     </label>
                     <label>
-                        Password:
-                        <input type="password" name="password" required/>
+                        Domain filter:
+                        <input type="text" name="domainFilter" required value="*" size="64"/>
                     </label>
-                    <button type="submit" class="expand"><?= $this->lang->line('Login') ?></button>
-                    <a href="/dev/register" style="font-size: small"><b>Register</b> to access developer options</a>
+                    <label>
+                        Description:
+                        <input type="text" name="description" size="256"/>
+                    </label>
+                    <button type="submit">Add</button>
+                    <a href="/dev/apikeys/list" class="button secondary">Cancel</a>
                 </form>
             </div>
-            <div class="large-3 columns">&nbsp;</div>
         </div>
         <script src="/ext/foundation/js/vendor/jquery.js"></script>
         <script src="/ext/foundation/js/vendor/fastclick.js"></script>
