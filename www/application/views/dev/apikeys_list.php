@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 ?><!DOCTYPE html>
 <html class="no-js" lang="en">
     <head>
-        <title>Login | KIRI Developers</title>
+        <title>API Keys | KIRI Developers</title>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="author" content="Project Kiri (KIRI)" />
@@ -13,29 +13,38 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <script src="/ext/foundation/js/vendor/modernizr.js"></script>
     </head>
     <body>
+        &nbsp;
+
         <div class="row">
-            <div class="large-3 columns">&nbsp;</div>
-            <div class="large-6 columns">
-                &nbsp;
+            <div class="large-12 columns">
                 <?php if (!is_null($this->session->flashdata('message'))): ?>
                     <div data-alert class="alert-box info radius">
                         <?= $this->session->flashdata('message') ?>
                     </div>
                 <?php endif; ?>
-                <form data-abide action="/dev/auth" method="POST">
-                    <label>
-                        E-mail:
-                        <input type="email" name="email" required/>
-                    </label>
-                    <label>
-                        Password:
-                        <input type="password" name="password" required/>
-                    </label>
-                    <button type="submit" class="expand"><?= $this->lang->line('Login') ?></button>
-                    <a href="/dev/register" style="font-size: small"><?= $this->lang->line('Register to remove ads or access developer options'); ?></a>
-                </form>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>API Key</th>
+                            <th>Domain Filter</th>
+                            <th>Description</th>
+                            <th>Actions</th>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($rows as $row): ?>
+                            <tr>
+                                <td><?= $row->verifier ?></td>
+                                <td><?= $row->domainFilter ?></td>
+                                <td><?= $row->description ?></td>
+                                <td><a href="/dev/apikeys/edit?verifier=<?= $row->verifier ?>">Edit</a> |
+                                    <a href="/dev/apikeys/delete?verifier=<?= $row->verifier ?>">Delete</a>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+                <a href="/dev/apikeys/add" class="button">Add</a>
             </div>
-            <div class="large-3 columns">&nbsp;</div>
         </div>
         <script src="/ext/foundation/js/vendor/jquery.js"></script>
         <script src="/ext/foundation/js/vendor/fastclick.js"></script>
