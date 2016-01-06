@@ -22,17 +22,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <?= $this->session->flashdata('message') ?>
                     </div>
                 <?php endif; ?>
-                <form data-abide action="/dev/auth" method="POST">
+                <form data-abide action="/dev/register" method="POST">
                     <label>
                         E-mail:
                         <input type="email" name="email" required/>
                     </label>
                     <label>
-                        Password:
-                        <input type="password" name="password" required/>
+                        Full Name:
+                        <input type="text" name="fullname" required/>
                     </label>
-                    <button type="submit" class="expand"><?= $this->lang->line('Login') ?></button>
-                    <a href="/dev/register" style="font-size: small"><b>Register</b> to access developer options</a>
+                    <label>
+                        Company (optional):
+                        <input type="text" name="company" required/>
+                    </label>                    
+                    <button type="submit" class="expand">Register</button>
+                    <span style="font-size: small">Password will be generated and sent to email</span>
                 </form>
             </div>
             <div class="large-3 columns">&nbsp;</div>

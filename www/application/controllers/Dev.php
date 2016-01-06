@@ -21,7 +21,7 @@ class Dev extends CI_Controller {
 
     public function index() {
         if ($this->session->has_userdata('email')) {
-            redirect('/dev/apikeys/list');
+            redirect('/dev/apikeys');
         } else {
             $this->load->view('dev/login');
         }
@@ -51,7 +51,55 @@ class Dev extends CI_Controller {
         }
     }
 
-    public function apikeys($action) {
+    public function logout() {
+        $this->session->unset_userdata('email');
+        $this->session->set_flashdata('message', 'You have logged out');
+        redirect('/dev');
+    }
+
+    public function register() {
+        try {
+            $this->session->unset_userdata('email');
+            if (is_null($this->input->post('email'))) {
+                $this->load->view('dev/register');
+            } else {
+                $password = $this->_generateRandom("abcdefghiklmnopqrstuvwxyz0123456789", 8);
+                $password_hash = password_hash($password, PASSWORD_BCRYPT);
+                // Send email
+                $inputArray = array(
+                    'fullname' => $this->input->post('fullname'),
+                    'password' => $password
+                );
+                $this->load->model('PHPMailer_model');
+                $this->load->config('dev');
+                $this->PHPMailer_model->from($this->config->item('sender_email'), $this->config->item('sender_name'));
+                $this->PHPMailer_model->to($this->input->post('email'));
+                $this->PHPMailer_model->subject('KIRI API Registration');
+                $this->PHPMailer_model->message($this->load->view('dev/email_registration.html.php', $inputArray, TRUE));
+                $this->PHPMailer_model->set_alt_message($this->load->view('dev/email_registration.txt.php', $inputArray, TRUE));
+                if (!$this->PHPMailer_model->send()) {
+                    throw new Exception('Confirmation email sending error: ' . $this->PHPMailer_model->print_debugger());
+                }
+
+                // Input to database
+                $this->db->insert('users', array(
+                    'email' => $this->input->post('email'),
+                    'password' => $password_hash,
+                    'privilegeRoute' => 0,
+                    'privilegeApiUsage' => 1,
+                    'fullName' => $this->input->post('fullname'),
+                    'company' => $this->input->post('company')
+                ));
+                $this->session->set_flashdata('message', 'Check your email for password!');
+                redirect('/dev');
+            }
+        } catch (Exception $e) {
+            $this->session->set_flashdata('message', $e->getMessage());
+            redirect('/dev');
+        }
+    }
+
+    public function apikeys($action = 'list') {
         if ($this->session->has_userdata('email')) {
             $email = $this->session->userdata('email');
         } else {
@@ -73,7 +121,7 @@ class Dev extends CI_Controller {
                             'domainFilter' => $this->input->post('domainFilter')
                         ));
                         $this->session->set_flashdata('message', 'Added new API Key: ' . $verifier);
-                        redirect('/dev/apikeys/list');
+                        redirect('/dev/apikeys');
                     }
                     break;
                 case 'delete':
@@ -82,7 +130,7 @@ class Dev extends CI_Controller {
                     $this->db->where('verifier', $verifier);
                     $this->db->delete('apikeys');
                     $this->session->set_flashdata('message', 'Deleted API Key: ' . $verifier);
-                    redirect('/dev/apikeys/list');
+                    redirect('/dev/apikeys');
                 case 'edit':
                     if (is_null($this->input->post('verifier'))) {
                         $query = $this->db->get_where('apikeys', array(
@@ -99,7 +147,7 @@ class Dev extends CI_Controller {
                             'domainFilter' => $this->input->post('domainFilter')
                         ));
                         $this->session->set_flashdata('message', 'Updated API Key: ' . $this->input->post('verifier'));
-                        redirect('/dev/apikeys/list');
+                        redirect('/dev/apikeys');
                     }
                     break;
                 case 'list':
@@ -121,10 +169,6 @@ class Dev extends CI_Controller {
         }
         return $locale;
     }
-
-//    private function _generatePassword() {
-//        return _generateRandom("abcdefghiklmnopqrstuvwxyz0123456789", 8);
-//    }
 
     /**
      * Generates a random string

@@ -13,6 +13,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <script src="/ext/foundation/js/vendor/modernizr.js"></script>
     </head>
     <body>
+        <?php $this->load->view('dev/template_topbar'); ?>
         &nbsp;
         <div class="row">
             <div class="large-12 columns">

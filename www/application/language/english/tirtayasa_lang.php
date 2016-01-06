@@ -33,7 +33,6 @@ $lang['minutes'] = 'minutes';
 $lang['not found'] = 'not found';
 $lang['Oops'] = 'Oops';
 $lang['Please wait'] = 'Please wait';
-$lang['Register to remove ads or access developer options'] = '<b>Register</b> to remove ads or access developer options';
 $lang['Route broken? Help fix it!'] = 'Route broken? Help fix it!';
 $lang['Route not found'] = "Sorry, we can't find a public transport route for your trip.";
 $lang['Take public transport'] = 'Take %tracktype %trackname at %from, and alight at %to about %distance later.';
