@@ -17,11 +17,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <div class="large-3 columns">&nbsp;</div>
             <div class="large-6 columns">
                 &nbsp;
-                <?php if (!is_null($this->session->flashdata('message'))): ?>
-                    <div data-alert class="alert-box info radius">
-                        <?= $this->session->flashdata('message') ?>
-                    </div>
-                <?php endif; ?>
+                <?php $this->load->view('dev/template_flashmessage'); ?>
                 <form data-abide action="/dev/register" method="POST">
                     <label>
                         E-mail:
@@ -33,7 +29,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     </label>
                     <label>
                         Company (optional):
-                        <input type="text" name="company" required/>
+                        <input type="text" name="company"/>
                     </label>                    
                     <button type="submit" class="expand">Register</button>
                     <span style="font-size: small">Password will be generated and sent to email</span>

@@ -17,6 +17,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         &nbsp;
         <div class="row">
             <div class="large-12 columns">
+                <?php $this->load->view('dev/template_flashmessage'); ?>
                 <form data-abide action="/dev/apikeys/edit" method="POST">
                     <input type="hidden" name="verifier" value="<?= $verifier ?>"/>
                     <label>

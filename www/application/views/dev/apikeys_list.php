@@ -15,14 +15,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <body>
         <?php $this->load->view('dev/template_topbar'); ?>
         &nbsp;
-
         <div class="row">
             <div class="large-12 columns">
-                <?php if (!is_null($this->session->flashdata('message'))): ?>
-                    <div data-alert class="alert-box info radius">
-                        <?= $this->session->flashdata('message') ?>
-                    </div>
-                <?php endif; ?>
+                <?php $this->load->view('dev/template_flashmessage'); ?>
                 <table>
                     <thead>
                         <tr>

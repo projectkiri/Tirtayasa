@@ -21,6 +21,7 @@ class Dev extends CI_Controller {
 
     public function index() {
         if ($this->session->has_userdata('email')) {
+            $this->session->keep_flashdata('message');
             redirect('/dev/apikeys');
         } else {
             $this->load->view('dev/login');
@@ -55,6 +56,42 @@ class Dev extends CI_Controller {
         $this->session->unset_userdata('email');
         $this->session->set_flashdata('message', 'You have logged out');
         redirect('/dev');
+    }
+
+    public function profile() {
+        if ($this->session->has_userdata('email')) {
+            $email = $this->session->userdata('email');
+        } else {
+            $this->session->set_flashdata('message', 'Please login');
+            redirect('/dev');
+            return;
+        }
+        try {
+            if (is_null($this->input->post('post'))) {
+                $query = $this->db->get_where('users', array('email' => $email));
+                $row = $query->row();
+                $row->fullname = $row->fullName; // different caps in db
+                $this->load->view('dev/profile', $row);
+            } else {
+                $this->db->where('email', $email);
+                $this->db->set('fullName', $this->input->post('fullname'));
+                $this->db->set('company', $this->input->post('company'));
+                if ($this->input->post('password') === '') {
+                    $this->session->set_flashdata('message', 'Profile updated, except password (not set)');
+                } elseif ($this->input->post('password') !== $this->input->post('confirmpassword')) {
+                    $this->session->set_flashdata('message', 'Profile updated, except password (does not match confirmation)');
+                } else {
+                    $password_hash = password_hash($this->input->post('password'), PASSWORD_BCRYPT);
+                    $this->db->set('password', $password_hash);
+                    $this->session->set_flashdata('message', 'Profile and password updated');
+                }
+                $this->db->update('users');
+                redirect('/dev');
+            }
+        } catch (Exception $e) {
+            $this->session->set_flashdata('message', $e->getMessage());
+            redirect('/dev');
+        }
     }
 
     public function register() {
