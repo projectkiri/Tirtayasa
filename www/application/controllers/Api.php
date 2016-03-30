@@ -242,7 +242,7 @@ class Api extends CI_Controller {
 			$city_lat = $regions[$region]['lat'];
 			$city_lon = $regions[$region]['lon'];
 			$city_radius = $regions[$region]['radius'];
-			$full_url = $this->config->item('url-searchplace') . '?key=' . $this->config->item('google-server-key') . "&location=$city_lat,$city_lon&radius=$city_radius&keyword=$querystring&types=establishment|route&sensor=true";
+			$full_url = $this->config->item('url-searchplace') . '?key=' . $this->config->item('google-server-key') . "&location=$city_lat,$city_lon&radius=$city_radius&keyword=$querystring";
 			$result = file_get_contents($full_url);
 			if ($result === FALSE) {
 				throw new Exception("There's an error while reading the places response ($full_url).");
