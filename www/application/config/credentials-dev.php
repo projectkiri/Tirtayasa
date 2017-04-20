@@ -11,3 +11,5 @@ $config['email']['smtp_port'] = 587;
 $config['email']['smtp_crypto'] = 'tls';
 $config['email']['smtp_user'] = 'your-email-address@kiri.travel';
 $config['email']['smtp_pass'] = 'your-password';
+
+$config['url-menjangan'] = 'http://newmenjangan.cloudapp.net:8000';
