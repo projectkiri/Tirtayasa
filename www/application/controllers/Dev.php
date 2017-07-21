@@ -110,7 +110,7 @@ class Dev extends CI_Controller {
                 $this->load->model('PHPMailer_model');
                 $this->load->config('dev');
                 $this->PHPMailer_model->from($this->config->item('sender_email'), $this->config->item('sender_name'));
-                $this->PHPMailer_model->to($this->input->post('email'));
+                $this->PHPMailer_model->to($this->input->post('email'), $this->input->post('fullname'));
                 $this->PHPMailer_model->subject('KIRI API Registration');
                 $this->PHPMailer_model->message($this->load->view('dev/email_registration.html.php', $inputArray, TRUE));
                 $this->PHPMailer_model->set_alt_message($this->load->view('dev/email_registration.txt.php', $inputArray, TRUE));
