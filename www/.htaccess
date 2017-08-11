@@ -1,4 +1,9 @@
 RewriteEngine On
+
+# https://stackoverflow.com/questions/13376219/htaccess-redirect-http-to-https
+RewriteCond     %{SERVER_PORT} ^80$
+RewriteRule     ^(.*)$ https://%{SERVER_NAME}%{REQUEST_URI} [L,R]
+
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ index.php/$1 [L]
