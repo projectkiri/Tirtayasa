@@ -21,9 +21,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <div class="row center">
                     <img src="/images/kiri200.png" alt="KIRI logo"/>
                 </div>
-                <div class="row center">
-                    <a href="<?= $this->lang->line('url-shutdown') ?>" target="_blank"><i><?= $this->lang->line('Our service ends') ?></i></a>
-                </div>
                 <div class="row">
                     <div class="small-5 columns">
                         <select id="regionselect">
@@ -85,7 +82,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <div class="row">
                     <div class="large-12 columns">
                         <footer>
-                            <a href="<?= $this->lang->line('url-apps') ?>"><?= $this->lang->line('Mobile Apps') ?></a> |
                             <a href="<?= $this->lang->line('url-legal') ?>"><?= $this->lang->line('Legal') ?></a> | 
                             <a href="<?= $this->lang->line('url-feedback') ?>"><?= $this->lang->line('Feedback') ?></a> | 
                             <a href="<?= $this->lang->line('url-about') ?>"><?= $this->lang->line('About KIRI') ?></a>
