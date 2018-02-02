@@ -82,7 +82,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <div class="row">
                     <div class="large-12 columns">
                         <footer>
-                            <a href="<?= $this->lang->line('url-apps') ?>"><?= $this->lang->line('Mobile Apps') ?></a> |
                             <a href="<?= $this->lang->line('url-legal') ?>"><?= $this->lang->line('Legal') ?></a> | 
                             <a href="<?= $this->lang->line('url-feedback') ?>"><?= $this->lang->line('Feedback') ?></a> | 
                             <a href="<?= $this->lang->line('url-about') ?>"><?= $this->lang->line('About KIRI') ?></a><br/><br/>
