@@ -242,7 +242,7 @@ class Api extends CI_Controller {
 			$city_lat = $regions[$region]['lat'];
 			$city_lon = $regions[$region]['lon'];
 			$city_radius = $regions[$region]['radius'];
-			$full_url = $this->config->item('url-searchplace') . '?key=' . $this->config->item('google-server-key') . "&location=$city_lat,$city_lon&radius=$city_radius&keyword=$querystring";
+			$full_url = $this->config->item('url-searchplace') . '?key=' . $this->config->item('google-server-key') . "&input=$querystring&inputtype=textquery&locationbias=circle:$city_radius@$city_lat,$city_lon&fields=name,geometry";
 			$result = file_get_contents($full_url);
 			if ($result === FALSE) {
 				throw new Exception("There's an error while reading the places response ($full_url).");
@@ -255,10 +255,10 @@ class Api extends CI_Controller {
 					$this->Logging_model->logError("Place search not found: \"$querystring\"");
 					$size = 0;
 				} else {
-					$size = min(sizeof($json_result['results']), $this->config->item('searchplace-maxresult'));
+					$size = min(sizeof($json_result['candidates']), $this->config->item('searchplace-maxresult'));
 				}
 				for ($i = 0; $i < $size; $i++) {
-					$current_venue = $json_result['results'][$i];
+					$current_venue = $json_result['candidates'][$i];
 					$search_result[$i]['placename'] = $current_venue['name'];
 					$search_result[$i]['location'] = sprintf(
 							'%.5lf,%.5lf',
@@ -269,7 +269,7 @@ class Api extends CI_Controller {
 				$json_output = array(
 					'status' => 'ok',
 					'searchresult' => $search_result,
-					'attributions' => $json_result['html_attributions']
+					'attributions' => isset($json_result['html_attributions'])?$json_result['html_attributions']:[]
 				);
 		
 				//input log statistic
