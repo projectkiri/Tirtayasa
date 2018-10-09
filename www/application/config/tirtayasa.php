@@ -57,4 +57,4 @@ $config['speed-walk'] = 5; // km/h
 $config['url-angkotwebid-prefix'] = 'https://angkot.web.id/go/route/';
 $config['url-angkotwebid-suffix'] = '?ref=kiri';
 $config['url-geocode'] = 'https://maps.googleapis.com/maps/api/geocode/json';
-$config['url-searchplace'] = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json';
+$config['url-searchplace'] = 'https://maps.googleapis.com/maps/api/place/findplacefromtext/json';
