@@ -107,16 +107,14 @@ class Dev extends CI_Controller {
                     'fullname' => $this->input->post('fullname'),
                     'password' => $password
                 );
-                $this->load->model('PHPMailer_model');
+                $this->load->model('Email_model');
                 $this->load->config('dev');
-                $this->PHPMailer_model->from($this->config->item('sender_email'), $this->config->item('sender_name'));
-                $this->PHPMailer_model->to($this->input->post('email'), $this->input->post('fullname'));
-                $this->PHPMailer_model->subject('KIRI API Registration');
-                $this->PHPMailer_model->message($this->load->view('dev/email_registration.html.php', $inputArray, TRUE));
-                $this->PHPMailer_model->set_alt_message($this->load->view('dev/email_registration.txt.php', $inputArray, TRUE));
-                if (!$this->PHPMailer_model->send()) {
-                    throw new Exception('Confirmation email sending error: ' . $this->PHPMailer_model->print_debugger());
-                }
+                $this->Email_model->from($this->config->item('sender_email'), $this->config->item('sender_name'));
+                $this->Email_model->to($this->input->post('email'));
+                $this->Email_model->subject('KIRI API Registration');
+                $this->Email_model->message($this->load->view('dev/email_registration.html.php', $inputArray, TRUE));
+                $this->Email_model->set_alt_message($this->load->view('dev/email_registration.txt.php', $inputArray, TRUE));
+                $this->Email_model->send();
 
                 // Input to database
                 $this->db->insert('users', array(
