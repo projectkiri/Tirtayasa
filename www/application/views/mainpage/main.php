@@ -85,12 +85,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <a href="<?= $this->lang->line('url-legal') ?>"><?= $this->lang->line('Legal') ?></a> | 
                             <a href="<?= $this->lang->line('url-feedback') ?>"><?= $this->lang->line('Feedback') ?></a> | 
                             <a href="<?= $this->lang->line('url-about') ?>"><?= $this->lang->line('About KIRI') ?></a><br/><br/>
-                            <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-                            <input type="hidden" name="cmd" value="_s-xclick">
-                            <input type="hidden" name="hosted_button_id" value="WKWS26A57WHJG">
-                            <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
-                            <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
-                            </form>
+                            <?= $this->lang->line('Sponsored by') ?>:<br/>
+                            <a href="https://informatika.unpar.ac.id" target="_blank">
+                                <img src="/images/logo_informatika.png" alt="Teknik Informatika UNPAR"/>
+                            </a>
                         </footer>
                         &nbsp;
                     </div>
