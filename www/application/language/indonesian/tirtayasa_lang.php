@@ -31,7 +31,6 @@ $lang['Oops'] = 'Ups';
 $lang['Please wait'] = 'Mohon tunggu';
 $lang['Route broken? Help fix it!'] = 'Route broken? Help fix it!';
 $lang['Route not found'] = "Maaf, kami tidak dapat menemukan rute transportasi publik untuk perjalanan Anda.";
-$lang['Sponsored by'] = "Disponsori oleh";
 $lang['Take public transport'] = 'Naik %tracktype %trackname di %from, dan turun di %to kurang lebih setelah %distance.';
 $lang['To'] = 'Ke';
 $lang['Walk from to'] = 'Jalan dari %from ke %to sejauh kurang lebih %distance.';
