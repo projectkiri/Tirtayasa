@@ -390,7 +390,6 @@ $(document).ready(function() {
 				resultHTML2 += '</td></tr>';
 			});
 			resultHTML2 += "<tr><td class=\"center\" colspan=\"2\">";
-			resultHTML2 += '<a href="https://youtu.be/jDFePujA8Kk" target="_blank" style="font-size: small;">' + '<?=$this->lang->line("Route broken? Help fix it!")?>' + "</a><br/><br/>\n";
 			resultHTML2 += "<a target=\"_blank\" href=\"https://www.facebook.com/sharer/sharer.php?u=" + kiriURL + "\"><img alt=\"Share to Facebook\" src=\"images/fb-large.png\"/></a> &nbsp; &nbsp; ";
 			resultHTML2 += "<a target=\"_blank\" href=\"https://twitter.com/intent/tweet?via=kiriupdate&text=" + kiriMessage + "+" + kiriURL + "\"><img alt=\"Tweet\" src=\"images/twitter-large.png\"/></a>";
 			resultHTML2 += "</td></tr>\n";
