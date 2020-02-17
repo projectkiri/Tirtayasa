@@ -10,7 +10,6 @@ $lang['url-feedback'] = 'https://projectkiri.github.io/#feedback';
 $lang['url-legal'] = 'https://projectkiri.github.io/#legal';
 $lang['label-youtube'] = array(
 	'cT2ao_r861k' => 'KIRI Smart Ticketing',
-	'jDFePujA8Kk' => 'Angkot.web.id integration',
 	'default' => 'KIRI is not affiliated with this video (but you can watch anyway!)');
 
 $lang['About KIRI'] = 'About KIRI';
