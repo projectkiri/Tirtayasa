@@ -387,9 +387,6 @@ $(document).ready(function() {
 				if (step[4] != null) {
 					resultHTML2 += ' <a class="ticket" href="' + step[4] + '" target="_blank"><?=$this->lang->line('BUY TICKET')?></a></td></tr>';
 				}
-				if (step[5] != null) {
-					resultHTML2 += ' <a href="' + step[5] + '" target="_blank"><img src="images/edit.png" class="fontsize" alt="edit"/></a></td></tr>';					
-				}
 				resultHTML2 += '</td></tr>';
 			});
 			resultHTML2 += "<tr><td class=\"center\" colspan=\"2\">";
