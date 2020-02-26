@@ -359,8 +359,7 @@ $(document).ready(function() {
 	 */
 	function showAlert(message, cssClass) {
 		var alert = $('<div data-alert class="alert-box ' + cssClass + ' round">' + message + '<a href="#" class="close">&times;</a></div>');
-		$('#routingresults').prepend(alert);
-		$(document).foundation();    
+		$('#routingresults').prepend(alert);  
 	}
 
 	/**
@@ -409,7 +408,6 @@ $(document).ready(function() {
 				showSingleRoutingResultOnMap(result);
  			});
 		});
-	    $(document).foundation();    
 		showSingleRoutingResultOnMap(results.routingresults[0]);
 	}
 	

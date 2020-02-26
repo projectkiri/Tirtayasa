@@ -9,14 +9,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <meta name="description" content="<?= $this->lang->line('meta-description') ?>" />
         <meta name="author" content="Project Kiri (KIRI)" />
         <meta name="google-site-verification" content="9AtqvB-LWohGnboiTyhtZUXAEcOql9B-8lDjo_wcUew" />
-
  	    <!-- ganti ke bootstrap -->
-        <link rel="stylesheet" href="/ext/bootstrap-4.4.1-dist/css/bootstrap.min.css" />
-
+        <link rel="stylesheet" href="/ext/bootstrap/css/bootstrap.min.css" />
         <link rel="stylesheet" href="/ext/openlayers/ol.css" />
         <link rel="stylesheet" href="/stylesheets/styleIndex.css" />
         <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
-        <script src="/ext/bootstrap-4.4.1-dist/js/vendor/modernizr.js"></script>
+        <script src="/ext/bootstrap/js/vendor/modernizr.js"></script>
     </head>
     <body>
         <div class="container-fluid">
@@ -114,17 +112,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 </div>
             </div>
         </div>
-        <script src="/ext/foundation/js/vendor/jquery.js"></script>
-        <script src="/ext/foundation/js/vendor/fastclick.js"></script>
-        <script src="/ext/foundation/js/foundation.min.js"></script>
-        <script src="/ext/foundation/js/foundation/foundation.alert.js"></script>
+        <script src="/ext/bootstrap/js/vendor/jquery.js"></script>
+        <script src="/ext/bootstrap/js/vendor/fastclick.js"></script>
+        <script src="/ext/bootstrap/js/bootstrap.min.js"></script>
         <script src="/ext/openlayers/ol.js"></script>
         <script>
             var region = '<?= $region ?>';
-            $(document).foundation();
-<?php if (!is_null($youtube)): ?>
-                $('#youtubepromo').foundation('reveal', 'open');
-<?php endif; ?>
             var input_text = <?= json_encode($inputText) ?>;
             var coordinates = <?= json_encode($inputCoordinate) ?>;
         </script>
