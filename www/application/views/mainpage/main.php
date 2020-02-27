@@ -40,12 +40,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             </select>
                         </div>
                     </div>
+                    
                     <div class="row p-1">
                         <div class="col-sm-2">
                             <span for="startInput" class="align-middle"><?= $this->lang->line('From') ?>:</span>
                         </div>
                         <div class="col-sm-10">
-                            <input type="text" id="startInput" value=""	placeholder="<?= $this->lang->line('placeholder-from') ?>">
+                            <input type="text" id="startInput" value=""	placeholder="<?= $this->lang->line('placeholder-from') ?>" style="width: 100%;">
                         </div>
                     </div>
                     <div class="row p-1">
@@ -58,7 +59,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <span for="finishInput" class="align-middle"><?= $this->lang->line('To') ?>:</span>
                         </div>
                         <div class="col-sm-10">
-                            <input type="text" id="finishInput" value="" placeholder="<?= $this->lang->line('placeholder-to') ?>">
+                            <input type="text" id="finishInput" value="" placeholder="<?= $this->lang->line('placeholder-to') ?>"  style="width: 100%;">
                         </div>
                     </div>
                     <div class="row p-1">
