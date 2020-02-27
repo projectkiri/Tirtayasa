@@ -22,14 +22,6 @@ class Mainpage extends CI_Controller {
 			$this->input->set_cookie('region', $region, time() + 3600 * 24 * 365);
 		}
 
-		// Setup Youtube code
-		$youtube_code = $this->input->get('yt');
-		$youtube_label = null;
-		if (!is_null($youtube_code) && !array_key_exists($youtube_code, $this->lang->line('label-youtube'))) {
-			$youtube_code = 'default';
-			$youtube_label = $this->lang->line('label-youtube')[$youtube_code];
-		}
-
 		// Setup start/finish autofill
 		$endpoint = array(
 			'start' => $this->input->get('start'),
@@ -56,7 +48,6 @@ class Mainpage extends CI_Controller {
 			'region' => $region,
 			'languages' => $this->config->item('languages'),
 			'locale' => $locale,
-			'youtube' => is_null($youtube_code) ? null : array('code' => $youtube_code, 'label' => $youtube_label),
 			'inputText' => array('start' => $textual_endpoint['start'], 'finish' => $textual_endpoint['finish']),
 			'inputCoordinate' => array('start' => $coordinate_endpoint['start'], 'finish' => $coordinate_endpoint['finish'])
 		);
