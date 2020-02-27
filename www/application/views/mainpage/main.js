@@ -384,9 +384,6 @@ $(document).ready(function() {
 			resultHTML2 += resultIndex === 0 ? ' class="content active"><table>' : ' class="content"><table>';
 			$.each(result.steps, function (stepIndex, step) {
 				resultHTML2 += '<tr><td><img src="../images/means/' + step[0]+ '/' + step[1] + '.png" alt="' + step[1] + '"/></td><td>' + step[3];
-				if (step[4] != null) {
-					resultHTML2 += ' <a class="ticket" href="' + step[4] + '" target="_blank"><?=$this->lang->line('BUY TICKET')?></a></td></tr>';
-				}
 				resultHTML2 += '</td></tr>';
 			});
 			resultHTML2 += "<tr><td class=\"center\" colspan=\"2\">";
