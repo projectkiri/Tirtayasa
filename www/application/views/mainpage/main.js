@@ -361,7 +361,7 @@ $(document).ready(function() {
 		if (cssClass === 'alert') {
 			cssClass = 'danger'
 		}
-		var alert = $('<div data-alert class="alert alert-' + cssClass + ' alert-dismissible rounded-left rounded-right" role="alert">' + message + '<a href="#" class="close">&times;</a></div>');
+		var alert = $('<div data-alert class="alert alert-' + cssClass + ' alert-dismissible rounded-left rounded-right" role="alert">' + message + '<button href="#" class="close" data-dismiss="alert">&times;</button></div>');
 		$('#routingresults').prepend(alert);  
 	}
 
