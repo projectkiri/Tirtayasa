@@ -83,3 +83,10 @@ a:link.ticket, a:visited.ticket, a:active.ticket, a:hover.ticket {
 	width: 1em;
 	height: 1em;
 }
+
+.paddingControl {
+	padding: 1%;
+}
+.paddingBottom {
+	padding-bottom: 3%;
+}

@@ -18,22 +18,22 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     </head>
     <body>
         <div class="container-fluid">
-            <div class="row">
-                <div id="map" class="col-lg-9 ml-auto"></div>
-                <div id="controlpanel" class="col-lg-3">
-                    <div class="row justify-content-md-center">
-                        <img src="/images/kiri200.png" alt="KIRI logo"/>
+            <div class="row order-3">
+                <div id="controlpanel" class="col-lg-3 order-lg-9">
+                    <div class="col">
+                        <img class="mx-auto d-block" src="/images/kiri200.png" alt="KIRI logo"/>
                     </div>
-                    <div class="row p-1">
+
+                    <div class="row paddingControl paddingBottom">
                         <div class="col-sm-5">
-                            <select id="regionselect" class="form-control form-control-sm">
+                            <select id="regionselect" class="form-control">
                                 <?php foreach ($regions as $key => $value): ?>
                                     <option value="<?= $key ?>"<?= ($region == $key ? ' selected' : '') ?>><?= $value['name'] ?></option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
                         <div class="col-sm-7">
-                            <select id="localeselect" class="form-control form-control-sm">
+                            <select id="localeselect" class="form-control">
                                 <?php foreach ($languages as $key => $value): ?>
                                     <option value="<?= $key ?>"<?= ($locale == $key ? ' selected' : '') ?>><?= $value['name'] ?></option>
                                 <?php endforeach; ?>
@@ -41,49 +41,49 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         </div>
                     </div>
                     
-                    <div class="row p-1">
+                    <div class="row paddingControl">
                         <div class="col-sm-2">
                             <span for="startInput" class="align-middle"><?= $this->lang->line('From') ?>:</span>
                         </div>
                         <div class="col-sm-10">
-                            <input type="text" id="startInput" value=""	placeholder="<?= $this->lang->line('placeholder-from') ?>" style="width: 100%;">
+                            <input type="text" id="startInput" class="form-control" value="" placeholder="<?= $this->lang->line('placeholder-from') ?>">
                         </div>
                     </div>
-                    <div class="row p-1">
+                    <div class="row paddingControl">
                         <div class="col-lg-12">
                             <select id="startSelect" class="hidden"></select>
                         </div>
                     </div>
-                    <div class="row p-1">
+                    <div class="row paddingControl">
                         <div class="col-sm-2">
                             <span for="finishInput" class="align-middle"><?= $this->lang->line('To') ?>:</span>
                         </div>
                         <div class="col-sm-10">
-                            <input type="text" id="finishInput" value="" placeholder="<?= $this->lang->line('placeholder-to') ?>"  style="width: 100%;">
+                            <input type="text" id="finishInput" class="form-control" value="" placeholder="<?= $this->lang->line('placeholder-to') ?>">
                         </div>
                     </div>
-                    <div class="row p-1">
+                    <div class="row paddingControl">
                         <div class="col-lg-12">
                             <select id="finishSelect" class="hidden"></select>
                         </div>
                     </div>
-                    <div class="row p-1">
+                    <div class="row paddingControl">
                         <div class="col-sm-6">
-                            <a href="#" class="btn btn-primary" id="findbutton"><strong><?= $this->lang->line('Find') ?>!</strong></a>
+                            <a href="#" class="btn btn-primary btn-block" id="findbutton"><strong><?= $this->lang->line('Find') ?>!</strong></a>
                         </div>
                         <div class="col-sm-3">
-                            <a href="#" class="btn btn-light" id="swapbutton"><img src="images/swap.png" alt="swap"></a>
+                            <a href="#" class="btn btn-light btn-block" id="swapbutton"><img src="images/swap.png" alt="swap"></a>
                         </div>
                         <div class="col-sm-3">
-                            <a href="#" class="btn btn-light" id="resetbutton"><img src="images/reset.png" alt="reset"></a>
+                            <a href="#" class="btn btn-light btn-block" id="resetbutton"><img src="images/reset.png" alt="reset"></a>
                         </div>
                     </div>
-                    <div class="row p-1">
+                    <div class="row paddingControl">
                         <div class="col-lg-12" id="routingresults">
                             <div id="results-section-container"></div>
                         </div>
                     </div>
-                    <div class="row p-1">
+                    <div class="row">
                         <div class="col-lg-12">
                             <footer>
                                 <a href="<?= $this->lang->line('url-legal') ?>"><?= $this->lang->line('Legal') ?></a> | 
@@ -111,6 +111,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         </div>
                     <?php endif; ?>
                 </div>
+                <div id="map" class="col-lg-9"></div>
             </div>
         </div>
         <script src="/ext/bootstrap/js/vendor/jquery.js"></script>
