@@ -8,11 +8,6 @@ $lang['placeholder-to'] = 'Monumen Nasional, Jakarta';
 $lang['url-about'] = 'https://projectkiri.github.io/#about-kiri';
 $lang['url-feedback'] = 'https://projectkiri.github.io/#feedback';
 $lang['url-legal'] = 'https://projectkiri.github.io/#legal';
-$lang['label-youtube'] = array(
-	'cT2ao_r861k' => 'KIRI Smart Ticketing',
-	'jDFePujA8Kk' => 'Integrasi angkot.web.id',
-	'default' => 'KIRI tidak terafiliasi dengan video ini (tapi Anda bisa nonton, koq!)');
-
 $lang['About KIRI'] = 'Tentang KIRI';
 $lang['BUY TICKET'] = 'BELI TIKET';
 $lang['Connection problem'] = 'Gangguan koneksi';
