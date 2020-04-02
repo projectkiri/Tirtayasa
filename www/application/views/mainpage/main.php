@@ -68,14 +68,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         </div>
                     </div>
                     <div class="row paddingControl">
-                        <div class="col-sm-6">
-                            <a href="#" class="btn btn-primary btn-block" id="findbutton"><strong><?= $this->lang->line('Find') ?>!</strong></a>
-                        </div>
-                        <div class="col-sm-3">
-                            <a href="#" class="btn btn-light btn-block" id="swapbutton"><img src="images/swap.png" alt="swap"></a>
-                        </div>
-                        <div class="col-sm-3">
-                            <a href="#" class="btn btn-light btn-block" id="resetbutton"><img src="images/reset.png" alt="reset"></a>
+                        <div class="btn-group fullwidth" role="group">
+                            <div class="col-sm-6">
+                                <a href="#" class="btn btn-primary btn-block" id="findbutton"><strong><?= $this->lang->line('Find') ?>!</strong></a>
+                            </div>
+                            <div class="col-sm-3">
+                                <a href="#" class="btn btn-light btn-block" id="swapbutton"><img src="images/swap.png" alt="swap"></a>
+                            </div>
+                            <div class="col-sm-3">
+                                <a href="#" class="btn btn-light btn-block" id="resetbutton"><img src="images/reset.png" alt="reset"></a>
+                            </div>
                         </div>
                     </div>
                     <div class="row paddingControl">
