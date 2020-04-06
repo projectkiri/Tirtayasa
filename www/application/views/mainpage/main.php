@@ -3,16 +3,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 ?><!DOCTYPE html>
 <html class="no-js" lang="en">
     <head>
-        <!-- This is a check message -->
         <title>KIRI</title>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="description" content="<?= $this->lang->line('meta-description') ?>" />
         <meta name="author" content="Project Kiri (KIRI)" />
         <meta name="google-site-verification" content="9AtqvB-LWohGnboiTyhtZUXAEcOql9B-8lDjo_wcUew" />
- 	    <!-- ganti ke bootstrap -->
+      <!-- ganti ke bootstrap -->
         <link rel="stylesheet" href="/ext/bootstrap/css/bootstrap.min.css" />
-        <link rel="stylesheet" href="/ext/openlayers/ol.css" />
+        <!-- openlayers -->
+        <!-- <link rel="stylesheet" href="/ext/openlayers/ol.css" /> -->
+        <!-- Mapbox -->
+        <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+        <script src='https://api.mapbox.com/mapbox.js/v3.3.0/mapbox.js'></script>
+        <link href='https://api.mapbox.com/mapbox.js/v3.3.0/mapbox.css' rel='stylesheet' />
         <link rel="stylesheet" href="/stylesheets/styleIndex.css" />
         <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
         <script src="/ext/bootstrap/js/vendor/modernizr.js"></script>
@@ -120,7 +124,25 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <script src="/ext/bootstrap/js/vendor/jquery.js"></script>
         <script src="/ext/bootstrap/js/vendor/fastclick.js"></script>
         <script src="/ext/bootstrap/js/bootstrap.min.js"></script>
+        <!-- Google Maps -->
+        <script>
+            var map;
+            function initMap() {
+              map = new google.maps.Map(document.getElementById('map'), {
+                center: {lat: -6.175389, lng: 106.827167},
+                zoom: 15
+              });
+            }
+        </script>
+        <!-- openlayers -->
         <script src="/ext/openlayers/ol.js"></script>
+        <!-- Mapbox -->
+        <script>
+        L.mapbox.accessToken = '<your access token here>';
+        var map = L.mapbox.map('map')
+            .setView([-6.175389, 106.827167], 9)
+            .addLayer(L.mapbox.styleLayer('mapbox://styles/mapbox/streets-v11'));
+        </script>
         <script>
             var region = '<?= $region ?>';
             var input_text = <?= json_encode($inputText) ?>;
