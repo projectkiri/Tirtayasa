@@ -6,14 +6,14 @@ body > .row {
 	max-width: 100%
 }
 #map {
-	height: 100%;
+	height: 100vh;
 	padding: 0px;
 }
 #controlpanel {
-	position: absolute;
 	top: 0px;
 	bottom: 0px;
 	overflow: auto;
+	height: 100vh;
 }
 .fullwidth {
 	width: 100%;
@@ -82,4 +82,11 @@ a:link.ticket, a:visited.ticket, a:active.ticket, a:hover.ticket {
 .fontsize {
 	width: 1em;
 	height: 1em;
+}
+
+.paddingControl {
+	padding: 1%;
+}
+.paddingBottom {
+	padding-bottom: 3%;
 }

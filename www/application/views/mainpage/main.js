@@ -224,11 +224,11 @@ $(document).ready(function() {
 	}
 	
 	function clearAlerts() {
-		$('.alert-box').remove();
+		$('.alert').remove();
 	}
 	
 	function clearSecondaryAlerts() {
-		$('.alert-box.secondary').fadeOut();
+		$('.alert.alert-secondary').fadeOut();
 	}
 	
 	function clearStartFinishMarker() {
@@ -358,9 +358,11 @@ $(document).ready(function() {
 	 * @param cssClass the foundation css class ('success', 'alert', 'secondary')
 	 */
 	function showAlert(message, cssClass) {
-		var alert = $('<div data-alert class="alert-box ' + cssClass + ' round">' + message + '<a href="#" class="close">&times;</a></div>');
-		$('#routingresults').prepend(alert);
-		$(document).foundation();    
+		if (cssClass === 'alert') {
+			cssClass = 'danger'
+		}
+		var alert = $('<div data-alert class="alert alert-' + cssClass + ' alert-dismissible rounded-left rounded-right" role="alert">' + message + '<a href="#" class="close" data-dismiss="alert">&times;</a></div>');
+		$('#routingresults').prepend(alert);  
 	}
 
 	/**
@@ -409,7 +411,6 @@ $(document).ready(function() {
 				showSingleRoutingResultOnMap(result);
  			});
 		});
-	    $(document).foundation();    
 		showSingleRoutingResultOnMap(results.routingresults[0]);
 	}
 	
