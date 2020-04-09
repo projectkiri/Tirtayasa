@@ -4,6 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <html class="no-js" lang="en">
     <head>
         <!-- Hello branch mapbox! -->
+        <!-- Hallo Mang!!!-->
         <!-- Test Komen -->
         <title>KIRI</title>
         <meta charset="utf-8" />
