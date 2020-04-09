@@ -5,6 +5,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <head>
 	<!--Cek komen-->
         <!-- Hello branch mapbox! -->
+        <!-- Hallo Mang!!!-->
         <!-- Test Komen -->
         <title>KIRI</title>
         <meta charset="utf-8" />
