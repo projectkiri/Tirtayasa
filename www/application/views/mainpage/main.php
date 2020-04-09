@@ -130,7 +130,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <script src="/ext/openlayers/ol.js"></script>
         <!-- Mapbox -->
         <script>
-        L.mapbox.accessToken = '<your access token here>';
+        // L.mapbox.accessToken = '<your access token here>';
+        L.mapbox.accessToken = 'pk.eyJ1Ijoia2VsdmluYWRyaWFuIiwiYSI6ImNrOGx1NWlkdDA1YmczbW44MGM3dzY2czAifQ.06uwtSbY-t2pKcFYLAoXqA';
         var map = L.mapbox.map('map')
             .setView([-6.175389, 106.827167], 9)
             .addLayer(L.mapbox.styleLayer('mapbox://styles/mapbox/streets-v11'));
