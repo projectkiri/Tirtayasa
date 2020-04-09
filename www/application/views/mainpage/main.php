@@ -3,6 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 ?><!DOCTYPE html>
 <html class="no-js" lang="en">
     <head>
+	<!--Cek komen-->
         <!-- Hello branch mapbox! -->
         <!-- Test Komen -->
         <title>KIRI</title>
