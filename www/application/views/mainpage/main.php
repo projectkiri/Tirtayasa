@@ -3,18 +3,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 ?><!DOCTYPE html>
 <html class="no-js" lang="en">
     <head>
-	<!--Cek komen-->
-        <!-- Hello branch mapbox! -->
-        <!-- Hallo Mang!!!-->
-        <!-- Test Komen -->
         <title>KIRI</title>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="description" content="<?= $this->lang->line('meta-description') ?>" />
         <meta name="author" content="Project Kiri (KIRI)" />
         <meta name="google-site-verification" content="9AtqvB-LWohGnboiTyhtZUXAEcOql9B-8lDjo_wcUew" />
-        <!-- ganti ke bootstrap -->
-        <link rel="stylesheet" href="/ext/bootstrap/css/bootstrap.min.css" />
         <!-- openlayers -->
         <!-- <link rel="stylesheet" href="/ext/openlayers/ol.css" /> -->
         <!-- Mapbox -->
@@ -22,6 +16,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <link href='https://api.mapbox.com/mapbox.js/v3.3.0/mapbox.css' rel='stylesheet' />
         <link rel="stylesheet" href="/stylesheets/styleIndex.css" />
         <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+        <link rel="stylesheet" href="/ext/bootstrap/css/bootstrap.min.css" />
     </head>
     <body>
         <div class="container-fluid">
