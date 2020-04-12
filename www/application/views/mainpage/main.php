@@ -13,17 +13,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <meta name="description" content="<?= $this->lang->line('meta-description') ?>" />
         <meta name="author" content="Project Kiri (KIRI)" />
         <meta name="google-site-verification" content="9AtqvB-LWohGnboiTyhtZUXAEcOql9B-8lDjo_wcUew" />
-      <!-- ganti ke bootstrap -->
+        <!-- ganti ke bootstrap -->
         <link rel="stylesheet" href="/ext/bootstrap/css/bootstrap.min.css" />
         <!-- openlayers -->
         <!-- <link rel="stylesheet" href="/ext/openlayers/ol.css" /> -->
         <!-- Mapbox -->
-        <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
-        <script src='https://api.mapbox.com/mapbox.js/v3.3.0/mapbox.js'></script>
+        <!-- <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' /> -->
         <link href='https://api.mapbox.com/mapbox.js/v3.3.0/mapbox.css' rel='stylesheet' />
         <link rel="stylesheet" href="/stylesheets/styleIndex.css" />
         <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
-        <script src="/ext/bootstrap/js/vendor/modernizr.js"></script>
     </head>
     <body>
         <div class="container-fluid">
@@ -128,13 +126,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <script src="/ext/bootstrap/js/vendor/jquery.js"></script>
         <script src="/ext/bootstrap/js/vendor/fastclick.js"></script>
         <script src="/ext/bootstrap/js/bootstrap.min.js"></script>
+        <script src="/ext/bootstrap/js/vendor/modernizr.js"></script>
         <!-- openlayers -->
         <script src="/ext/openlayers/ol.js"></script>
         <!-- Mapbox -->
+        <script src='https://api.mapbox.com/mapbox.js/v3.3.0/mapbox.js'></script>
         <script>
         // L.mapbox.accessToken = '<your access token here>';
         L.mapbox.accessToken = 'pk.eyJ1Ijoia2VsdmluYWRyaWFuIiwiYSI6ImNrOGx1NWlkdDA1YmczbW44MGM3dzY2czAifQ.06uwtSbY-t2pKcFYLAoXqA';
         var map = L.mapbox.map('map')
+            // Koordinat sementara = monas,jakarta
             .setView([-6.175389, 106.827167], 9)
             .addLayer(L.mapbox.styleLayer('mapbox://styles/mapbox/streets-v11'));
         </script>
