@@ -123,7 +123,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <script src="/ext/bootstrap/js/bootstrap.min.js"></script>
         <script src="/ext/bootstrap/js/vendor/modernizr.js"></script>
         <!-- openlayers -->
-        <script src="/ext/openlayers/ol.js"></script>
+        <!-- <script src="/ext/openlayers/ol.js"></script> -->
         <!-- Mapbox -->
         <script src='https://api.mapbox.com/mapbox.js/v3.3.0/mapbox.js'></script>
         <script>

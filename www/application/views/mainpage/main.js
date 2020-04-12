@@ -6,19 +6,19 @@ var map;
 var trackStrokeStyles = [
 	new ol.style.Style({
 		stroke: new ol.style.Stroke({
-			color : '#339933',
+			color : '#339933', // Ijo tua
 			width : 5			
 		})
 	}),
 	new ol.style.Style({
 		stroke: new ol.style.Stroke({
-			color : '#8BB33B',
+			color : '#8BB33B', // Ijo Muda
 			width : 5			
 		})
 	}),
 	new ol.style.Style({
 		stroke: new ol.style.Stroke({
-			color : '#267373',
+			color : '#267373', // Biru Muda
 			width : 5			
 		})
 	})
@@ -26,7 +26,7 @@ var trackStrokeStyles = [
 
 var walkStrokeStyle = new ol.style.Style({
 	stroke: new ol.style.Stroke({
-		color : '#CC3333',
+		color : '#CC3333', // Merah
 		width : 5
 	})
 });
@@ -63,10 +63,10 @@ $(document).ready(function() {
 		image : new ol.style.Circle({
 			radius : 6,
 			fill : new ol.style.Fill({
-				color : '#3399CC'
+				color : '#3399CC' // Biru rada tua
 			}),
 			stroke : new ol.style.Stroke({
-				color : '#fff',
+				color : '#fff', // putih
 				width : 2
 			})
 		})
