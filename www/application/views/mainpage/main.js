@@ -380,10 +380,10 @@ $(document).ready(function() {
 		var temp2 = $('<div class="tab-content"></div>');
 		$('#routingresults').append(sectionContainer);
 		$.each(results.routingresults, function(resultIndex, result) {
-			var resultHTML1 = resultIndex === 0 ? '<dd id="panel1-' + (resultIndex + 1) + '-tab" class="nav-link active" role="tab" aria-controls="panel1-' + (resultIndex + 1) + '" aria-selected="true">' : '<dd class="nav-link" role="tab" aria-selected="false">';
-			resultHTML1 += '<a data-toggle="tab" href="#panel1-' + (resultIndex + 1) + '">' + (result.traveltime === null ? '<?=$this->lang->line('Oops')?>' : result.traveltime) + '</a></dd>';
-			var resultHTML2 = '<div id="panel1-' + (resultIndex + 1)+'"';
-			resultHTML2 += resultIndex === 0 ? ' class="tab-pane active" role="tabpanel" aria-labelledby="panel1-' + (resultIndex + 1) + '-tab"><table>' : ' class="tab-pane" role="tabpanel"><table>';
+			var resultHTML1 = resultIndex === 0 ? '<dd class="nav-link active">' : '<dd class="nav-link">';
+			resultHTML1 += '<a data-toggle="tab" href="#panel1-' + (resultIndex + 1) + '" role="tab">' + (result.traveltime === null ? '<?=$this->lang->line('Oops')?>' : result.traveltime) + '</a></dd>';
+			var resultHTML2 = '<div id="panel1-' + (resultIndex + 1)+ '"';
+			resultHTML2 += resultIndex === 0 ? ' class="tab-pane active" role="tabpanel"><table>' : ' class="tab-pane" role="tabpanel"><table>';
 			$.each(result.steps, function (stepIndex, step) {
 				resultHTML2 += '<tr><td><img src="../images/means/' + step[0]+ '/' + step[1] + '.png" alt="' + step[1] + '"/></td><td>' + step[3];
 				if (step[4] != null) {
