@@ -6,7 +6,7 @@ mapboxgl.accessToken = 'pk.eyJ1Ijoia2VsdmluYWRyaWFuIiwiYSI6ImNrOGx1NWlkdDA1Ymczb
 var map = new mapboxgl.Map({
 	container: 'map', // container id
 	style: 'mapbox://styles/mapbox/outdoors-v11', // stylesheet location
-	center: [-74.5, 40], // starting position [lng, lat]
+	center: [106.827167, -6.175389], // starting position [lng, lat]
 	zoom: 9 // starting zoom
 });
 // // Mewarnai rute perjalanan dengan width 5
@@ -38,7 +38,7 @@ var map = new mapboxgl.Map({
 // 	})
 // });
 	
-// Mendapatkan lokasi saat ini
+// Get current location
 map.addControl(new mapboxgl.GeolocateControl({
     positionOptions: {
         enableHighAccuracy: true
@@ -56,27 +56,9 @@ $(document).ready(function() {
 	// // Jode
 	// var resultVectorSource = new ol.source.Vector();
 	// var inputVectorSource = new ol.source.Vector();
-	
-	// var map = new mapboxgl.Map({
-	// 	container: 'map',
-	// 	center: [-6.175389, 106.827167],
-	// 	zoom: 13,
-	// 	style: 'mapbox://styles/mapbox/outdoors-v11', // Specify which map style to use
-	// 	// style: style_object,
-	// 	hash: true,
-	// 	transformRequest: (url, resourceType)=> {
-	// 		if(resourceType === 'Source' && url.startsWith('http://myHost')) {
-	// 			return {
-	// 				url: url.replace('http', 'https'),
-	// 				headers: { 'map': true},
-	// 				credentials: 'include'  // Include cookies for cross-origin requests
-	//      		}
-	//     	}
-	//   	}
-	// });
 
 	// Start geolocation tracking routine
-	var geolocation = new ol.Geolocation({
+	var geolocation = new mapboxgl.GeolocateControl({
 		  projection: map.getView().getProjection()
 		});
 	var positionFeature = new ol.Feature();
