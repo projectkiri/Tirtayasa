@@ -2,7 +2,13 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
 var regions = <?=json_encode($this->config->item('regions'))?>;
-var map;
+L.mapbox.accessToken = 'pk.eyJ1Ijoia2VsdmluYWRyaWFuIiwiYSI6ImNrOGx1NWlkdDA1YmczbW44MGM3dzY2czAifQ.06uwtSbY-t2pKcFYLAoXqA';
+var map = L.mapbox.map('map')
+    // Koordinat sementara = monas,jakarta
+    .setView([-6.175389, 106.827167], 9)
+    .addLayer(L.mapbox.styleLayer('mapbox://styles/mapbox/streets-v11'));
+// Mewarnai rute perjalanan dengan width 5
+// Yoga
 var trackStrokeStyles = [
 	new ol.style.Style({
 		stroke: new ol.style.Stroke({
@@ -32,28 +38,33 @@ var walkStrokeStyle = new ol.style.Style({
 });
 		
 $(document).ready(function() {
+	// Untuk alert connection problem
 	var protocol = new CicaheumLedengProtocol("02428203D4526448", function(message) {
 		clearSecondaryAlerts();
 		showAlert('<?=$this->lang->line('Connection problem')?>', 'alert');
 	});
-	
-	var mapLayer = new ol.layer.Tile(
-	{
-		source : new ol.source.BingMaps(
-			{
-				key : 'AuV7xXD6_UMiQ5BLoZr0xkpjLpzWqMT55772Q8XtLIQeuDebHPKiNXSlZXxEr1GA',
-				imagerySet : 'Road'
-			})
-	});
+	// Jode
 	var resultVectorSource = new ol.source.Vector();
 	var inputVectorSource = new ol.source.Vector();
 	
-	var map = new ol.Map(
-	{
-		layers : [ mapLayer, new ol.layer.Vector({source: inputVectorSource}), new ol.layer.Vector({source: resultVectorSource}) ],
-		target : 'map'
-	});
-	
+	// var map = new mapboxgl.Map({
+	// 	container: 'map',
+	// 	center: [-6.175389, 106.827167],
+	// 	zoom: 13,
+	// 	style: 'mapbox://styles/mapbox/outdoors-v11', // Specify which map style to use
+	// 	// style: style_object,
+	// 	hash: true,
+	// 	transformRequest: (url, resourceType)=> {
+	// 		if(resourceType === 'Source' && url.startsWith('http://myHost')) {
+	// 			return {
+	// 				url: url.replace('http', 'https'),
+	// 				headers: { 'map': true},
+	// 				credentials: 'include'  // Include cookies for cross-origin requests
+	//      		}
+	//     	}
+	//   	}
+	// });
+
 	// Start geolocation tracking routine
 	var geolocation = new ol.Geolocation({
 		  projection: map.getView().getProjection()
@@ -97,6 +108,7 @@ $(document).ready(function() {
 	geolocation.setTracking(true);
 	// End geolocation tracking routine
 
+	//william & Indra
 	var markers = {start: null, finish: null};
 	updateRegion(region, false);
 	
@@ -554,4 +566,3 @@ $(document).ready(function() {
 		return d;
 	}
 });
-
