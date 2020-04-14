@@ -9,11 +9,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <meta name="description" content="<?= $this->lang->line('meta-description') ?>" />
         <meta name="author" content="Project Kiri (KIRI)" />
         <meta name="google-site-verification" content="9AtqvB-LWohGnboiTyhtZUXAEcOql9B-8lDjo_wcUew" />
-        <!-- openlayers -->
-        <!-- <link rel="stylesheet" href="/ext/openlayers/ol.css" /> -->
-        <!-- Mapbox -->
-        <!-- <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' /> -->
-        <link href='https://api.mapbox.com/mapbox.js/v3.3.0/mapbox.css' rel='stylesheet' />
+        <link href="https://api.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.css" rel="stylesheet" />
         <link rel="stylesheet" href="/stylesheets/styleIndex.css" />
         <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
         <link rel="stylesheet" href="/ext/bootstrap/css/bootstrap.min.css" />
@@ -122,10 +118,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <script src="/ext/bootstrap/js/vendor/fastclick.js"></script>
         <script src="/ext/bootstrap/js/bootstrap.min.js"></script>
         <script src="/ext/bootstrap/js/vendor/modernizr.js"></script>
-        <!-- openlayers -->
-        <!-- <script src="/ext/openlayers/ol.js"></script> -->
-        <!-- Mapbox -->
-        <script src='https://api.mapbox.com/mapbox.js/v3.3.0/mapbox.js'></script>
+        <script src="https://api.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.js"></script>
         <script>
             var region = '<?= $region ?>';
             var input_text = <?= json_encode($inputText) ?>;
