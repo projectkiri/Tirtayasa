@@ -2,50 +2,60 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
 var regions = <?=json_encode($this->config->item('regions'))?>;
-L.mapbox.accessToken = 'pk.eyJ1Ijoia2VsdmluYWRyaWFuIiwiYSI6ImNrOGx1NWlkdDA1YmczbW44MGM3dzY2czAifQ.06uwtSbY-t2pKcFYLAoXqA';
-var map = L.mapbox.map('map')
-    // Koordinat sementara = monas,jakarta
-    .setView([-6.175389, 106.827167], 9)
-    .addLayer(L.mapbox.styleLayer('mapbox://styles/mapbox/streets-v11'));
-// Mewarnai rute perjalanan dengan width 5
-// Yoga
-var trackStrokeStyles = [
-	new ol.style.Style({
-		stroke: new ol.style.Stroke({
-			color : '#339933', // Ijo tua
-			width : 5			
-		})
-	}),
-	new ol.style.Style({
-		stroke: new ol.style.Stroke({
-			color : '#8BB33B', // Ijo Muda
-			width : 5			
-		})
-	}),
-	new ol.style.Style({
-		stroke: new ol.style.Stroke({
-			color : '#267373', // Biru Muda
-			width : 5			
-		})
-	})
-];
-
-var walkStrokeStyle = new ol.style.Style({
-	stroke: new ol.style.Stroke({
-		color : '#CC3333', // Merah
-		width : 5
-	})
+mapboxgl.accessToken = 'pk.eyJ1Ijoia2VsdmluYWRyaWFuIiwiYSI6ImNrOGx1NWlkdDA1YmczbW44MGM3dzY2czAifQ.06uwtSbY-t2pKcFYLAoXqA';
+var map = new mapboxgl.Map({
+	container: 'map', // container id
+	style: 'mapbox://styles/mapbox/outdoors-v11', // stylesheet location
+	center: [-74.5, 40], // starting position [lng, lat]
+	zoom: 9 // starting zoom
 });
-		
+// // Mewarnai rute perjalanan dengan width 5
+// var trackStrokeStyles = [
+// 	new ol.style.Style({
+// 		stroke: new ol.style.Stroke({
+// 			color : '#339933', // Ijo tua
+// 			width : 5			
+// 		})
+// 	}),
+// 	new ol.style.Style({
+// 		stroke: new ol.style.Stroke({
+// 			color : '#8BB33B', // Ijo Muda
+// 			width : 5			
+// 		})
+// 	}),
+// 	new ol.style.Style({
+// 		stroke: new ol.style.Stroke({
+// 			color : '#267373', // Biru Muda
+// 			width : 5			
+// 		})
+// 	})
+// ];
+
+// var walkStrokeStyle = new ol.style.Style({
+// 	stroke: new ol.style.Stroke({
+// 		color : '#CC3333', // Merah
+// 		width : 5
+// 	})
+// });
+	
+// Mendapatkan lokasi saat ini
+map.addControl(new mapboxgl.GeolocateControl({
+    positionOptions: {
+        enableHighAccuracy: true
+    },
+    trackUserLocation: true
+}));
+
 $(document).ready(function() {
 	// Untuk alert connection problem
 	var protocol = new CicaheumLedengProtocol("02428203D4526448", function(message) {
 		clearSecondaryAlerts();
 		showAlert('<?=$this->lang->line('Connection problem')?>', 'alert');
 	});
-	// Jode
-	var resultVectorSource = new ol.source.Vector();
-	var inputVectorSource = new ol.source.Vector();
+
+	// // Jode
+	// var resultVectorSource = new ol.source.Vector();
+	// var inputVectorSource = new ol.source.Vector();
 	
 	// var map = new mapboxgl.Map({
 	// 	container: 'map',
@@ -108,7 +118,6 @@ $(document).ready(function() {
 	geolocation.setTracking(true);
 	// End geolocation tracking routine
 
-	//william & Indra
 	var markers = {start: null, finish: null};
 	updateRegion(region, false);
 	
