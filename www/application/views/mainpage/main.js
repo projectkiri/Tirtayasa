@@ -7,7 +7,7 @@ var map = new mapboxgl.Map({
 	container: 'map', // container id
 	style: 'mapbox://styles/mapbox/outdoors-v11', // stylesheet location
 	center: [106.827167, -6.175389], // starting position [lng, lat]
-	zoom: 9 // starting zoom
+	zoom: 12 // starting zoom
 });
 // // Mewarnai rute perjalanan dengan width 5
 // var trackStrokeStyles = [
@@ -74,11 +74,38 @@ $(document).ready(function() {
 			})
 		})
 	}));
+	map.on('load', function() {
+		// Add styles to the map
+		// sumber:https://docs.mapbox.com/mapbox-gl-js/example/measure/
+		map.addLayer({
+			id: 'measure-points',
+			type: 'circle',
+			source: 'geojson',
+			paint: {
+				'circle-radius': 5,
+				'circle-color': '#000'
+			},
+			filter: ['in', '$type', 'Point']
+		});
+		map.addLayer({
+			id: 'measure-lines',
+			type: 'line',
+			source: 'geojson',
+			layout: {
+			'line-cap': 'round',
+			'line-join': 'round'
+			},
+			paint: {
+				'line-color': '#000',
+				'line-width': 2.5
+			},
+			filter: ['in', '$type', 'LineString']
+		});
+	});
 	geolocation.on('change:position', function() {
 		var coordinates = geolocation.getPosition();
-		positionFeature
-				.setGeometry(coordinates ? new ol.geom.Point(
-						coordinates) : null);
+		positionFeature.setGeometry(coordinates ? new ol.geom.Point(
+		coordinates) : null);
 	});
 	var featuresOverlay = new ol.FeatureOverlay({
 		  map: map,
