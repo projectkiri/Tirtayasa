@@ -118,16 +118,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <script src="/ext/bootstrap/js/vendor/jquery.js"></script>
         <script src="/ext/bootstrap/js/vendor/fastclick.js"></script>
         <script src="/ext/bootstrap/js/bootstrap.min.js"></script>
-        <!-- Google Maps -->
-        <script>
-            var map;
-            function initMap() {
-              map = new google.maps.Map(document.getElementById('map'), {
-                center: {lat: -6.175389, lng: 106.827167},
-                zoom: 15
-              });
-            }
-        </script>
         <script src="/ext/openlayers/ol.js"></script>
         <script>
             var region = '<?= $region ?>';
