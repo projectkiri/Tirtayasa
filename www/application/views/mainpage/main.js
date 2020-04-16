@@ -2,63 +2,60 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
 var regions = <?=json_encode($this->config->item('regions'))?>;
-mapboxgl.accessToken = 'pk.eyJ1Ijoia2VsdmluYWRyaWFuIiwiYSI6ImNrOGx1NWlkdDA1YmczbW44MGM3dzY2czAifQ.06uwtSbY-t2pKcFYLAoXqA';
-var map = new mapboxgl.Map({
-	container: 'map', // container id
-	style: 'mapbox://styles/mapbox/outdoors-v11', // stylesheet location
-	center: [106.827167, -6.175389], // starting position [lng, lat]
-	zoom: 12 // starting zoom
+var map;
+var trackStrokeStyles = [
+	new ol.style.Style({
+		stroke: new ol.style.Stroke({
+			color : '#339933',
+			width : 5			
+		})
+	}),
+	new ol.style.Style({
+		stroke: new ol.style.Stroke({
+			color : '#8BB33B',
+			width : 5			
+		})
+	}),
+	new ol.style.Style({
+		stroke: new ol.style.Stroke({
+			color : '#267373',
+			width : 5			
+		})
+	})
+];
+
+var walkStrokeStyle = new ol.style.Style({
+	stroke: new ol.style.Stroke({
+		color : '#CC3333',
+		width : 5
+	})
 });
-// // Mewarnai rute perjalanan dengan width 5
-// var trackStrokeStyles = [
-// 	new ol.style.Style({
-// 		stroke: new ol.style.Stroke({
-// 			color : '#339933', // Ijo tua
-// 			width : 5			
-// 		})
-// 	}),
-// 	new ol.style.Style({
-// 		stroke: new ol.style.Stroke({
-// 			color : '#8BB33B', // Ijo Muda
-// 			width : 5			
-// 		})
-// 	}),
-// 	new ol.style.Style({
-// 		stroke: new ol.style.Stroke({
-// 			color : '#267373', // Biru Muda
-// 			width : 5			
-// 		})
-// 	})
-// ];
-
-// var walkStrokeStyle = new ol.style.Style({
-// 	stroke: new ol.style.Stroke({
-// 		color : '#CC3333', // Merah
-// 		width : 5
-// 	})
-// });
-	
-// Get current location
-map.addControl(new mapboxgl.GeolocateControl({
-    positionOptions: {
-        enableHighAccuracy: true
-    },
-    trackUserLocation: true
-}));
-
+		
 $(document).ready(function() {
-	// Untuk alert connection problem
 	var protocol = new CicaheumLedengProtocol("02428203D4526448", function(message) {
 		clearSecondaryAlerts();
 		showAlert('<?=$this->lang->line('Connection problem')?>', 'alert');
 	});
-
-	// // Jode
-	// var resultVectorSource = new ol.source.Vector();
-	// var inputVectorSource = new ol.source.Vector();
-
+	
+	var mapLayer = new ol.layer.Tile(
+	{
+		source : new ol.source.BingMaps(
+			{
+				key : 'AuV7xXD6_UMiQ5BLoZr0xkpjLpzWqMT55772Q8XtLIQeuDebHPKiNXSlZXxEr1GA',
+				imagerySet : 'Road'
+			})
+	});
+	var resultVectorSource = new ol.source.Vector();
+	var inputVectorSource = new ol.source.Vector();
+	
+	var map = new ol.Map(
+	{
+		layers : [ mapLayer, new ol.layer.Vector({source: inputVectorSource}), new ol.layer.Vector({source: resultVectorSource}) ],
+		target : 'map'
+	});
+	
 	// Start geolocation tracking routine
-	var geolocation = new mapboxgl.GeolocateControl({
+	var geolocation = new ol.Geolocation({
 		  projection: map.getView().getProjection()
 		});
 	var positionFeature = new ol.Feature();
@@ -66,46 +63,19 @@ $(document).ready(function() {
 		image : new ol.style.Circle({
 			radius : 6,
 			fill : new ol.style.Fill({
-				color : '#3399CC' // Biru rada tua
+				color : '#3399CC'
 			}),
 			stroke : new ol.style.Stroke({
-				color : '#fff', // putih
+				color : '#fff',
 				width : 2
 			})
 		})
 	}));
-	map.on('load', function() {
-		// Add styles to the map
-		// sumber:https://docs.mapbox.com/mapbox-gl-js/example/measure/
-		map.addLayer({
-			id: 'measure-points',
-			type: 'circle',
-			source: 'geojson',
-			paint: {
-				'circle-radius': 5,
-				'circle-color': '#000'
-			},
-			filter: ['in', '$type', 'Point']
-		});
-		map.addLayer({
-			id: 'measure-lines',
-			type: 'line',
-			source: 'geojson',
-			layout: {
-			'line-cap': 'round',
-			'line-join': 'round'
-			},
-			paint: {
-				'line-color': '#000',
-				'line-width': 2.5
-			},
-			filter: ['in', '$type', 'LineString']
-		});
-	});
 	geolocation.on('change:position', function() {
 		var coordinates = geolocation.getPosition();
-		positionFeature.setGeometry(coordinates ? new ol.geom.Point(
-		coordinates) : null);
+		positionFeature
+				.setGeometry(coordinates ? new ol.geom.Point(
+						coordinates) : null);
 	});
 	var featuresOverlay = new ol.FeatureOverlay({
 		  map: map,
@@ -584,3 +554,4 @@ $(document).ready(function() {
 		return d;
 	}
 });
+

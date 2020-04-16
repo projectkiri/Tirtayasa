@@ -5,14 +5,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <head>
         <title>KIRI</title>
         <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="description" content="<?= $this->lang->line('meta-description') ?>" />
         <meta name="author" content="Project Kiri (KIRI)" />
         <meta name="google-site-verification" content="9AtqvB-LWohGnboiTyhtZUXAEcOql9B-8lDjo_wcUew" />
-        <link href="https://api.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.css" rel="stylesheet" />
+        <link rel="stylesheet" href="/ext/bootstrap/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="/ext/openlayers/ol.css" />
         <link rel="stylesheet" href="/stylesheets/styleIndex.css" />
         <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
-        <link rel="stylesheet" href="/ext/bootstrap/css/bootstrap.min.css" />
+        <script src="/ext/bootstrap/js/vendor/modernizr.js"></script>
     </head>
     <body>
         <div class="container-fluid">
@@ -117,8 +118,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <script src="/ext/bootstrap/js/vendor/jquery.js"></script>
         <script src="/ext/bootstrap/js/vendor/fastclick.js"></script>
         <script src="/ext/bootstrap/js/bootstrap.min.js"></script>
-        <script src="/ext/bootstrap/js/vendor/modernizr.js"></script>
-        <script src="https://api.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.js"></script>
+        <!-- Google Maps -->
+        <script>
+            var map;
+            function initMap() {
+              map = new google.maps.Map(document.getElementById('map'), {
+                center: {lat: -6.175389, lng: 106.827167},
+                zoom: 15
+              });
+            }
+        </script>
+        <script src="/ext/openlayers/ol.js"></script>
         <script>
             var region = '<?= $region ?>';
             var input_text = <?= json_encode($inputText) ?>;
