@@ -2,7 +2,13 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
 var regions = <?=json_encode($this->config->item('regions'))?>;
-var map;
+mapboxgl.accessToken = 'pk.eyJ1Ijoia2VsdmluYWRyaWFuIiwiYSI6ImNrOGx1NWlkdDA1YmczbW44MGM3dzY2czAifQ.06uwtSbY-t2pKcFYLAoXqA';
+var map = new mapboxgl.Map({
+	container: 'map', // container id
+	style: 'mapbox://styles/mapbox/outdoors-v11', // stylesheet location
+	center: [106.827167, -6.175389], // starting position [lng, lat]
+	zoom: 12 // starting zoom
+});
 var trackStrokeStyles = [
 	new ol.style.Style({
 		stroke: new ol.style.Stroke({
