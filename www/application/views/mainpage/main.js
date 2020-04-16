@@ -376,14 +376,14 @@ $(document).ready(function() {
 		var kiriURL = encodeURIComponent('http://kiri.travel?start=' + encodeURIComponent($('#startInput').val()) + '&finish=' + encodeURIComponent($('#finishInput').val()) + '&region=' + region);
 		var kiriMessage = encodeURIComponent('<?=$this->lang->line("I take public transport")?>'.replace('%finish%', $('#finishInput').val()).replace('%start%', $('#startInput').val()));
 		var sectionContainer = $('<div></div>');
-		var temp1 = $('<dl id="myTab" class="nav nav-tabs" role="tablist"></dl>');
+		var temp1 = $('<ul id="myTab" class="nav nav-tabs" role="tablist"></ul>');
 		var temp2 = $('<div class="tab-content"></div>');
 		$('#routingresults').append(sectionContainer);
 		$.each(results.routingresults, function(resultIndex, result) {
-			var resultHTML1 = resultIndex === 0 ? '<dd class="nav-link active">' : '<dd class="nav-link">';
-			resultHTML1 += '<a data-toggle="tab" href="#panel1-' + (resultIndex + 1) + '" role="tab">' + (result.traveltime === null ? '<?=$this->lang->line('Oops')?>' : result.traveltime) + '</a></dd>';
+			var resultHTML1 = resultIndex === 0 ? '<li class="nav-link active">' : '<li class="nav-link">';
+			resultHTML1 += '<a data-toggle="tab" href="#panel1-' + (resultIndex + 1) + '" role="tab">' + (result.traveltime === null ? '<?=$this->lang->line('Oops')?>' : result.traveltime) + '</a></li>';
 			var resultHTML2 = '<div id="panel1-' + (resultIndex + 1)+ '"';
-			resultHTML2 += resultIndex === 0 ? ' class="tab-pane active" role="tabpanel"><table>' : ' class="tab-pane" role="tabpanel fade"><table>';
+			resultHTML2 += resultIndex === 0 ? ' class="tab-pane container active" role="tabpanel"><table>' : ' class="tab-pane container fade" role="tabpanel"><table>';
 			$.each(result.steps, function (stepIndex, step) {
 				resultHTML2 += '<tr><td><img src="../images/means/' + step[0]+ '/' + step[1] + '.png" alt="' + step[1] + '"/></td><td>' + step[3];
 				if (step[4] != null) {
