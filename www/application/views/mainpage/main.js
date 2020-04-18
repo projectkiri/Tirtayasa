@@ -66,40 +66,6 @@ $(document).ready(function () {
 		trackUserLocation: true
 	});
 	map.addControl(geolocation);
-
-	// var positionFeature = new ol.Feature();
-	// positionFeature.setStyle(new ol.style.Style({
-	// 	image : new ol.style.Circle({
-	// 		radius : 6,
-	// 		fill : new ol.style.Fill({
-	// 			color : '#3399CC'
-	// 		}),
-	// 		stroke : new ol.style.Stroke({
-	// 			color : '#fff',
-	// 			width : 2
-	// 		})
-	// 	})
-	// }));
-
-	// update the HTML page when the position changes
-	// var featuresOverlay = new ol.FeatureOverlay({
-	// 	map: map,
-	// 	features: [positionFeature]
-	// });
-
-	// geolocation.once('change', function(evt) {
-	// 	var closestKey = null, closestDistance = null;
-	// 	$.each(regions, function(key, value) {
-	// 		var distance = computeDistance(ol.proj.transform(geolocation.getPosition(), 'EPSG:3857', 'EPSG:4326'), [value.lon, value.lat]);
-	// 		if (closestDistance == null || distance < value.radius / 1000) {
-	// 			closestDistance = distance;
-	// 			closestKey = key;
-	// 		}
-	// 	});
-	// 	$('#regionselect').val(closestKey);
-	// 	updateRegion(closestKey, false);
-	// });
-	// geolocation.setTracking(true);
 	// End geolocation tracking routine
 
 	var markers = { start: null, finish: null };
