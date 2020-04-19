@@ -69,92 +69,124 @@ $(document).ready(function () {
 	// End geolocation tracking routine
 
 	var markers = { start: null, finish: null };
-	updateRegion(region, false);
+	// updateRegion(region, false);
 
-	var focused = false;
-	$.each(['start', 'finish'], function (sfIndex, sfValue) {
-		var placeInput = $('#' + sfValue + 'Input');
-		var placeSelect = $('#' + sfValue + 'Select');
+	// var focused = false;
+	// $.each(['start', 'finish'], function (sfIndex, sfValue) {
+	// 	var placeInput = $('#' + sfValue + 'Input');
+	// 	var placeSelect = $('#' + sfValue + 'Select');
 
-		if (input_text[sfValue] != null) {
-			placeInput.val(input_text[sfValue]);
-			if (coordinates[sfValue] != null) {
-				placeInput.prop('disabled', true);
-				var lonlat = stringToLonLat(coordinates[sfValue]);
-				mapCenter = lonlat;
-			}
-		} else if (focused === false) {
-			placeInput.focus();
-			focused = true;
-		}
-		$('#' + sfValue + 'Select').addClass('hidden');
+	// 	if (input_text[sfValue] != null) {
+	// 		placeInput.val(input_text[sfValue]);
+	// 		if (coordinates[sfValue] != null) {
+	// 			placeInput.prop('disabled', true);
+	// 			var lonlat = stringToLonLat(coordinates[sfValue]);
+	// 			mapCenter = lonlat;
+	// 		}
+	// 	} else if (focused === false) {
+	// 		placeInput.focus();
+	// 		focused = true;
+	// 	}
+	// 	$('#' + sfValue + 'Select').addClass('hidden');
 
-		placeInput.change(function () {
-			coordinates[sfValue] = null;
-			if (markers[sfValue] != null) {
-				inputVectorSource.removeFeature(markers[sfValue]);
-				markers[sfValue] = null;
-			}
-		});
-		placeSelect.change(function () {
-			clearAlerts();
-			showAlert('<img src="images/loading.gif" alt="... "/> ' + '<?=$this->lang->line('Please wait')?>...', 'secondary');
-			coordinates[sfValue] = $(this).val();
-			checkCoordinatesThenRoute(coordinates);
-		});
+	// 	placeInput.change(function () {
+	// 		coordinates[sfValue] = null;
+	// 		if (markers[sfValue] != null) {
+	// 			inputVectorSource.removeFeature(markers[sfValue]);
+	// 			markers[sfValue] = null;
+	// 		}
+	// 	});
+	// 	placeSelect.change(function () {
+	// 		clearAlerts();
+	// 		showAlert('<img src="images/loading.gif" alt="... "/> ' + '<?=$this->lang->line('Please wait')?>...', 'secondary');
+	// 		coordinates[sfValue] = $(this).val();
+	// 		checkCoordinatesThenRoute(coordinates);
+	// 	});
 
-	});
+	// });
 
 	// Event handlers
-	var localeSelect = $('#localeselect');
-	localeSelect.change(function () {
-		// IE fix: when window.location.origin is not available 
-		if (!window.location.origin) {
-			window.location.origin = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port : '');
-		}
-		window.location.replace(window.location.origin + "?locale=" + localeSelect.val());
-	});
-	var regionSelect = $('#regionselect');
-	regionSelect.change(function () {
-		updateRegion(regionSelect.val(), true);
-		coordinates['start'] = null;
-		coordinates['finish'] = null;
-	});
-	$('#findbutton').click(findRouteClicked);
-	$('input').keyup(function (e) {
-		if (e.keyCode === 13) {
-			findRouteClicked();
-		}
-	});
-	$('#resetbutton').click(resetScreen);
-	$('#swapbutton').click(swapInput);
+	// var localeSelect = $('#localeselect');
+	// localeSelect.change(function () {
+	// 	// IE fix: when window.location.origin is not available 
+	// 	if (!window.location.origin) {
+	// 		window.location.origin = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port : '');
+	// 	}
+	// 	window.location.replace(window.location.origin + "?locale=" + localeSelect.val());
+	// });
+	// var regionSelect = $('#regionselect');
+	// regionSelect.change(function () {
+	// 	updateRegion(regionSelect.val(), true);
+	// 	coordinates['start'] = null;
+	// 	coordinates['finish'] = null;
+	// });
+	// $('#findbutton').click(findRouteClicked);
+	// $('input').keyup(function (e) {
+	// 	if (e.keyCode === 13) {
+	// 		findRouteClicked();
+	// 	}
+	// });
+	// $('#resetbutton').click(resetScreen);
+	// $('#swapbutton').click(swapInput);
 
 	// Map click event
 	map.on('click', function (event) {
 		if ($('#startInput').val() === '') {
-			markers['start'] = new ol.Feature({
-				geometry: new ol.geom.Point(event.coordinate)
-			})
-			markers['start'].setStyle(new ol.style.Style({
-				image: new ol.style.Icon({
-					src: 'images/start.png',
-					anchor: [1.0, 1.0]
-				})
-			}));
-			inputVectorSource.addFeature(markers['start']);
-			$('#startInput').val(latLngToString(ol.proj.transform(event.coordinate, 'EPSG:3857', 'EPSG:4326')));
+			map.addSource('start', {
+				'type': 'geojson',
+				'data': {
+					'type': 'FeatureCollection',
+					'features': [
+						{
+							'type': 'Feature',
+							'geometry': {
+								'type': 'Point',
+								'coordinates': [event.lngLat['lng'], event.lngLat['lat']]
+							}
+						}
+					]
+				}
+			});
+			map.addLayer({
+				'id': 'start',
+				'type': 'circle',
+				'source': 'start'
+			});
+
+			// // markers['start'] = new ol.Feature({
+			// // 	geometry: new ol.geom.Point(event.coordinate)
+			// // })
+			// markers['start'].setStyle(new ol.style.Style({
+			// 	image: new ol.style.Icon({
+			// 		src: 'images/start.png',
+			// 		anchor: [1.0, 1.0]
+			// 	})
+			// }));
+			// inputVectorSource.addFeature(markers['start']);
+			$('#startInput').val(event.lngLat['lng'] + ', ' + event.lngLat['lat']);
+			// $('#startInput').val(latLngToString(ol.proj.transform(event.coordinate, 'EPSG:3857', 'EPSG:4326')));
 		} else if ($('#finishInput').val() === '') {
-			markers['finish'] = new ol.Feature({
-				geometry: new ol.geom.Point(event.coordinate)
-			})
-			markers['finish'].setStyle(new ol.style.Style({
-				image: new ol.style.Icon({
-					src: 'images/finish.png',
-					anchor: [0.0, 1.0]
-				})
-			}));
-			inputVectorSource.addFeature(markers['finish']);
-			$('#finishInput').val(latLngToString(ol.proj.transform(event.coordinate, 'EPSG:3857', 'EPSG:4326')));
+			map.addSource('finish', {
+				'type': 'geojson',
+				'data': {
+					'type': 'FeatureCollection',
+					'features': [
+						{
+							'type': 'Feature',
+							'geometry': {
+								'type': 'Point',
+								'coordinates': [event.lngLat['lng'], event.lngLat['lat']]
+							}
+						}
+					]
+				}
+			});
+			map.addLayer({
+				'id': 'finish',
+				'type': 'circle',
+				'source': 'finish'
+			});
+			$('#finishInput').val(event.lngLat['lng'] + ', ' + event.lngLat['lat']);
 		}
 	});
 
@@ -203,13 +235,13 @@ $(document).ready(function () {
 	}
 
 	function clearStartFinishMarker() {
-		if (markers['start'] != null) {
-			markers['start'] = null;
-		}
-		if (markers['finish'] != null) {
-			markers['finish'] = null;
-		}
-		inputVectorSource.clear();
+		// if (markers['start'] != null) {
+		// 	markers['start'] = null;
+		// }
+		// if (markers['finish'] != null) {
+		// 	markers['finish'] = null;
+		// }
+		// inputVectorSource.clear();
 	}
 
 	/**
