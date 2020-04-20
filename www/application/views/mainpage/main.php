@@ -3,14 +3,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 ?><!DOCTYPE html>
 <html class="no-js" lang="en">
     <head>
-        <!-- This is a check message -->
         <title>KIRI</title>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="description" content="<?= $this->lang->line('meta-description') ?>" />
         <meta name="author" content="Project Kiri (KIRI)" />
         <meta name="google-site-verification" content="9AtqvB-LWohGnboiTyhtZUXAEcOql9B-8lDjo_wcUew" />
- 	    <!-- ganti ke bootstrap -->
         <link rel="stylesheet" href="/ext/bootstrap/css/bootstrap.min.css" />
         <link rel="stylesheet" href="/ext/openlayers/ol.css" />
         <link rel="stylesheet" href="/stylesheets/styleIndex.css" />
