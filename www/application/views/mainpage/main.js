@@ -383,7 +383,7 @@ $(document).ready(function() {
 			var resultHTML1 = resultIndex === 0 ? '<li><a class="nav-link active ' : '<li><a class="nav-link ';
 			resultHTML1 += 'text-decoration-none" data-toggle="tab" href="#panel1-' + (resultIndex + 1) + '" role="tab">' + (result.traveltime === null ? '<?=$this->lang->line('Oops')?>' : result.traveltime) + '</a></li>';
 			var resultHTML2 = '<div id="panel1-' + (resultIndex + 1) + '"';
-			resultHTML2 += resultIndex === 0 ? ' class="x tab-pane active" role="tabpanel"><table class="table-striped">' : ' class="x tab-pane" role="tabpanel"><table class="table-striped">';
+			resultHTML2 += resultIndex === 0 ? ' class="tab-pane active" role="tabpanel"><table class="table-striped">' : ' class="x tab-pane" role="tabpanel"><table class="table-striped">';
 			$.each(result.steps, function (stepIndex, step) {
 				resultHTML2 += '<tr><td><img src="../images/means/' + step[0]+ '/' + step[1] + '.png" alt="' + step[1] + '"/></td><td>' + step[3];
 				if (step[4] != null) {
