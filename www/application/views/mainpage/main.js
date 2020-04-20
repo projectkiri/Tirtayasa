@@ -163,7 +163,7 @@ $(document).ready(function () {
 			// 	})
 			// }));
 			// inputVectorSource.addFeature(markers['start']);
-			$('#startInput').val(event.lngLat['lng'] + ', ' + event.lngLat['lat']);
+			$('#startInput').val(event.lngLat['lat'] + ', ' + event.lngLat['lng']);
 			// $('#startInput').val(latLngToString(ol.proj.transform(event.coordinate, 'EPSG:3857', 'EPSG:4326')));
 		} else if ($('#finishInput').val() === '') {
 			map.addSource('finish', {
@@ -186,7 +186,7 @@ $(document).ready(function () {
 				'type': 'circle',
 				'source': 'finish'
 			});
-			$('#finishInput').val(event.lngLat['lng'] + ', ' + event.lngLat['lat']);
+			$('#finishInput').val(event.lngLat['lat'] + ', ' + event.lngLat['lng']);
 		}
 	});
 
