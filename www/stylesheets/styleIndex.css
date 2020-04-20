@@ -85,8 +85,12 @@ a:link.ticket, a:visited.ticket, a:active.ticket, a:hover.ticket {
 }
 
 .paddingControl {
-	padding: 1%;
+	padding: 2%;
 }
 .paddingBottom {
 	padding-bottom: 3%;
+}
+
+.nav-link a:hover{
+    text-decoration: none;
 }
