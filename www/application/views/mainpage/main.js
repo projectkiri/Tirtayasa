@@ -5,22 +5,91 @@ var regions = <?= json_encode($this -> config -> item('regions')) ?>;
 mapboxgl.accessToken = 'pk.eyJ1Ijoia2VsdmluYWRyaWFuIiwiYSI6ImNrOGx1NWlkdDA1YmczbW44MGM3dzY2czAifQ.06uwtSbY-t2pKcFYLAoXqA';
 var map;
 
+    map.on('load', function() {
+        map.addSource('lines', {
+            'type': 'geojson',
+            'data': {
+                'type': 'FeatureCollection',
+                'features': [
+                    {
+                        'type': 'Feature',
+                        'properties': {
+                            'color': '#339933' // hijau tua
+                        },
+                        'geometry': {
+                            'type': 'LineString',
+                            'coordinates': [
+                                //koordinat
+                            ]
+                        }
+                    },
+                    {
+                        'type': 'Feature',
+                        'properties': {
+                            'color': '#8BB33B' // hijau muda
+                        },
+                        'geometry': {
+                            'type': 'LineString',
+                            'coordinates': [
+                                //koordinat
+                            ]
+                        }
+					},
+					{
+                        'type': 'Feature',
+                        'properties': {
+                            'color': '#267373' // biru muda
+                        },
+                        'geometry': {
+                            'type': 'LineString',
+                            'coordinates': [
+                                //koordinat
+                            ]
+                        }
+					},
+					{
+                        'type': 'Feature',
+                        'properties': {
+                            'color': '#CC3333' // merah
+                        },
+                        'geometry': {
+                            'type': 'LineString',
+                            'coordinates': [
+                                //koordinat
+                            ]
+                        }
+                    }
+                ]
+            }
+        });
+        map.addLayer({
+            'id': 'lines',
+            'type': 'line',
+            'source': 'lines',
+            'paint': {
+                'line-width': 5,
+                // Use a get expression (https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-get)
+                // to set the line-color to a feature property value.
+                'line-color': ['get', 'color']
+            }
+        });
+    });
 // var trackStrokeStyles = [
 // 	new ol.style.Style({
 // 		stroke: new ol.style.Stroke({
-// 			color : '#339933',
+// 			color : '#339933', hijau tua
 // 			width : 5			
 // 		})
 // 	}),
 // 	new ol.style.Style({
 // 		stroke: new ol.style.Stroke({
-// 			color : '#8BB33B',
+// 			color : '#8BB33B', hijau muda
 // 			width : 5			
 // 		})
 // 	}),
 // 	new ol.style.Style({
 // 		stroke: new ol.style.Stroke({
-// 			color : '#267373',
+// 			color : '#267373', biru muda
 // 			width : 5			
 // 		})
 // 	})
@@ -28,7 +97,7 @@ var map;
 
 // var walkStrokeStyle = new ol.style.Style({
 // 	stroke: new ol.style.Stroke({
-// 		color : '#CC3333',
+// 		color : '#CC3333', merah
 // 		width : 5
 // 	})
 // });
