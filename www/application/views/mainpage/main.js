@@ -56,6 +56,7 @@ $(document).ready(function () {
 		center: [-122.486055, 37.830948], // starting position [lng, lat]
 		zoom: 12 // starting zoom
 	});
+	map.addControl(new mapboxgl.NavigationControl());
 
 	// line color start
 	map.on('load', function() {
@@ -192,7 +193,7 @@ $(document).ready(function () {
 	// End geolocation tracking routine
 
 	var markers = { start: null, finish: null };
-	// updateRegion(region, false);
+	updateRegion(region, false);
 
 	// var focused = false;
 	// $.each(['start', 'finish'], function (sfIndex, sfValue) {
@@ -229,28 +230,28 @@ $(document).ready(function () {
 	// });
 
 	// Event handlers
-	// var localeSelect = $('#localeselect');
-	// localeSelect.change(function () {
-	// 	// IE fix: when window.location.origin is not available 
-	// 	if (!window.location.origin) {
-	// 		window.location.origin = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port : '');
-	// 	}
-	// 	window.location.replace(window.location.origin + "?locale=" + localeSelect.val());
-	// });
-	// var regionSelect = $('#regionselect');
-	// regionSelect.change(function () {
-	// 	updateRegion(regionSelect.val(), true);
-	// 	coordinates['start'] = null;
-	// 	coordinates['finish'] = null;
-	// });
-	// $('#findbutton').click(findRouteClicked);
-	// $('input').keyup(function (e) {
-	// 	if (e.keyCode === 13) {
-	// 		findRouteClicked();
-	// 	}
-	// });
+	var localeSelect = $('#localeselect');
+	localeSelect.change(function () {
+		// IE fix: when window.location.origin is not available 
+		if (!window.location.origin) {
+			window.location.origin = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port : '');
+		}
+		window.location.replace(window.location.origin + "?locale=" + localeSelect.val());
+	});
+	var regionSelect = $('#regionselect');
+	regionSelect.change(function () {
+		updateRegion(regionSelect.val(), true);
+		coordinates['start'] = null;
+		coordinates['finish'] = null;
+	});
+	$('#findbutton').click(findRouteClicked);
+	$('input').keyup(function (e) {
+		if (e.keyCode === 13) {
+			findRouteClicked();
+		}
+	});
 	$('#resetbutton').click(resetScreen);
-	// $('#swapbutton').click(swapInput);
+	$('#swapbutton').click(swapInput);
 
 	// Map click event
 	map.on('click', function (event) {
@@ -282,6 +283,8 @@ $(document).ready(function () {
 							'icon-size': 1
 						}
 					});
+
+					markers['start'] = map.getSource('start');
 				}
 			);
 
@@ -325,6 +328,8 @@ $(document).ready(function () {
 							'icon-size': 1
 						}
 					});
+
+					markers['finish'] = map.getSource('finish')
 				}
 			);
 			$('#finishInput').val(event.lngLat['lat'] + ', ' + event.lngLat['lng']);
@@ -382,10 +387,14 @@ $(document).ready(function () {
 		// if (markers['finish'] != null) {
 		// 	markers['finish'] = null;
 		// }
-		map.removeLayer('start');
-		map.removeSource('start');
-		map.removeLayer('finish');
-		map.removeSource('finish');
+		if (markers['start'] != null) {
+			map.removeLayer('start');
+			map.removeSource('start');
+		}
+		if (markers['finish'] != null) {
+			map.removeLayer('finish');
+			map.removeSource('finish');
+		}
 		// inputVectorSource.clear();
 	}
 
@@ -680,8 +689,7 @@ function updateRegion(newRegion, updateCookie) {
 	region = newRegion;
 	setCookie('region', region);
 	var point = [regions[region].lon, regions[region].lat];
-	map.getView().setCenter(ol.proj.transform(point, 'EPSG:4326', 'EPSG:3857'));
-	map.getView().setZoom(regions[region].zoom);
+	map.flyTo({ center: point, zoom: regions[region].zoom });
 }
 
 /**
