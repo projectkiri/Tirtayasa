@@ -57,6 +57,9 @@ $(document).ready(function () {
 		zoom: 12 // starting zoom
 	});
 	map.addControl(new mapboxgl.NavigationControl());
+	// var resultVectorSource = map.addSource('resultVectorSource', {
+	// 	type: 'vector'
+	// });
 
 	// line color start
 	map.on('load', function() {
@@ -381,19 +384,15 @@ $(document).ready(function () {
 	}
 
 	function clearStartFinishMarker() {
-		// if (markers['start'] != null) {
-		// 	markers['start'] = null;
-		// }
-		// if (markers['finish'] != null) {
-		// 	markers['finish'] = null;
-		// }
 		if (markers['start'] != null) {
 			map.removeLayer('start');
 			map.removeSource('start');
+			if (map.hasImage('startPoint')) map.removeImage('startPoint');
 		}
 		if (markers['finish'] != null) {
 			map.removeLayer('finish');
 			map.removeSource('finish');
+			if (map.hasImage('finishPoint')) map.removeImage('finishPoint');
 		}
 		// inputVectorSource.clear();
 	}
