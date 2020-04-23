@@ -57,10 +57,7 @@ $(document).ready(function () {
 		zoom: 12 // starting zoom
 	});
 	map.addControl(new mapboxgl.NavigationControl());
-	// var resultVectorSource = map.addSource('resultVectorSource', {
-	// 	type: 'vector'
-	// });
-
+	
 	// line color start
 	map.on('load', function() {
 	    map.addSource('route', {
@@ -198,39 +195,41 @@ $(document).ready(function () {
 	var markers = { start: null, finish: null };
 	updateRegion(region, false);
 
-	// var focused = false;
-	// $.each(['start', 'finish'], function (sfIndex, sfValue) {
-	// 	var placeInput = $('#' + sfValue + 'Input');
-	// 	var placeSelect = $('#' + sfValue + 'Select');
+	var focused = false;
+	$.each(['start', 'finish'], function (sfIndex, sfValue) {
+		var placeInput = $('#' + sfValue + 'Input');
+		var placeSelect = $('#' + sfValue + 'Select');
 
-	// 	if (input_text[sfValue] != null) {
-	// 		placeInput.val(input_text[sfValue]);
-	// 		if (coordinates[sfValue] != null) {
-	// 			placeInput.prop('disabled', true);
-	// 			var lonlat = stringToLonLat(coordinates[sfValue]);
-	// 			mapCenter = lonlat;
-	// 		}
-	// 	} else if (focused === false) {
-	// 		placeInput.focus();
-	// 		focused = true;
-	// 	}
-	// 	$('#' + sfValue + 'Select').addClass('hidden');
+		if (input_text[sfValue] != null) {
+			placeInput.val(input_text[sfValue]);
+			if (coordinates[sfValue] != null) {
+				placeInput.prop('disabled', true);
+				var lonlat = stringToLonLat(coordinates[sfValue]);
+				mapCenter = lonlat;
+			}
+		} else if (focused === false) {
+			placeInput.focus();
+			focused = true;
+		}
+		$('#' + sfValue + 'Select').addClass('hidden');
 
-	// 	placeInput.change(function () {
-	// 		coordinates[sfValue] = null;
-	// 		if (markers[sfValue] != null) {
-	// 			inputVectorSource.removeFeature(markers[sfValue]);
-	// 			markers[sfValue] = null;
-	// 		}
-	// 	});
-	// 	placeSelect.change(function () {
-	// 		clearAlerts();
-	// 		showAlert('<img src="images/loading.gif" alt="... "/> ' + '<?=$this->lang->line('Please wait')?>...', 'secondary');
-	// 		coordinates[sfValue] = $(this).val();
-	// 		checkCoordinatesThenRoute(coordinates);
-	// 	});
+		placeInput.change(function () {
+			coordinates[sfValue] = null;
+			if (markers[sfValue] != null) {
+				// inputVectorSource.removeFeature(markers[sfValue]);
+				map.removeLayer(sfValue);
+				map.removeSource(sfValue)
 
-	// });
+			}
+		});
+		placeSelect.change(function () {
+			clearAlerts();
+			showAlert('<img src="images/loading.gif" alt="... "/> ' + '<?=$this->lang->line('Please wait')?>...', 'secondary');
+			coordinates[sfValue] = $(this).val();
+			checkCoordinatesThenRoute(coordinates);
+		});
+
+	});
 
 	// Event handlers
 	var localeSelect = $('#localeselect');
@@ -286,23 +285,10 @@ $(document).ready(function () {
 							'icon-size': 1
 						}
 					});
-
 					markers['start'] = map.getSource('start');
 				}
 			);
-
-			// // markers['start'] = new ol.Feature({
-			// // 	geometry: new ol.geom.Point(event.coordinate)
-			// // })
-			// markers['start'].setStyle(new ol.style.Style({
-			// 	image: new ol.style.Icon({
-			// 		src: 'images/start.png',
-			// 		anchor: [1.0, 1.0]
-			// 	})
-			// }));
-			// inputVectorSource.addFeature(markers['start']);
 			$('#startInput').val(event.lngLat['lat'] + ', ' + event.lngLat['lng']);
-			// $('#startInput').val(latLngToString(ol.proj.transform(event.coordinate, 'EPSG:3857', 'EPSG:4326')));
 		} else if ($('#finishInput').val() === '') {
 			map.loadImage('../../../images/finish.png',
 				function(error, image) {
@@ -331,7 +317,6 @@ $(document).ready(function () {
 							'icon-size': 1
 						}
 					});
-
 					markers['finish'] = map.getSource('finish')
 				}
 			);
@@ -538,36 +523,36 @@ $(document).ready(function () {
 		$.each(results.routingresults, function (resultIndex, result) {
 			var resultHTML1 = resultIndex === 0 ? '<li class="nav-link active">' : '<li class="nav-link">';
 			resultHTML1 += '<a data-toggle="tab" href="#panel1-' + (resultIndex + 1) + '" role="tab">' + (result.traveltime === null ? '<?=$this->lang->line('Oops')?>' : result.traveltime) + '</a></li>';
-		var resultHTML2 = '<div id="panel1-' + (resultIndex + 1) + '"';
-		resultHTML2 += resultIndex === 0 ? ' class="tab-pane container active" role="tabpanel"><table>' : ' class="tab-pane container fade" role="tabpanel"><table>';
-		$.each(result.steps, function (stepIndex, step) {
-			resultHTML2 += '<tr><td><img src="../images/means/' + step[0] + '/' + step[1] + '.png" alt="' + step[1] + '"/></td><td>' + step[3];
-			if (step[4] != null) {
-				resultHTML2 += ' <a class="ticket" href="' + step[4] + '" target="_blank"><?=$this->lang->line('BUY TICKET')?></a></td></tr>';
-			}
-			if (step[5] != null) {
-				resultHTML2 += ' <a href="' + step[5] + '" target="_blank"><img src="images/edit.png" class="fontsize" alt="edit"/></a></td></tr>';
-			}
-			resultHTML2 += '</td></tr>';
+			var resultHTML2 = '<div id="panel1-' + (resultIndex + 1) + '"';
+			resultHTML2 += resultIndex === 0 ? ' class="tab-pane container active" role="tabpanel"><table>' : ' class="tab-pane container fade" role="tabpanel"><table>';
+			$.each(result.steps, function (stepIndex, step) {
+				resultHTML2 += '<tr><td><img src="../images/means/' + step[0] + '/' + step[1] + '.png" alt="' + step[1] + '"/></td><td>' + step[3];
+				if (step[4] != null) {
+					resultHTML2 += ' <a class="ticket" href="' + step[4] + '" target="_blank"><?=$this->lang->line('BUY TICKET')?></a></td></tr>';
+				}
+				if (step[5] != null) {
+					resultHTML2 += ' <a href="' + step[5] + '" target="_blank"><img src="images/edit.png" class="fontsize" alt="edit"/></a></td></tr>';
+				}
+				resultHTML2 += '</td></tr>';
+			});
+			resultHTML2 += "<tr><td class=\"center\" colspan=\"2\">";
+			resultHTML2 += '<a href="https://youtu.be/jDFePujA8Kk" target="_blank" style="font-size: small;">' + '<?=$this->lang->line("Route broken? Help fix it!")?>' + "</a><br/><br/>\n";
+			resultHTML2 += "<a target=\"_blank\" href=\"https://www.facebook.com/sharer/sharer.php?u=" + kiriURL + "\"><img alt=\"Share to Facebook\" src=\"images/fb-large.png\"/></a> &nbsp; &nbsp; ";
+			resultHTML2 += "<a target=\"_blank\" href=\"https://twitter.com/intent/tweet?via=kiriupdate&text=" + kiriMessage + "+" + kiriURL + "\"><img alt=\"Tweet\" src=\"images/twitter-large.png\"/></a>";
+			resultHTML2 += "</td></tr>\n";
+			resultHTML2 += '</table></div>';
+			temp1.append(resultHTML1);
+			temp2.append(resultHTML2);
 		});
-		resultHTML2 += "<tr><td class=\"center\" colspan=\"2\">";
-		resultHTML2 += '<a href="https://youtu.be/jDFePujA8Kk" target="_blank" style="font-size: small;">' + '<?=$this->lang->line("Route broken? Help fix it!")?>' + "</a><br/><br/>\n";
-		resultHTML2 += "<a target=\"_blank\" href=\"https://www.facebook.com/sharer/sharer.php?u=" + kiriURL + "\"><img alt=\"Share to Facebook\" src=\"images/fb-large.png\"/></a> &nbsp; &nbsp; ";
-		resultHTML2 += "<a target=\"_blank\" href=\"https://twitter.com/intent/tweet?via=kiriupdate&text=" + kiriMessage + "+" + kiriURL + "\"><img alt=\"Tweet\" src=\"images/twitter-large.png\"/></a>";
-		resultHTML2 += "</td></tr>\n";
-		resultHTML2 += '</table></div>';
-		temp1.append(resultHTML1);
-		temp2.append(resultHTML2);
-	});
-sectionContainer.append(temp1);
-sectionContainer.append(temp2);
+		sectionContainer.append(temp1);
+		sectionContainer.append(temp2);
 
-$.each(results.routingresults, function (resultIndex, result) {
-	$('a[href="#panel1-' + (resultIndex + 1) + '"]').click(function () {
-		showSingleRoutingResultOnMap(result);
-	});
-});
-showSingleRoutingResultOnMap(results.routingresults[0]);
+		$.each(results.routingresults, function (resultIndex, result) {
+			$('a[href="#panel1-' + (resultIndex + 1) + '"]').click(function () {
+				showSingleRoutingResultOnMap(result);
+			});
+		});
+		showSingleRoutingResultOnMap(results.routingresults[0]);
 	}
 
 /**
@@ -676,9 +661,10 @@ function swapInput() {
 	finishInput.val(temp);
 	coordinates['start'] = null;
 	coordinates['finish'] = null;
-	if (startInput.val() != '' && finishInput.val() != '') {
-		findRouteClicked();
-	}
+	
+	// if (startInput.val() != '' && finishInput.val() != '') {
+	// 	findRouteClicked();
+	// }
 }
 
 /**
