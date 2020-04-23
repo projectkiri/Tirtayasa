@@ -249,32 +249,41 @@ $(document).ready(function () {
 	// 		findRouteClicked();
 	// 	}
 	// });
-	// $('#resetbutton').click(resetScreen);
+	$('#resetbutton').click(resetScreen);
 	// $('#swapbutton').click(swapInput);
 
 	// Map click event
 	map.on('click', function (event) {
 		if ($('#startInput').val() === '') {
-			map.addSource('start', {
-				'type': 'geojson',
-				'data': {
-					'type': 'FeatureCollection',
-					'features': [
-						{
-							'type': 'Feature',
-							'geometry': {
-								'type': 'Point',
-								'coordinates': [event.lngLat['lng'], event.lngLat['lat']]
-							}
+			map.loadImage('../../../images/start.png',
+				function(error, image) {
+					map.addImage('startPoint', image);
+					map.addSource('start', {
+						'type': 'geojson',
+						'data': {
+							'type': 'FeatureCollection',
+							'features': [
+								{
+									'type': 'Feature',
+									'geometry': {
+										'type': 'Point',
+										'coordinates': [event.lngLat['lng'], event.lngLat['lat']]
+									}
+								}
+							]
 						}
-					]
+					});
+					map.addLayer({
+						'id': 'start',
+						'type': 'symbol',
+						'source': 'start',
+						'layout': {
+							'icon-image': 'startPoint',
+							'icon-size': 1
+						}
+					});
 				}
-			});
-			map.addLayer({
-				'id': 'start',
-				'type': 'circle',
-				'source': 'start'
-			});
+			);
 
 			// // markers['start'] = new ol.Feature({
 			// // 	geometry: new ol.geom.Point(event.coordinate)
@@ -289,26 +298,35 @@ $(document).ready(function () {
 			$('#startInput').val(event.lngLat['lat'] + ', ' + event.lngLat['lng']);
 			// $('#startInput').val(latLngToString(ol.proj.transform(event.coordinate, 'EPSG:3857', 'EPSG:4326')));
 		} else if ($('#finishInput').val() === '') {
-			map.addSource('finish', {
-				'type': 'geojson',
-				'data': {
-					'type': 'FeatureCollection',
-					'features': [
-						{
-							'type': 'Feature',
-							'geometry': {
-								'type': 'Point',
-								'coordinates': [event.lngLat['lng'], event.lngLat['lat']]
-							}
+			map.loadImage('../../../images/finish.png',
+				function(error, image) {
+					map.addImage('finishPoint', image);
+					map.addSource('finish', {
+						'type': 'geojson',
+						'data': {
+							'type': 'FeatureCollection',
+							'features': [
+								{
+									'type': 'Feature',
+									'geometry': {
+										'type': 'Point',
+										'coordinates': [event.lngLat['lng'], event.lngLat['lat']]
+									}
+								}
+							]
 						}
-					]
+					});
+					map.addLayer({
+						'id': 'finish',
+						'type': 'symbol',
+						'source': 'finish',
+						'layout': {
+							'icon-image': 'finishPoint',
+							'icon-size': 1
+						}
+					});
 				}
-			});
-			map.addLayer({
-				'id': 'finish',
-				'type': 'circle',
-				'source': 'finish'
-			});
+			);
 			$('#finishInput').val(event.lngLat['lat'] + ', ' + event.lngLat['lng']);
 		}
 	});
@@ -364,6 +382,10 @@ $(document).ready(function () {
 		// if (markers['finish'] != null) {
 		// 	markers['finish'] = null;
 		// }
+		map.removeLayer('start');
+		map.removeSource('start');
+		map.removeLayer('finish');
+		map.removeSource('finish');
 		// inputVectorSource.clear();
 	}
 
@@ -457,7 +479,7 @@ $(document).ready(function () {
 
 	function resetScreen() {
 		clearRoutingResultsOnTable();
-		clearRoutingResultsOnMap();
+		// clearRoutingResultsOnMap();
 		clearAlerts();
 		clearStartFinishMarker();
 		$.each(['start', 'finish'], function (sfIndex, sfValue) {
