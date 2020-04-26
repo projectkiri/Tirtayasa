@@ -57,6 +57,16 @@ $(document).ready(function () {
 		zoom: 12 // starting zoom
 	});
 	map.addControl(new mapboxgl.NavigationControl());
+	var resultVectorSource = {
+		'type': 'FeatureCollection',
+		'features': [
+			{}
+		]};
+
+	// auto detect geolocation
+	// setTimeout(function() {
+	// 	$(".mapboxgl-ctrl-geolocate").click();
+	// }, 5000);
 	
 	// line color start
 	map.on('load', function() {
@@ -351,7 +361,7 @@ $(document).ready(function () {
 	}
 
 	function clearRoutingResultsOnMap() {
-		resultVectorSource.clear();
+		// resultVectorSource.clear();
 		updateRegion(region, false);
 	}
 
@@ -408,50 +418,54 @@ $(document).ready(function () {
 		$.each(['start', 'finish'], function (sfIndex, sfValue) {
 			var placeInput = $('#' + sfValue + 'Input');
 			var placeSelect = $('#' + sfValue + 'Select');
+
 			if (isLatLng(placeInput.val())) {
 				coordinates[sfValue] = placeInput.val();
 				completedLatLon++;
 			} else {
 				if (coordinates[sfValue] == null) {
 					// Coordinates not yet ready, we do a search place
-					protocol.searchPlace(
-						placeInput.val(),
-						region,
-						function (result) {
-							placeSelect.empty();
-							placeSelect.addClass('hidden');
-							if (result.status != 'error') {
-								if (result.searchresult.length > 0) {
-									$.each(result.searchresult, function (index, value) {
-										var placeSelect = $('#' + sfValue + 'Select');
-										placeSelect
-											.append($('<option></option>')
-												.attr('value', value['location'])
-												.text(value['placename']));
-										placeSelect.removeClass('hidden');
-									});
-									coordinates[sfValue] = result.searchresult[0]['location'];
-									checkCoordinatesThenRoute(coordinates);
+					if (coordinates[sfValue] == null) {
+						// Coordinates not yet ready, we do a search place
+						protocol.searchPlace(
+							placeInput.val(),
+							region,
+							function (result) {
+								placeSelect.empty();
+								placeSelect.addClass('hidden');
+								if (result.status != 'error') {
+									if (result.searchresult.length > 0) {
+										$.each(result.searchresult, function (index, value) {
+											var placeSelect = $('#' + sfValue + 'Select');
+											placeSelect
+												.append($('<option></option>')
+													.attr('value', value['location'])
+													.text(value['placename']));
+											placeSelect.removeClass('hidden');
+										});
+										coordinates[sfValue] = result.searchresult[0]['location'];
+										checkCoordinatesThenRoute(coordinates);
+									} else {
+										clearSecondaryAlerts();
+										clearRoutingResultsOnMap();
+										showAlert(placeInput.val() + ' <?=$this->lang->line('not found')?>', 'alert');
+									}
 								} else {
 									clearSecondaryAlerts();
 									clearRoutingResultsOnMap();
-									showAlert(placeInput.val() + ' <?=$this->lang->line('not found')?>', 'alert');
+									showAlert('<?=$this->lang->line('Connection problem')?>', 'alert');
 								}
-							} else {
-								clearSecondaryAlerts();
-								clearRoutingResultsOnMap();
-								showAlert('<?=$this->lang->line('Connection problem')?>', 'alert');
-							}
-						});
-				} else {
-					// Coordinates are already available, skip searching
-					completedLatLon++;
+							});
+					} else {
+						// Coordinates are already available, skip searching
+						completedLatLon++;
+					}
 				}
 			}
 		});
-		if (completedLatLon == 2) {
-			checkCoordinatesThenRoute(coordinates);
-		}
+		// if (completedLatLon == 2) {
+		// 	checkCoordinatesThenRoute(coordinates);
+		// }
 	}
 
 	/**
@@ -567,66 +581,139 @@ function showSingleRoutingResultOnMap(result) {
 		if (step[0] === 'none') {
 			// Don't draw line
 		} else {
-			var lineFeature = new ol.Feature({
-				geometry: new ol.geom.LineString(stringArrayToPointArray(step[2])),
-			});
-			lineFeature.setStyle(step[0] == 'walk' ? walkStrokeStyle : trackStrokeStyles[trackCounter++ % trackStrokeStyles.length]);
-			resultVectorSource.addFeature(lineFeature);
+			// var lineFeature = new ol.Feature({
+			// 	geometry: new ol.geom.LineString(stringArrayToPointArray(step[2])),
+			// });
+			// lineFeature.setStyle(step[0] == 'walk' ? walkStrokeStyle : trackStrokeStyles[trackCounter++ % trackStrokeStyles.length]);
+			// resultVectorSource.addFeature(lineFeature);
+
+			var coord1 = (step[2][0]).split(',');
+			var coord2 = (step[2][1]).split(',');
+			var lineFeature = {
+				'type': 'Feature',
+				'geometry': {
+					'type': 'LineString',
+					'coordinates': [coord1[1],coord1[0],
+									coord2[1],coord2[0]]
+				}
+			};
+			resultVectorSource['features'].push(lineFeature);
 		}
 
 		if (stepIndex === 0) {
-			var pointFeature = new ol.Feature({
-				geometry: new ol.geom.Point(ol.proj.transform(stringToLonLat(step[2][0]), 'EPSG:4326', 'EPSG:3857'))
-			})
-			pointFeature.setStyle(new ol.style.Style({
-				image: new ol.style.Icon({
-					src: 'images/start.png',
-					anchor: [1.0, 1.0]
-				})
-			}));
-			resultVectorSource.addFeature(pointFeature);
+			// var pointFeature = new ol.Feature({
+			// 	geometry: new ol.geom.Point(ol.proj.transform(stringToLonLat(step[2][0]), 'EPSG:4326', 'EPSG:3857'))
+			// })
+			// pointFeature.setStyle(new ol.style.Style({
+			// 	image: new ol.style.Icon({
+			// 		src: 'images/start.png',
+			// 		anchor: [1.0, 1.0]
+			// 	})
+			// }));
+			// resultVectorSource.addFeature(pointFeature);
+
+			// if (!map.hasImage('startPoint')){
+			// 	map.loadImage('../../../images/start.png', function(error, image) {
+			// 		map.addImage('startPoint', image);
+			// 	});
+			// }
+			var coord = (step[2][0]).split(',');
+			var pointFeature = {
+				'type': 'Feature',
+				'geometry': {
+					'type': 'Point',
+					'coordinates': [coord[1],coord[0]]
+				}
+			};
+			resultVectorSource['features'].push(pointFeature);
 		} else {
 			var lonlat = stringToLonLat(step[2][0]);
 			if (step[0] != "walk") {
-				var pointFeature = new ol.Feature({
-					geometry: new ol.geom.Point(ol.proj.transform(lonlat, 'EPSG:4326', 'EPSG:3857'))
-				})
-				pointFeature.setStyle(new ol.style.Style({
-					image: new ol.style.Icon({
-						src: '../images/means/' + step[0] + '/baloon/' + step[1] + '.png',
-						anchor: [0.0, 1.0]
-					})
-				}));
-				resultVectorSource.addFeature(pointFeature);
+				// var pointFeature = new ol.Feature({
+				// 	geometry: new ol.geom.Point(ol.proj.transform(lonlat, 'EPSG:4326', 'EPSG:3857'))
+				// })
+				// pointFeature.setStyle(new ol.style.Style({
+				// 	image: new ol.style.Icon({
+				// 		src: '../images/means/' + step[0] + '/baloon/' + step[1] + '.png',
+				// 		anchor: [0.0, 1.0]
+				// 	})
+				// }));
+				// resultVectorSource.addFeature(pointFeature);
+
+				// if (!map.hasImage(step[0] + 'baloon' + step[1])){
+				// 	map.loadImage('../../../images/means/' + step[0] + '/baloon/' + step[1] + '.png', function(error, image) {
+				// 		map.addImage(step[0] + 'baloon' + step[1], image);
+				// 	});
+				// }
+				var pointFeature = {
+					'type': 'Feature',
+					'geometry': {
+						'type': 'Point',
+						'coordinates': [lonlat[1],lonlat[0]]
+					}
+				};
+				resultVectorSource['features'].push(pointFeature);
 			} else {
-				var pointFeature = new ol.Feature({
-					geometry: new ol.geom.Point(ol.proj.transform(lonlat, 'EPSG:4326', 'EPSG:3857'))
-				})
-				pointFeature.setStyle(new ol.style.Style({
-					image: new ol.style.Icon({
-						src: 'images/means/walk/baloon/walk.png',
-						anchor: [1.0, 1.0]
-					})
-				}));
-				resultVectorSource.addFeature(pointFeature);
+				// var pointFeature = new ol.Feature({
+				// 	geometry: new ol.geom.Point(ol.proj.transform(lonlat, 'EPSG:4326', 'EPSG:3857'))
+				// })
+				// pointFeature.setStyle(new ol.style.Style({
+				// 	image: new ol.style.Icon({
+				// 		src: 'images/means/walk/baloon/walk.png',
+				// 		anchor: [1.0, 1.0]
+				// 	})
+				// }));
+				// resultVectorSource.addFeature(pointFeature);
+
+				// if (!map.hasImage('walk')){
+				// 	map.loadImage('../../../images/means/walk/baloon/walk.png', function(error, image) {
+				// 		map.addImage('walk', image);
+				// 	});
+				// }
+				var pointFeature = {
+					'type': 'Feature',
+					'geometry': {
+						'type': 'Point',
+						'coordinates': [lonlat[1],lonlat[0]]
+					}
+				};
+				resultVectorSource['features'].push(pointFeature);
 			}
 		}
 
 		if (stepIndex === result.steps.length - 1) {
-			var lonlat = stringToLonLat(step[2][step[2].length - 1]);
-			var pointFeature = new ol.Feature({
-				geometry: new ol.geom.Point(ol.proj.transform(lonlat, 'EPSG:4326', 'EPSG:3857'))
-			})
-			pointFeature.setStyle(new ol.style.Style({
-				image: new ol.style.Icon({
-					src: 'images/finish.png',
-					anchor: [0.0, 1.0]
-				})
-			}));
-			resultVectorSource.addFeature(pointFeature);
+			// var lonlat = stringToLonLat(step[2][step[2].length - 1]);
+			// var pointFeature = new ol.Feature({
+			// 	geometry: new ol.geom.Point(ol.proj.transform(lonlat, 'EPSG:4326', 'EPSG:3857'))
+			// })
+			// pointFeature.setStyle(new ol.style.Style({
+			// 	image: new ol.style.Icon({
+			// 		src: 'images/finish.png',
+			// 		anchor: [0.0, 1.0]
+			// 	})
+			// }));
+			// resultVectorSource.addFeature(pointFeature);
+
+			// if (!map.hasImage('finishPoint')){
+			// 	map.loadImage('../../../images/finish.png', function(error, image) {
+			// 		map.addImage('finishPoint', image);
+			// 	});
+			// }
+			var pointFeature = {
+				'type': 'Feature',
+				'geometry': {
+					'type': 'Point',
+					'coordinates': [lonlat[1],lonlat[0]]
+				}
+			};
+			resultVectorSource['features'].push(pointFeature);
 		}
 	});
-	map.getView().fitExtent(resultVectorSource.getExtent(), map.getSize());
+	map.addSource('routing', {
+		'type': 'geojson',
+		'data': resultVectorSource
+	});
+	// map.getView().fitExtent(resultVectorSource.getExtent(), map.getSize());
 }
 
 /**
@@ -662,9 +749,9 @@ function swapInput() {
 	coordinates['start'] = null;
 	coordinates['finish'] = null;
 	
-	// if (startInput.val() != '' && finishInput.val() != '') {
-	// 	findRouteClicked();
-	// }
+	if (startInput.val() != '' && finishInput.val() != '') {
+		findRouteClicked();
+	}
 }
 
 /**
