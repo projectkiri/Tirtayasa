@@ -50,7 +50,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     </div>
                     <div class="row paddingControl">
                         <div class="col-lg-12">
-                            <select id="startSelect" class="hidden"></select>
+                            <select id="startSelect" class="form-control hidden"></select>
                         </div>
                     </div>
                     <div class="row paddingControl">
@@ -63,10 +63,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     </div>
                     <div class="row paddingControl">
                         <div class="col-lg-12">
-                            <select id="finishSelect" class="hidden"></select>
+                            <select id="finishSelect" class="form-control hidden"></select>
                         </div>
                     </div>
-                    <div class="row paddingControl">
+                    <div class="row paddingControl paddingBottom">
                         <div class="btn-group fullwidth" role="group">
                             <div class="col-sm-6">
                                 <a href="#" class="btn btn-primary btn-block" id="findbutton"><strong><?= $this->lang->line('Find') ?>!</strong></a>
