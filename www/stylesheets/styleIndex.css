@@ -92,5 +92,9 @@ a:link.ticket, a:visited.ticket, a:active.ticket, a:hover.ticket {
 }
 
 .nav-link a:hover{
-    text-decoration: none;
+	text-decoration: none;
+}
+
+.nav-tabs a:hover{
+	background-color:#DCDCDC;
 }

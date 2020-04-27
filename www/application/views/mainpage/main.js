@@ -380,7 +380,7 @@ $(document).ready(function() {
 		var temp2 = $('<div class="tab-content"></div>');
 		$('#routingresults').append(sectionContainer);
 		$.each(results.routingresults, function(resultIndex, result) {
-			var resultHTML1 = resultIndex === 0 ? '<li><a class="nav-link active ' : '<li><a class="nav-link ';
+			var resultHTML1 = resultIndex === 0 ? '<li><a class="nav-link active active-tabs ' : '<li><a class="nav-link ';
 			resultHTML1 += 'text-decoration-none" data-toggle="tab" href="#panel1-' + (resultIndex + 1) + '" role="tab">' + (result.traveltime === null ? '<?=$this->lang->line('Oops')?>' : result.traveltime) + '</a></li>';
 			var resultHTML2 = '<div id="panel1-' + (resultIndex + 1) + '"';
 			resultHTML2 += resultIndex === 0 ? ' class="tab-pane active" role="tabpanel"><table class="table-striped">' : ' class="x tab-pane" role="tabpanel"><table class="table-striped">';
