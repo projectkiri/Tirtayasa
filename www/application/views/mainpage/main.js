@@ -380,13 +380,13 @@ $(document).ready(function () {
 
 	function clearStartFinishMarker() {
 		if (markers['start'] != null) {
-			map.removeLayer('start');
-			map.removeSource('start');
+			if (map.getLayer('start')) map.removeLayer('start');
+			if (map.getSource('start')) map.removeSource('start');
 			if (map.hasImage('startPoint')) map.removeImage('startPoint');
 		}
 		if (markers['finish'] != null) {
-			map.removeLayer('finish');
-			map.removeSource('finish');
+			if (map.getLayer('finish')) map.removeLayer('finish');
+			if (map.getSource('finish')) map.removeSource('finish');
 			if (map.hasImage('finishPoint')) map.removeImage('finishPoint');
 		}
 		// inputVectorSource.clear();
@@ -463,9 +463,9 @@ $(document).ready(function () {
 				}
 			}
 		});
-		// if (completedLatLon == 2) {
-		// 	checkCoordinatesThenRoute(coordinates);
-		// }
+		if (completedLatLon == 2) {
+			checkCoordinatesThenRoute(coordinates);
+		}
 	}
 
 	/**
@@ -617,6 +617,41 @@ function showSingleRoutingResultOnMap(result) {
 			// 		map.addImage('startPoint', image);
 			// 	});
 			// }
+			
+			if (map.hasImage('startPoint')) map.removeImage('startPoint');
+			if (map.getLayer('start')) map.removeLayer('start');
+			if (map.getSource('start')) map.removeSource('start');
+
+			map.loadImage('../../../images/start.png',
+				function(error, image) {
+					map.addImage('startPoint', image);
+					map.addSource('start', {
+						'type': 'geojson',
+						'data': {
+							'type': 'FeatureCollection',
+							'features': [
+								{
+									'type': 'Feature',
+									'geometry': {
+										'type': 'Point',
+										'coordinates': [coord[1],coord[0]]
+									}
+								}
+							]
+						}
+					});
+					map.addLayer({
+						'id': 'start',
+						'type': 'symbol',
+						'source': 'start',
+						'layout': {
+							'icon-image': 'startPoint',
+							'icon-size': 1
+						}
+					});
+				}
+			);
+
 			var coord = (step[2][0]).split(',');
 			var pointFeature = {
 				'type': 'Feature',
@@ -699,6 +734,41 @@ function showSingleRoutingResultOnMap(result) {
 			// 		map.addImage('finishPoint', image);
 			// 	});
 			// }
+
+			if (map.hasImage('finishPoint')) map.removeImage('finishPoint');
+			if (map.getLayer('finish')) map.removeLayer('finish');
+			if (map.getSource('finish')) map.removeSource('finish');
+
+			map.loadImage('../../../images/finish.png',
+				function(error, image) {
+					map.addImage('finishPoint', image);
+					map.addSource('finish', {
+						'type': 'geojson',
+						'data': {
+							'type': 'FeatureCollection',
+							'features': [
+								{
+									'type': 'Feature',
+									'geometry': {
+										'type': 'Point',
+										'coordinates': [lonlat[0],lonlat[1]]
+									}
+								}
+							]
+						}
+					});
+					map.addLayer({
+						'id': 'finish',
+						'type': 'symbol',
+						'source': 'finish',
+						'layout': {
+							'icon-image': 'finishPoint',
+							'icon-size': 1
+						}
+					});
+				}
+			);
+
 			var pointFeature = {
 				'type': 'Feature',
 				'geometry': {
@@ -709,11 +779,13 @@ function showSingleRoutingResultOnMap(result) {
 			resultVectorSource['features'].push(pointFeature);
 		}
 	});
-	map.addSource('routing', {
-		'type': 'geojson',
-		'data': resultVectorSource
-	});
+	// map.addSource('routing', {
+	// 	'type': 'geojson',
+	// 	'data': resultVectorSource
+	// });
+
 	// map.getView().fitExtent(resultVectorSource.getExtent(), map.getSize());
+	// map.flyTo({ center: point, zoom: 3 });
 }
 
 /**
