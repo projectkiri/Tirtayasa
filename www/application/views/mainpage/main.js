@@ -4,6 +4,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 var regions = <?= json_encode($this -> config -> item('regions')) ?>;
 mapboxgl.accessToken = 'pk.eyJ1Ijoia2VsdmluYWRyaWFuIiwiYSI6ImNrOGx1NWlkdDA1YmczbW44MGM3dzY2czAifQ.06uwtSbY-t2pKcFYLAoXqA';
 var map;
+// colorList: 0=walk, 1=angkot1, 2=angkot2, 3=angkot3
+const colorList = ['#CC3333', '#339933', '#8BB33B', '#267373'];
 var ids = [];
 
 // var trackStrokeStyles = [
@@ -445,6 +447,41 @@ $(document).ready(function () {
 		});
 		showSingleRoutingResultOnMap(results.routingresults[0]);
 	}
+/**
+ * Drawing a path between two coord1 and coord2
+ **/
+function drawPath(color,coord1,coord2, stepIndex, i){
+	map.addSource('route' + stepIndex + i, {
+		'type': 'geojson',
+		'data': {
+				'type': 'Feature',
+				'properties': {
+					'color': colorList[color]
+				},
+				'geometry': {
+					'type': 'LineString',
+					'coordinates': [
+						[coord1[0],coord1[1]],
+						[coord2[0],coord2[1]]
+					]
+				}
+			}
+		});
+		map.addLayer({
+			'id': 'route' + stepIndex + i,
+			'type': 'line',
+			'source': 'route' + stepIndex + i,
+			'layout': {
+				'line-join': 'round',
+				'line-cap': 'round'
+			},
+			'paint': {
+				'line-color': ['get', 'color'],
+				'line-width': 5
+			}
+		}
+	);
+}
 
 /**
  * Shows a single routing result on map
@@ -452,46 +489,49 @@ $(document).ready(function () {
  */
 function showSingleRoutingResultOnMap(result) {
 	clearRoutingResultsOnMap();
+	console.log(result);
 	var startPoint;
 	var finishPoint;
 	var trackCounter = 0;
+	var startVector = "";
+	var curColor = 0;
+	var curAngkot = 0;
 	$.each(result.steps, function (stepIndex, step) {
 		if (step[0] === 'none') {
 			// Don't draw line
 		} else {
 			for ($i = 0; $i < step[2].length - 1; $i += 1) {
+				if (step[0]==""){
+					if(step[0]=='walk'){
+						curColor = 0;
+					} else {
+						curColor=1;
+					}
+				}
+				// 0=walk, 1=angkot1, 2=angkot2, 3=angkot3
+				// #CC3333, #339933, #8BB33B, #267373
+				else if (step[0]!="walk"){
+					if(startVector!=step[0]){
+						if (curColor==0){
+							curColor = curAngkot;
+						}
+						if (curColor<3){
+							curColor ++;
+							curAngkot = curColor;
+						} else if (curColor==3) {
+							curColor = 1;
+							curAngkot = curColor;
+						}
+					}
+				} else {
+					curColor = 0
+				}
+				startVector = step[0];
+				console.log(curColor);
 				var coord1 = stringToLonLat(step[2][$i]);
 				var coord2 = stringToLonLat(step[2][$i + 1]);
 				ids.push('route' + stepIndex + $i);
-				map.addSource('route' + stepIndex + $i, {
-					'type': 'geojson',
-					'data': {
-							'type': 'Feature',
-							'properties': {
-								'color': '#339933' // hijau tua
-							},
-							'geometry': {
-								'type': 'LineString',
-								'coordinates': [
-									[coord1[0],coord1[1]],
-									[coord2[0],coord2[1]]
-								]
-							}
-						}
-					});
-					map.addLayer({
-						'id': 'route' + stepIndex + $i,
-						'type': 'line',
-						'source': 'route' + stepIndex + $i,
-						'layout': {
-							'line-join': 'round',
-							'line-cap': 'round'
-						},
-						'paint': {
-							'line-color': ['get', 'color'],
-							'line-width': 5
-						}
-					});
+				drawPath(curColor,coord1,coord2,stepIndex,$i);
 			}
 		}
 
@@ -652,6 +692,7 @@ function showSingleRoutingResultOnMap(result) {
 /**
  * Converts "lat,lon" array into coordinate object array.
  * @return the converted Point array object
+ * sudah tidak diperlukan lagi
  */
 function stringArrayToPointArray(textArray) {
 	var lonlatArray = new Array();
