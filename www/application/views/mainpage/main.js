@@ -452,6 +452,8 @@ $(document).ready(function () {
  */
 function showSingleRoutingResultOnMap(result) {
 	clearRoutingResultsOnMap();
+	var startPoint;
+	var finishPoint;
 	var trackCounter = 0;
 	$.each(result.steps, function (stepIndex, step) {
 		if (step[0] === 'none') {
@@ -495,6 +497,7 @@ function showSingleRoutingResultOnMap(result) {
 
 		if (stepIndex === 0) {
 			var coord = step[2][0].split(',');
+			startPoint = [coord[1], coord[0]];
 			if (map.hasImage('startPoint')) map.removeImage('startPoint');
 			if (map.getLayer('start')) map.removeLayer('start');
 			if (map.getSource('start')) map.removeSource('start');
@@ -604,10 +607,12 @@ function showSingleRoutingResultOnMap(result) {
 		}
 
 		if (stepIndex === result.steps.length - 1) {
+			var lonlat = stringToLonLat(step[2][step[2].length - 1]);
 			if (map.hasImage('finishPoint')) map.removeImage('finishPoint');
 			if (map.getLayer('finish')) map.removeLayer('finish');
 			if (map.getSource('finish')) map.removeSource('finish');
 			ids.push('finish');
+			finishPoint = [lonlat[0], lonlat[1]];
 			map.loadImage('../../../images/finish.png',
 				function(error, image) {
 					map.addImage('finishPoint', image);
@@ -639,8 +644,9 @@ function showSingleRoutingResultOnMap(result) {
 			);
 		}
 	});
+	var center = [(Number(startPoint[0]) + finishPoint[0]) / 2, (Number(startPoint[1]) + finishPoint[1]) / 2];
 	// map.getView().fitExtent(resultVectorSource.getExtent(), map.getSize());
-	// map.flyTo({ center: point, zoom: 3 });
+	// map.flyTo({ center: center, zoom: 7 });
 }
 
 /**
