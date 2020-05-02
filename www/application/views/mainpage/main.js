@@ -452,7 +452,6 @@ $(document).ready(function () {
  */
 function showSingleRoutingResultOnMap(result) {
 	clearRoutingResultsOnMap();
-
 	var trackCounter = 0;
 	$.each(result.steps, function (stepIndex, step) {
 		if (step[0] === 'none') {
@@ -495,6 +494,7 @@ function showSingleRoutingResultOnMap(result) {
 		}
 
 		if (stepIndex === 0) {
+			var coord = step[2][0].split(',');
 			if (map.hasImage('startPoint')) map.removeImage('startPoint');
 			if (map.getLayer('start')) map.removeLayer('start');
 			if (map.getSource('start')) map.removeSource('start');
