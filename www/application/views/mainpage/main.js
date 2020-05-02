@@ -460,8 +460,8 @@ function showSingleRoutingResultOnMap(result) {
 			// Don't draw line
 		} else {
 			for ($i = 0; $i < step[2].length - 1; $i += 1) {
-				var coord1 = (step[2][$i]).split(',');
-				var coord2 = (step[2][$i + 1]).split(',');
+				var coord1 = stringToLonLat(step[2][$i]);
+				var coord2 = stringToLonLat(step[2][$i + 1]);
 				ids.push('route' + stepIndex + $i);
 				map.addSource('route' + stepIndex + $i, {
 					'type': 'geojson',
@@ -473,8 +473,8 @@ function showSingleRoutingResultOnMap(result) {
 							'geometry': {
 								'type': 'LineString',
 								'coordinates': [
-									[coord1[1],coord1[0]],
-									[coord2[1],coord2[0]]
+									[coord1[0],coord1[1]],
+									[coord2[0],coord2[1]]
 								]
 							}
 						}
@@ -496,7 +496,7 @@ function showSingleRoutingResultOnMap(result) {
 		}
 
 		if (stepIndex === 0) {
-			var coord = step[2][0].split(',');
+			var coord = stringToLonLat(step[2][0]);
 			startPoint = [coord[1], coord[0]];
 			if (map.hasImage('startPoint')) map.removeImage('startPoint');
 			if (map.getLayer('start')) map.removeLayer('start');
@@ -514,7 +514,7 @@ function showSingleRoutingResultOnMap(result) {
 									'type': 'Feature',
 									'geometry': {
 										'type': 'Point',
-										'coordinates': [coord[1],coord[0]]
+										'coordinates': [coord[0],coord[1]]
 									}
 								}
 							]
