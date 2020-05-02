@@ -4,6 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 var regions = <?= json_encode($this -> config -> item('regions')) ?>;
 mapboxgl.accessToken = 'pk.eyJ1Ijoia2VsdmluYWRyaWFuIiwiYSI6ImNrOGx1NWlkdDA1YmczbW44MGM3dzY2czAifQ.06uwtSbY-t2pKcFYLAoXqA';
 var map;
+var ids = [];
 
 // var trackStrokeStyles = [
 // 	new ol.style.Style({
@@ -229,7 +230,6 @@ $(document).ready(function () {
 				// inputVectorSource.removeFeature(markers[sfValue]);
 				map.removeLayer(sfValue);
 				map.removeSource(sfValue)
-
 			}
 		});
 		placeSelect.change(function () {
@@ -361,8 +361,11 @@ $(document).ready(function () {
 	}
 
 	function clearRoutingResultsOnMap() {
-		// resultVectorSource.clear();
 		updateRegion(region, false);
+		for (var i = 0; i < ids.length; i++) {
+			if(map.getLayer(ids[i])) map.removeLayer(ids[i]);
+			if(map.getSource(ids[i])) map.removeSource(ids[i]);
+		}
 	}
 
 	function clearRoutingResultsOnTable() {
@@ -379,16 +382,13 @@ $(document).ready(function () {
 	}
 
 	function clearStartFinishMarker() {
-		if (markers['start'] != null) {
-			if (map.getLayer('start')) map.removeLayer('start');
-			if (map.getSource('start')) map.removeSource('start');
-			if (map.hasImage('startPoint')) map.removeImage('startPoint');
-		}
-		if (markers['finish'] != null) {
-			if (map.getLayer('finish')) map.removeLayer('finish');
-			if (map.getSource('finish')) map.removeSource('finish');
-			if (map.hasImage('finishPoint')) map.removeImage('finishPoint');
-		}
+		if (map.getLayer('start')) map.removeLayer('start');
+		if (map.getSource('start')) map.removeSource('start');
+		if (map.hasImage('startPoint')) map.removeImage('startPoint');
+		
+		if (map.getLayer('finish')) map.removeLayer('finish');
+		if (map.getSource('finish')) map.removeSource('finish');
+		if (map.hasImage('finishPoint')) map.removeImage('finishPoint');
 		// inputVectorSource.clear();
 	}
 
@@ -486,7 +486,7 @@ $(document).ready(function () {
 
 	function resetScreen() {
 		clearRoutingResultsOnTable();
-		// clearRoutingResultsOnMap();
+		clearRoutingResultsOnMap();
 		clearAlerts();
 		clearStartFinishMarker();
 		$.each(['start', 'finish'], function (sfIndex, sfValue) {
@@ -581,47 +581,47 @@ function showSingleRoutingResultOnMap(result) {
 		if (step[0] === 'none') {
 			// Don't draw line
 		} else {
-			// var lineFeature = new ol.Feature({
-			// 	geometry: new ol.geom.LineString(stringArrayToPointArray(step[2])),
-			// });
-			// lineFeature.setStyle(step[0] == 'walk' ? walkStrokeStyle : trackStrokeStyles[trackCounter++ % trackStrokeStyles.length]);
-			// resultVectorSource.addFeature(lineFeature);
-
-			var coord1 = (step[2][0]).split(',');
-			var coord2 = (step[2][1]).split(',');
-			var lineFeature = {
-				'type': 'Feature',
-				'geometry': {
-					'type': 'LineString',
-					'coordinates': [coord1[1],coord1[0],
-									coord2[1],coord2[0]]
-				}
-			};
-			resultVectorSource['features'].push(lineFeature);
+			for ($i = 0; $i < step[2].length - 1; $i += 1) {
+				var coord1 = (step[2][$i]).split(',');
+				var coord2 = (step[2][$i + 1]).split(',');
+				ids.push('route' + stepIndex + $i);
+				map.addSource('route' + stepIndex + $i, {
+					'type': 'geojson',
+					'data': {
+							'type': 'Feature',
+							'properties': {
+								'color': '#339933' // hijau tua
+							},
+							'geometry': {
+								'type': 'LineString',
+								'coordinates': [
+									[coord1[1],coord1[0]],
+									[coord2[1],coord2[0]]
+								]
+							}
+						}
+					});
+					map.addLayer({
+						'id': 'route' + stepIndex + $i,
+						'type': 'line',
+						'source': 'route' + stepIndex + $i,
+						'layout': {
+							'line-join': 'round',
+							'line-cap': 'round'
+						},
+						'paint': {
+							'line-color': ['get', 'color'],
+							'line-width': 5
+						}
+					});
+			}
 		}
 
 		if (stepIndex === 0) {
-			// var pointFeature = new ol.Feature({
-			// 	geometry: new ol.geom.Point(ol.proj.transform(stringToLonLat(step[2][0]), 'EPSG:4326', 'EPSG:3857'))
-			// })
-			// pointFeature.setStyle(new ol.style.Style({
-			// 	image: new ol.style.Icon({
-			// 		src: 'images/start.png',
-			// 		anchor: [1.0, 1.0]
-			// 	})
-			// }));
-			// resultVectorSource.addFeature(pointFeature);
-
-			// if (!map.hasImage('startPoint')){
-			// 	map.loadImage('../../../images/start.png', function(error, image) {
-			// 		map.addImage('startPoint', image);
-			// 	});
-			// }
-			
 			if (map.hasImage('startPoint')) map.removeImage('startPoint');
 			if (map.getLayer('start')) map.removeLayer('start');
 			if (map.getSource('start')) map.removeSource('start');
-
+			ids.push('start');
 			map.loadImage('../../../images/start.png',
 				function(error, image) {
 					map.addImage('startPoint', image);
@@ -651,94 +651,86 @@ function showSingleRoutingResultOnMap(result) {
 					});
 				}
 			);
-
-			var coord = (step[2][0]).split(',');
-			var pointFeature = {
-				'type': 'Feature',
-				'geometry': {
-					'type': 'Point',
-					'coordinates': [coord[1],coord[0]]
-				}
-			};
-			resultVectorSource['features'].push(pointFeature);
 		} else {
 			var lonlat = stringToLonLat(step[2][0]);
 			if (step[0] != "walk") {
-				// var pointFeature = new ol.Feature({
-				// 	geometry: new ol.geom.Point(ol.proj.transform(lonlat, 'EPSG:4326', 'EPSG:3857'))
-				// })
-				// pointFeature.setStyle(new ol.style.Style({
-				// 	image: new ol.style.Icon({
-				// 		src: '../images/means/' + step[0] + '/baloon/' + step[1] + '.png',
-				// 		anchor: [0.0, 1.0]
-				// 	})
-				// }));
-				// resultVectorSource.addFeature(pointFeature);
-
-				// if (!map.hasImage(step[0] + 'baloon' + step[1])){
-				// 	map.loadImage('../../../images/means/' + step[0] + '/baloon/' + step[1] + '.png', function(error, image) {
-				// 		map.addImage(step[0] + 'baloon' + step[1], image);
-				// 	});
-				// }
-				var pointFeature = {
-					'type': 'Feature',
-					'geometry': {
-						'type': 'Point',
-						'coordinates': [lonlat[1],lonlat[0]]
+				if (map.hasImage(step[0] + 'baloon' + step[1])) map.removeImage(step[0] + 'baloon' + step[1]);
+				if (map.getLayer(step[0] + 'baloon' + step[1])) map.removeLayer(step[0] + 'baloon' + step[1]);
+				if (map.getSource(step[0] + 'baloon' + step[1])) map.removeSource(step[0] + 'baloon' + step[1]);
+				ids.push(step[0] + '/baloon/' + step[1]);
+				map.loadImage('../../../images/means/' + step[0] + '/baloon/' + step[1] + '.png',
+					function(error, image) {
+						map.addImage(step[0] + '/baloon/' + step[1], image);
+						map.addSource(step[0] + '/baloon/' + step[1], {
+							'type': 'geojson',
+							'data': {
+								'type': 'FeatureCollection',
+								'features': [
+									{
+										'type': 'Feature',
+										'geometry': {
+											'type': 'Point',
+											'coordinates': [lonlat[0],lonlat[1]]
+											
+										}
+									}
+								]
+							}
+						});
+						map.addLayer({
+							'id': step[0] + '/baloon/' + step[1],
+							'type': 'symbol',
+							'source': step[0] + '/baloon/' + step[1],
+							'layout': {
+								'icon-image': step[0] + '/baloon/' + step[1],
+								'icon-size': 1
+							}
+						});
 					}
-				};
-				resultVectorSource['features'].push(pointFeature);
+				);
 			} else {
-				// var pointFeature = new ol.Feature({
-				// 	geometry: new ol.geom.Point(ol.proj.transform(lonlat, 'EPSG:4326', 'EPSG:3857'))
-				// })
-				// pointFeature.setStyle(new ol.style.Style({
-				// 	image: new ol.style.Icon({
-				// 		src: 'images/means/walk/baloon/walk.png',
-				// 		anchor: [1.0, 1.0]
-				// 	})
-				// }));
-				// resultVectorSource.addFeature(pointFeature);
-
-				// if (!map.hasImage('walk')){
-				// 	map.loadImage('../../../images/means/walk/baloon/walk.png', function(error, image) {
-				// 		map.addImage('walk', image);
-				// 	});
-				// }
-				var pointFeature = {
-					'type': 'Feature',
-					'geometry': {
-						'type': 'Point',
-						'coordinates': [lonlat[1],lonlat[0]]
+				if (map.hasImage('walk' + stepIndex)) map.removeImage('walk' + stepIndex);
+				if (map.getLayer('walk' + stepIndex)) map.removeLayer('walk' + stepIndex);
+				if (map.getSource('walk' + stepIndex)) map.removeSource('walk' + stepIndex);
+				ids.push('walk' + stepIndex);
+				map.loadImage('../../../images/means/walk/baloon/walk.png',
+					function(error, image) {
+						map.addImage('walk' + stepIndex, image);
+						map.addSource('walk' + stepIndex, {
+							'type': 'geojson',
+							'data': {
+								'type': 'FeatureCollection',
+								'features': [
+									{
+										'type': 'Feature',
+										'geometry': {
+											'type': 'Point',
+											'coordinates': [lonlat[0],lonlat[1]]
+											
+										}
+									}
+								]
+							}
+						});
+						map.addLayer({
+							'id': 'walk' + stepIndex,
+							'type': 'symbol',
+							'source': 'walk' + stepIndex,
+							'layout': {
+								'icon-image': 'walk' + stepIndex,
+								'icon-size': 1
+							}
+						});
 					}
-				};
-				resultVectorSource['features'].push(pointFeature);
+				);
 			}
 		}
 
 		if (stepIndex === result.steps.length - 1) {
-			// var lonlat = stringToLonLat(step[2][step[2].length - 1]);
-			// var pointFeature = new ol.Feature({
-			// 	geometry: new ol.geom.Point(ol.proj.transform(lonlat, 'EPSG:4326', 'EPSG:3857'))
-			// })
-			// pointFeature.setStyle(new ol.style.Style({
-			// 	image: new ol.style.Icon({
-			// 		src: 'images/finish.png',
-			// 		anchor: [0.0, 1.0]
-			// 	})
-			// }));
-			// resultVectorSource.addFeature(pointFeature);
-
-			// if (!map.hasImage('finishPoint')){
-			// 	map.loadImage('../../../images/finish.png', function(error, image) {
-			// 		map.addImage('finishPoint', image);
-			// 	});
-			// }
-
 			if (map.hasImage('finishPoint')) map.removeImage('finishPoint');
 			if (map.getLayer('finish')) map.removeLayer('finish');
 			if (map.getSource('finish')) map.removeSource('finish');
-
+			ids.push('finish');
 			map.loadImage('../../../images/finish.png',
 				function(error, image) {
 					map.addImage('finishPoint', image);
@@ -768,22 +760,8 @@ function showSingleRoutingResultOnMap(result) {
 					});
 				}
 			);
-
-			var pointFeature = {
-				'type': 'Feature',
-				'geometry': {
-					'type': 'Point',
-					'coordinates': [lonlat[1],lonlat[0]]
-				}
-			};
-			resultVectorSource['features'].push(pointFeature);
 		}
 	});
-	// map.addSource('routing', {
-	// 	'type': 'geojson',
-	// 	'data': resultVectorSource
-	// });
-
 	// map.getView().fitExtent(resultVectorSource.getExtent(), map.getSize());
 	// map.flyTo({ center: point, zoom: 3 });
 }
