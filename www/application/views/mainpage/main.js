@@ -177,7 +177,7 @@ $(document).ready(function () {
 					markers['start'] = map.getSource('start');
 				}
 			);
-			$('#startInput').val(event.lngLat['lat'] + ', ' + event.lngLat['lng']);
+			$('#startInput').val(event.lngLat['lat'] + ',' + event.lngLat['lng']);
 		} else if ($('#finishInput').val() === '') {
 			map.loadImage('../../../images/finish.png',
 				function(error, image) {
@@ -209,7 +209,7 @@ $(document).ready(function () {
 					markers['finish'] = map.getSource('finish')
 				}
 			);
-			$('#finishInput').val(event.lngLat['lat'] + ', ' + event.lngLat['lng']);
+			$('#finishInput').val(event.lngLat['lat'] + ',' + event.lngLat['lng']);
 		}
 	});
 
