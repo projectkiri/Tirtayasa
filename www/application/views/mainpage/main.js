@@ -450,7 +450,8 @@ $(document).ready(function () {
 /**
  * Drawing a path between two coord1 and coord2
  **/
-function drawPath(color,coord1,coord2, stepIndex, i){
+function drawPath(color,coord1,coord2, stepIndex, i, coordinates){
+	coordinates.push([coord1[0], coord1[1]], [coord2[0], coord2[1]]);
 	map.addSource('route' + stepIndex + i, {
 		'type': 'geojson',
 		'data': {
@@ -489,13 +490,11 @@ function drawPath(color,coord1,coord2, stepIndex, i){
  */
 function showSingleRoutingResultOnMap(result) {
 	clearRoutingResultsOnMap();
-	console.log(result);
-	var startPoint;
-	var finishPoint;
 	var trackCounter = 0;
 	var startVector = "";
 	var curColor = 0;
 	var curAngkot = 0;
+	var coordinates = [];
 	$.each(result.steps, function (stepIndex, step) {
 		if (step[0] === 'none') {
 			// Don't draw line
@@ -527,17 +526,15 @@ function showSingleRoutingResultOnMap(result) {
 					curColor = 0
 				}
 				startVector = step[0];
-				console.log(curColor);
 				var coord1 = stringToLonLat(step[2][$i]);
 				var coord2 = stringToLonLat(step[2][$i + 1]);
 				ids.push('route' + stepIndex + $i);
-				drawPath(curColor,coord1,coord2,stepIndex,$i);
+				drawPath(curColor,coord1,coord2,stepIndex,$i, coordinates);
 			}
 		}
 
 		if (stepIndex === 0) {
 			var coord = stringToLonLat(step[2][0]);
-			startPoint = [coord[1], coord[0]];
 			if (map.hasImage('startPoint')) map.removeImage('startPoint');
 			if (map.getLayer('start')) map.removeLayer('start');
 			if (map.getSource('start')) map.removeSource('start');
@@ -577,11 +574,11 @@ function showSingleRoutingResultOnMap(result) {
 				if (map.hasImage(step[0] + 'baloon' + step[1])) map.removeImage(step[0] + 'baloon' + step[1]);
 				if (map.getLayer(step[0] + 'baloon' + step[1])) map.removeLayer(step[0] + 'baloon' + step[1]);
 				if (map.getSource(step[0] + 'baloon' + step[1])) map.removeSource(step[0] + 'baloon' + step[1]);
-				ids.push(step[0] + '/baloon/' + step[1]);
+				ids.push(step[0] + 'baloon' + step[1]);
 				map.loadImage('../../../images/means/' + step[0] + '/baloon/' + step[1] + '.png',
 					function(error, image) {
-						map.addImage(step[0] + '/baloon/' + step[1], image);
-						map.addSource(step[0] + '/baloon/' + step[1], {
+						map.addImage(step[0] + 'baloon' + step[1], image);
+						map.addSource(step[0] + 'baloon' + step[1], {
 							'type': 'geojson',
 							'data': {
 								'type': 'FeatureCollection',
@@ -598,11 +595,11 @@ function showSingleRoutingResultOnMap(result) {
 							}
 						});
 						map.addLayer({
-							'id': step[0] + '/baloon/' + step[1],
+							'id': step[0] + 'baloon' + step[1],
 							'type': 'symbol',
-							'source': step[0] + '/baloon/' + step[1],
+							'source': step[0] + 'baloon' + step[1],
 							'layout': {
-								'icon-image': step[0] + '/baloon/' + step[1],
+								'icon-image': step[0] + 'baloon' + step[1],
 								'icon-size': 1
 							}
 						});
@@ -652,7 +649,6 @@ function showSingleRoutingResultOnMap(result) {
 			if (map.getLayer('finish')) map.removeLayer('finish');
 			if (map.getSource('finish')) map.removeSource('finish');
 			ids.push('finish');
-			finishPoint = [lonlat[0], lonlat[1]];
 			map.loadImage('../../../images/finish.png',
 				function(error, image) {
 					map.addImage('finishPoint', image);
@@ -684,9 +680,13 @@ function showSingleRoutingResultOnMap(result) {
 			);
 		}
 	});
-	var center = [(Number(startPoint[0]) + finishPoint[0]) / 2, (Number(startPoint[1]) + finishPoint[1]) / 2];
-	// map.getView().fitExtent(resultVectorSource.getExtent(), map.getSize());
-	// map.flyTo({ center: center, zoom: 7 });
+	
+	var bounds = coordinates.reduce(function(bounds, coord) {
+		return bounds.extend(coord);
+	}, new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]));
+	map.fitBounds(bounds, {
+		padding: 20
+	});
 }
 
 /**
