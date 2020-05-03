@@ -563,7 +563,8 @@ function showSingleRoutingResultOnMap(result) {
 						'source': 'start',
 						'layout': {
 							'icon-image': 'startPoint',
-							'icon-size': 1
+							'icon-size': 1,
+							'icon-anchor': 'bottom-right'
 						}
 					});
 				}
@@ -600,7 +601,8 @@ function showSingleRoutingResultOnMap(result) {
 							'source': step[0] + 'baloon' + step[1],
 							'layout': {
 								'icon-image': step[0] + 'baloon' + step[1],
-								'icon-size': 1
+								'icon-size': 1,
+								'icon-anchor': 'bottom-left'
 							}
 						});
 					}
@@ -635,7 +637,8 @@ function showSingleRoutingResultOnMap(result) {
 							'source': 'walk' + stepIndex,
 							'layout': {
 								'icon-image': 'walk' + stepIndex,
-								'icon-size': 1
+								'icon-size': 1,
+								'icon-anchor': 'bottom-right'
 							}
 						});
 					}
@@ -673,7 +676,8 @@ function showSingleRoutingResultOnMap(result) {
 						'source': 'finish',
 						'layout': {
 							'icon-image': 'finishPoint',
-							'icon-size': 1
+							'icon-size': 1,
+							'icon-anchor': 'bottom-left'
 						}
 					});
 				}
