@@ -157,7 +157,6 @@ class Api extends CI_Controller {
 					}
 					$travel_time += $distance / $this->config->item('speed-walk');
 					$booking_url = null;
-					$editor_url = null;
 				} else {
 					$trackDetail = $this->Api_model->getTrackDetails($means, $means_detail);
 
@@ -179,12 +178,6 @@ class Api extends CI_Controller {
 					} else {
 						$booking_url = null;
 					}
-					if (strpos($trackDetail->internalInfo, 'angkotwebid:') === 0) {
-						$token = explode(':', $trackDetail->internalInfo);
-						$editor_url = $this->config->item('url-angkotwebid-prefix') . $token[1] . $this->config->item('url-angkotwebid-suffix');
-					} else {
-						$editor_url = null;
-					}
 
 					// compatibility patch for older 3rd party apps
 					if ($means === 'bdo_angkot' && $version < 3) {
@@ -192,7 +185,7 @@ class Api extends CI_Controller {
 					}
 				}
 				if (!is_null($humanreadable)) {
-					$route_output[] = array($means, $means_detail, $points, $humanreadable, $booking_url, $editor_url);
+					$route_output[] = array($means, $means_detail, $points, $humanreadable, $booking_url);
 				}
 			}
 			$routing_result['steps'] = $route_output;

@@ -100,17 +100,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             &nbsp;
                         </div>
                     </div>
-                    <?php if (!is_null($youtube)): ?>
-                        <div class="row">
-                            <div id="youtubepromo" class="reveal-modal small" data-reveal="">
-                                <h3><?= $youtube['label'] ?></h3>
-                                <div class="flex-video">
-                                    <iframe width="640" height="480" src="//www.youtube.com/embed/<?= $youtube['code'] ?>" frameborder="0" allowfullscreen></iframe>
-                                </div>
-                                <a class="close-reveal-modal">&#215;</a>
-                            </div>
-                        </div>
-                    <?php endif; ?>
                 </div>
                 <div id="map" class="col-lg-9"></div>
             </div>
