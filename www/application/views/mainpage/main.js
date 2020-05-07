@@ -8,50 +8,11 @@ var map;
 const colorList = ['#CC3333', '#339933', '#8BB33B', '#267373'];
 var ids = [];
 
-// var trackStrokeStyles = [
-// 	new ol.style.Style({
-// 		stroke: new ol.style.Stroke({
-// 			color : '#339933', hijau tua #339933
-// 			width : 5			
-// 		})
-// 	}),
-// 	new ol.style.Style({
-// 		stroke: new ol.style.Stroke({
-// 			color : '#8BB33B', hijau muda #8BB33B
-// 			width : 5			
-// 		})
-// 	}),
-// 	new ol.style.Style({
-// 		stroke: new ol.style.Stroke({
-// 			color : '#267373', biru muda #267373
-// 			width : 5			
-// 		})
-// 	})
-// ];
-
-// var walkStrokeStyle = new ol.style.Style({
-// 	stroke: new ol.style.Stroke({
-// 		color : '#CC3333', merah #CC3333
-// 		width : 5
-// 	})
-// });
-
 $(document).ready(function () {
 	var protocol = new CicaheumLedengProtocol("02428203D4526448", function (message) {
 		clearSecondaryAlerts();
 		showAlert('<?=$this->lang->line('Connection problem')?>', 'alert');
 	});
-
-	// var mapLayer = new ol.layer.Tile(
-	// {
-	// 	source : new ol.source.BingMaps(
-	// 		{
-	// 			key : 'AuV7xXD6_UMiQ5BLoZr0xkpjLpzWqMT55772Q8XtLIQeuDebHPKiNXSlZXxEr1GA',
-	// 			imagerySet : 'Road'
-	// 		})
-	// });
-	// var resultVectorSource = new ol.source.Vector();
-	// var inputVectorSource = new ol.source.Vector();
 
 	var map = new mapboxgl.Map({
 		container: 'map', // container id
@@ -78,6 +39,7 @@ $(document).ready(function () {
 			timeout:1000
 		},
 		trackUserLocation: true
+
 	});
 	map.addControl(geolocation);
 	// End geolocation tracking routine
@@ -410,14 +372,14 @@ $(document).ready(function () {
 		var kiriURL = encodeURIComponent('http://kiri.travel?start=' + encodeURIComponent($('#startInput').val()) + '&finish=' + encodeURIComponent($('#finishInput').val()) + '&region=' + region);
 		var kiriMessage = encodeURIComponent('<?=$this->lang->line("I take public transport")?>'.replace('%finish%', $('#finishInput').val()).replace('%start%', $('#startInput').val()));
 		var sectionContainer = $('<div></div>');
-		var temp1 = $('<ul id="myTab" class="nav nav-tabs" role="tablist"></ul>');
+		var temp1 = $('<ul class="nav nav-tabs" role="tablist"></ul>');
 		var temp2 = $('<div class="tab-content"></div>');
 		$('#routingresults').append(sectionContainer);
-		$.each(results.routingresults, function (resultIndex, result) {
-			var resultHTML1 = resultIndex === 0 ? '<li class="nav-link active">' : '<li class="nav-link">';
-			resultHTML1 += '<a data-toggle="tab" href="#panel1-' + (resultIndex + 1) + '" role="tab">' + (result.traveltime === null ? '<?=$this->lang->line('Oops')?>' : result.traveltime) + '</a></li>';
+		$.each(results.routingresults, function(resultIndex, result) {
+			var resultHTML1 = resultIndex === 0 ? '<li><a class="nav-link active active-tabs ' : '<li><a class="nav-link ';
+			resultHTML1 += 'text-decoration-none" data-toggle="tab" href="#panel1-' + (resultIndex + 1) + '" role="tab">' + (result.traveltime === null ? '<?=$this->lang->line('Oops')?>' : result.traveltime) + '</a></li>';
 			var resultHTML2 = '<div id="panel1-' + (resultIndex + 1) + '"';
-			resultHTML2 += resultIndex === 0 ? ' class="tab-pane container active" role="tabpanel"><table>' : ' class="tab-pane container fade" role="tabpanel"><table>';
+			resultHTML2 += resultIndex === 0 ? ' class="tab-pane active" role="tabpanel"><table class="table-striped">' : ' class="x tab-pane" role="tabpanel"><table class="table-striped">';
 			$.each(result.steps, function (stepIndex, step) {
 				resultHTML2 += '<tr><td><img src="../images/means/' + step[0] + '/' + step[1] + '.png" alt="' + step[1] + '"/></td><td>' + step[3];
 				if (step[4] != null) {
@@ -440,8 +402,15 @@ $(document).ready(function () {
 		sectionContainer.append(temp1);
 		sectionContainer.append(temp2);
 
-		$.each(results.routingresults, function (resultIndex, result) {
-			$('a[href="#panel1-' + (resultIndex + 1) + '"]').click(function () {
+		$(".nav .nav-link").on("click", function(){
+			$(".nav").find(".active").removeClass("active");
+			$(".tab-pane").removeClass("active");
+			$(this).addClass("active");
+			$($(this).attr("href")).addClass("active");
+		 });
+
+		$.each(results.routingresults, function(resultIndex, result) {
+			$('a[href="#panel1-' + (resultIndex + 1) + '"]').click(function() {
 				showSingleRoutingResultOnMap(result);
 			});
 		});

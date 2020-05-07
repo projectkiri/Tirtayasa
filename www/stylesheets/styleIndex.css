@@ -90,3 +90,11 @@ a:link.ticket, a:visited.ticket, a:active.ticket, a:hover.ticket {
 .paddingBottom {
 	padding-bottom: 3%;
 }
+
+.nav-link a:hover{
+	text-decoration: none;
+}
+
+.nav-tabs a:hover{
+	background-color:#DCDCDC;
+}
