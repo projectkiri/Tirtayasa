@@ -17,7 +17,7 @@ $(document).ready(function () {
 	var map = new mapboxgl.Map({
 		container: 'map', // container id
 		style: 'mapbox://styles/mapbox/outdoors-v11', // stylesheet location
-		center: [-122.486055, 37.830948], // starting position [lng, lat]
+		center: [107.60981, -6.91474], // starting position [lng, lat]
 		zoom: 12 // starting zoom
 	});
 	map.addControl(new mapboxgl.NavigationControl());
