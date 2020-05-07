@@ -119,6 +119,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <script src="/ext/bootstrap/js/vendor/fastclick.js"></script>
         <script src="/ext/bootstrap/js/bootstrap.min.js"></script>
         <script src="/ext/openlayers/ol.js"></script>
+        <script src="https://api.mapbox.com/mapbox-gl-js/v1.10.0/mapbox-gl.js"></script>
+        <link href="https://api.mapbox.com/mapbox-gl-js/v1.10.0/mapbox-gl.css" rel="stylesheet" />
         <script>
             var region = '<?= $region ?>';
             var input_text = <?= json_encode($inputText) ?>;
