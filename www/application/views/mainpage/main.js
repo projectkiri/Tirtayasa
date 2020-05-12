@@ -27,11 +27,6 @@ $(document).ready(function () {
 			{}
 		]};
 
-	// auto detect geolocation
-	// setTimeout(function() {
-	// 	$(".mapboxgl-ctrl-geolocate").click();
-	// }, 5000);
-
 	// Start geolocation tracking routine
 	var geolocation = new mapboxgl.GeolocateControl({
 		positionOptions: {
@@ -67,7 +62,6 @@ $(document).ready(function () {
 		placeInput.change(function () {
 			coordinates[sfValue] = null;
 			if (markers[sfValue] != null) {
-				// inputVectorSource.removeFeature(markers[sfValue]);
 				map.removeLayer(sfValue);
 				map.removeSource(sfValue)
 			}
@@ -229,7 +223,6 @@ $(document).ready(function () {
 		if (map.getLayer('finish')) map.removeLayer('finish');
 		if (map.getSource('finish')) map.removeSource('finish');
 		if (map.hasImage('finishPoint')) map.removeImage('finishPoint');
-		// inputVectorSource.clear();
 	}
 
 	/**
