@@ -3,10 +3,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
 var regions = <?=json_encode($this->config->item('regions'))?>;
 mapboxgl.accessToken = <?=json_encode($this->config->item('mapbox-token'))?>;
-var map;
-// colorList: 0=walk, 1=angkot1, 2=angkot2, 3=angkot3
-const colorList = ['#CC3333', '#339933', '#8BB33B', '#267373'];
-var ids = [];
+
+const trackColors = ['#339933', '#8BB33B', '#267373'];
+const walkColor = '#CC3333';
+
+var map_component_ids = [];
 
 $(document).ready(function () {
 	var protocol = new CicaheumLedengProtocol(<?=json_encode($this->config->item('cicaheumledeng-key'))?>, function (message) {
@@ -196,9 +197,15 @@ $(document).ready(function () {
 
 	 function clearRoutingResultsOnMap() {
 	 	updateRegion(region, false);
-	 	for (var i = 0; i < ids.length; i++) {
-	 		if(map.getLayer(ids[i])) map.removeLayer(ids[i]);
-	 		if(map.getSource(ids[i])) map.removeSource(ids[i]);
+	 	// Remove components in backward manner, because layer is dependant on source
+	 	// but source was created first
+	 	for (let i = map_component_ids.length; i >= 0; i--) {
+	 		if(map.getLayer(map_component_ids[i])) {
+	 			map.removeLayer(map_component_ids[i]);
+	 		}
+	 		if(map.getSource(map_component_ids[i])) {
+	 			map.removeSource(map_component_ids[i]);
+	 		}
 	 	}
 	 }
 
@@ -401,88 +408,54 @@ $(document).ready(function () {
 		});
 		showSingleRoutingResultOnMap(results.routingresults[0]);
 	}
-	/**
-	 * Drawing a path between two coord1 and coord2
-	 */
-	function drawPath(color,coord1,coord2, stepIndex, i, coordinates){
-		coordinates.push([coord1[0], coord1[1]], [coord2[0], coord2[1]]);
-		map.addSource('route' + stepIndex + i, {
-			'type': 'geojson',
-			'data': {
-				'type': 'Feature',
-				'properties': {
-					'color': colorList[color]
-				},
-				'geometry': {
-					'type': 'LineString',
-					'coordinates': [
-					[coord1[0],coord1[1]],
-					[coord2[0],coord2[1]]
-					]
-				}
-			}
-		});
-		map.addLayer({
-			'id': 'route' + stepIndex + i,
-			'type': 'line',
-			'source': 'route' + stepIndex + i,
-			'layout': {
-				'line-join': 'round',
-				'line-cap': 'round'
-			},
-			'paint': {
-				'line-color': ['get', 'color'],
-				'line-width': 5
-			}
-		});
-	}
 
 	/**
 	 * Shows a single routing result on map
 	 * @param result the JSON array for one result
-	**/
+	 **/
 	function showSingleRoutingResultOnMap(result) {
 		clearRoutingResultsOnMap();
-		var trackCounter = 0;
-		var startVector = "";
-		var curColor = 0;
-		var curAngkot = 0;
-		var coordinates = [];
+		let trackCounter = 0;
+		let bounds = null;
 		$.each(result.steps, function (stepIndex, step) {
 			if (step[0] === 'none') {
 				// Don't draw line
 			} else {
-				for ($i = 0; $i < step[2].length - 1; $i += 1) {
-					if (step[0]==""){
-						if(step[0]=='walk'){
-							curColor = 0;
-						} else {
-							curColor=1;
+				let coordinates = stringArrayToPointArray(step[2]);
+				map.addSource('source_' + stepIndex, {
+					'type': 'geojson',
+					'data': {
+						'type': 'Feature',
+						'properties': {
+							'color': step[0] == 'walk' ? walkColor : trackColors[trackCounter++ % trackColors.length]
+						},
+						'geometry': {
+							'type': 'LineString',
+							'coordinates': coordinates
 						}
 					}
-					// 0=walk, 1=angkot1, 2=angkot2, 3=angkot3
-					// #CC3333, #339933, #8BB33B, #267373
-					else if (step[0]!="walk"){
-						if(startVector!=step[0]){
-							if (curColor==0){
-								curColor = curAngkot;
-							}
-							if (curColor<3){
-								curColor ++;
-								curAngkot = curColor;
-							} else if (curColor==3) {
-								curColor = 1;
-								curAngkot = curColor;
-							}
-						}
+				});
+				map_component_ids.push('source_' + stepIndex);
+				map.addLayer({
+					'id': 'layer_' + stepIndex,
+					'type': 'line',
+					'source': 'source_' + stepIndex,
+					'layout': {
+						'line-join': 'round',
+						'line-cap': 'round'
+					},
+					'paint': {
+						'line-color': ['get', 'color'],
+						'line-width': 5
+					}
+				});
+				map_component_ids.push('layer_' + stepIndex);
+				for (let i = 0; i < coordinates.length; coordinates++) {
+					if (bounds) {
+						bounds.extend(coordinates[i]);
 					} else {
-						curColor = 0
-					}
-					startVector = step[0];
-					var coord1 = stringToLonLat(step[2][$i]);
-					var coord2 = stringToLonLat(step[2][$i + 1]);
-					ids.push('route' + stepIndex + $i);
-					drawPath(curColor,coord1,coord2,stepIndex,$i, coordinates);
+						bounds = new mapboxgl.LngLatBounds(coordinates[i], coordinates[i]);
+					}					
 				}
 			}
 
@@ -491,7 +464,7 @@ $(document).ready(function () {
 				if (map.hasImage('startPoint')) map.removeImage('startPoint');
 				if (map.getLayer('start')) map.removeLayer('start');
 				if (map.getSource('start')) map.removeSource('start');
-				ids.push('start');
+				map_component_ids.push('start');
 				map.loadImage('../../../images/start.png',
 					function(error, image) {
 						map.addImage('startPoint', image);
@@ -528,7 +501,7 @@ $(document).ready(function () {
 					if (map.hasImage(step[0] + 'baloon' + step[1])) map.removeImage(step[0] + 'baloon' + step[1]);
 					if (map.getLayer(step[0] + 'baloon' + step[1])) map.removeLayer(step[0] + 'baloon' + step[1]);
 					if (map.getSource(step[0] + 'baloon' + step[1])) map.removeSource(step[0] + 'baloon' + step[1]);
-					ids.push(step[0] + 'baloon' + step[1]);
+					map_component_ids.push(step[0] + 'baloon' + step[1]);
 					map.loadImage('../../../images/means/' + step[0] + '/baloon/' + step[1] + '.png',
 						function(error, image) {
 							map.addImage(step[0] + 'baloon' + step[1], image);
@@ -570,7 +543,7 @@ $(document).ready(function () {
 					if (map.getSource('walk' + stepIndex)) {
 						map.removeSource('walk' + stepIndex);
 					}
-					ids.push('walk' + stepIndex);
+					map_component_ids.push('walk' + stepIndex);
 					map.loadImage('../../../images/means/walk/baloon/walk.png', function(error, image) {
 						map.addImage('walk' + stepIndex, image);
 						map.addSource('walk' + stepIndex, {
@@ -608,7 +581,7 @@ $(document).ready(function () {
 				if (map.hasImage('finishPoint')) map.removeImage('finishPoint');
 				if (map.getLayer('finish')) map.removeLayer('finish');
 				if (map.getSource('finish')) map.removeSource('finish');
-				ids.push('finish');
+				map_component_ids.push('finish');
 				map.loadImage('../../../images/finish.png', function(error, image) {
 					map.addImage('finishPoint', image);
 					map.addSource('finish', {
@@ -641,9 +614,6 @@ $(document).ready(function () {
 			}
 		});
 
-		var bounds = coordinates.reduce(function(bounds, coord) {
-			return bounds.extend(coord);
-		}, new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]));
 		map.fitBounds(bounds, {
 			padding: 20
 		});
@@ -652,12 +622,11 @@ $(document).ready(function () {
 	/**
 	 * Converts "lat,lon" array into coordinate object array.
 	 * @return the converted Point array object
-	 * sudah tidak diperlukan lagi
 	 */
 	function stringArrayToPointArray(textArray) {
 		var lonlatArray = new Array();
 		$.each(textArray, function (index, value) {
-			lonlatArray[index] = ol.proj.transform(stringToLonLat(value), 'EPSG:4326', 'EPSG:3857');
+			lonlatArray[index] = stringToLonLat(value);
 		});
 		return lonlatArray;
 	}
