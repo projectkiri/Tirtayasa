@@ -1,15 +1,15 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
-var regions = <?= json_encode($this -> config -> item('regions')) ?>;
-mapboxgl.accessToken = 'pk.eyJ1Ijoia2VsdmluYWRyaWFuIiwiYSI6ImNrOGx1NWlkdDA1YmczbW44MGM3dzY2czAifQ.06uwtSbY-t2pKcFYLAoXqA';
+var regions = <?=json_encode($this->config->item('regions'))?>;
+mapboxgl.accessToken = <?=json_encode($this->config->item('mapbox-token'))?>;
 var map;
 // colorList: 0=walk, 1=angkot1, 2=angkot2, 3=angkot3
 const colorList = ['#CC3333', '#339933', '#8BB33B', '#267373'];
 var ids = [];
 
 $(document).ready(function () {
-	var protocol = new CicaheumLedengProtocol("02428203D4526448", function (message) {
+	var protocol = new CicaheumLedengProtocol(<?=json_encode($this->config->item('cicaheumledeng-key'))?>, function (message) {
 		clearSecondaryAlerts();
 		showAlert('<?=$this->lang->line('Connection problem')?>', 'alert');
 	});
