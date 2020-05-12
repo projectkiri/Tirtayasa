@@ -17,8 +17,8 @@ $(document).ready(function () {
 	var map = new mapboxgl.Map({
 		container: 'map', // container id
 		style: 'mapbox://styles/mapbox/outdoors-v11', // stylesheet location
-		center: [107.60981, -6.91474], // starting position [lng, lat]
-		zoom: 12 // starting zoom
+		center: [regions[region].lon, regions[region].lat], // starting position [lng, lat]
+		zoom: regions[region].zoom // starting zoom
 	});
 	map.addControl(new mapboxgl.NavigationControl());
 	var resultVectorSource = {
@@ -45,7 +45,6 @@ $(document).ready(function () {
 	// End geolocation tracking routine
 
 	var markers = { start: null, finish: null };
-	updateRegion(region, false);
 
 	var focused = false;
 	$.each(['start', 'finish'], function (sfIndex, sfValue) {
@@ -699,7 +698,9 @@ function swapInput() {
  */
 function updateRegion(newRegion, updateCookie) {
 	region = newRegion;
-	setCookie('region', region);
+	if (updateCookie) {
+		setCookie('region', region);
+	}
 	var point = [regions[region].lon, regions[region].lat];
 	map.flyTo({ center: point, zoom: regions[region].zoom });
 }
