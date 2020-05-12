@@ -61,6 +61,7 @@ class Mainpage extends CI_Controller {
 		switch ($name) {
 			case 'main.js':
 				$this->load->config('credentials');
+				$this->load->helper('url');
 				header('Content-type: text/javascript');
 				$this->load->view('mainpage/main.js', array('locale' => $locale));
 				break;

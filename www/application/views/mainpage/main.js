@@ -361,7 +361,7 @@ $(document).ready(function () {
 		clearStartFinishMarker();
 		clearRoutingResultsOnTable();
 		clearSecondaryAlerts();
-		var kiriURL = encodeURIComponent('http://kiri.travel?start=' + encodeURIComponent($('#startInput').val()) + '&finish=' + encodeURIComponent($('#finishInput').val()) + '&region=' + region);
+		var kiriURL = encodeURIComponent('<?= base_url() ?>?start=' + encodeURIComponent($('#startInput').val()) + '&finish=' + encodeURIComponent($('#finishInput').val()) + '&region=' + region);
 		var kiriMessage = encodeURIComponent('<?=$this->lang->line("I take public transport")?>'.replace('%finish%', $('#finishInput').val()).replace('%start%', $('#startInput').val()));
 		var sectionContainer = $('<div></div>');
 		var temp1 = $('<ul class="nav nav-tabs" role="tablist"></ul>');
