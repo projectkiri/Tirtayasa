@@ -11,7 +11,7 @@ var ids = [];
 $(document).ready(function () {
 	var protocol = new CicaheumLedengProtocol(<?=json_encode($this->config->item('cicaheumledeng-key'))?>, function (message) {
 		clearSecondaryAlerts();
-		showAlert('<?=$this->lang->line('Connection problem')?>', 'alert');
+		showAlert('<?=$this->lang->line("Connection problem")?>', 'alert');
 	});
 
 	var map = new mapboxgl.Map({
@@ -24,7 +24,7 @@ $(document).ready(function () {
 	var resultVectorSource = {
 		'type': 'FeatureCollection',
 		'features': [
-			{}
+		{}
 		]};
 
 	// Start geolocation tracking routine
@@ -68,7 +68,7 @@ $(document).ready(function () {
 		});
 		placeSelect.change(function () {
 			clearAlerts();
-			showAlert('<img src="images/loading.gif" alt="... "/> ' + '<?=$this->lang->line('Please wait')?>...', 'secondary');
+			showAlert('<img src="images/loading.gif" alt="... "/> ' + '<?=$this->lang->line("Please wait")?>...', 'secondary');
 			coordinates[sfValue] = $(this).val();
 			checkCoordinatesThenRoute(coordinates);
 		});
@@ -110,13 +110,13 @@ $(document).ready(function () {
 						'data': {
 							'type': 'FeatureCollection',
 							'features': [
-								{
-									'type': 'Feature',
-									'geometry': {
-										'type': 'Point',
-										'coordinates': [event.lngLat['lng'], event.lngLat['lat']]
-									}
+							{
+								'type': 'Feature',
+								'geometry': {
+									'type': 'Point',
+									'coordinates': [event.lngLat['lng'], event.lngLat['lat']]
 								}
+							}
 							]
 						}
 					});
@@ -131,7 +131,7 @@ $(document).ready(function () {
 					});
 					markers['start'] = map.getSource('start');
 				}
-			);
+				);
 			$('#startInput').val(event.lngLat['lat'] + ',' + event.lngLat['lng']);
 		} else if ($('#finishInput').val() === '') {
 			map.loadImage('../../../images/finish.png',
@@ -142,13 +142,13 @@ $(document).ready(function () {
 						'data': {
 							'type': 'FeatureCollection',
 							'features': [
-								{
-									'type': 'Feature',
-									'geometry': {
-										'type': 'Point',
-										'coordinates': [event.lngLat['lng'], event.lngLat['lat']]
-									}
+							{
+								'type': 'Feature',
+								'geometry': {
+									'type': 'Point',
+									'coordinates': [event.lngLat['lng'], event.lngLat['lat']]
 								}
+							}
 							]
 						}
 					});
@@ -163,7 +163,7 @@ $(document).ready(function () {
 					});
 					markers['finish'] = map.getSource('finish')
 				}
-			);
+				);
 			$('#finishInput').val(event.lngLat['lat'] + ',' + event.lngLat['lng']);
 		}
 	});
@@ -177,59 +177,59 @@ $(document).ready(function () {
 	 * Check if coordinates are complete. If yes, then start routing.
 	 * @param coordinates the coordinates to check.
 	 */
-	function checkCoordinatesThenRoute(coordinates) {
-		if (coordinates['start'] != null && coordinates['finish'] != null) {
-			protocol.findRoute(
-				coordinates['start'],
-				coordinates['finish'],
-				'<?=$locale?>',
-				function (results) {
-					if (results.status === 'ok') {
-						showRoutingResults(results);
-					} else {
-						clearSecondaryAlerts();
-						showAlert('<?=$this->lang->line('Connection problem')?>', 'alert');
-					}
-				});
-		}
-	}
+	 function checkCoordinatesThenRoute(coordinates) {
+	 	if (coordinates['start'] != null && coordinates['finish'] != null) {
+	 		protocol.findRoute(
+	 			coordinates['start'],
+	 			coordinates['finish'],
+	 			'<?=$locale?>',
+	 			function (results) {
+	 				if (results.status === 'ok') {
+	 					showRoutingResults(results);
+	 				} else {
+	 					clearSecondaryAlerts();
+	 					showAlert('<?=$this->lang->line("Connection problem")?>', 'alert');
+	 				}
+	 			});
+	 	}
+	 }
 
-	function clearRoutingResultsOnMap() {
-		updateRegion(region, false);
-		for (var i = 0; i < ids.length; i++) {
-			if(map.getLayer(ids[i])) map.removeLayer(ids[i]);
-			if(map.getSource(ids[i])) map.removeSource(ids[i]);
-		}
-	}
+	 function clearRoutingResultsOnMap() {
+	 	updateRegion(region, false);
+	 	for (var i = 0; i < ids.length; i++) {
+	 		if(map.getLayer(ids[i])) map.removeLayer(ids[i]);
+	 		if(map.getSource(ids[i])) map.removeSource(ids[i]);
+	 	}
+	 }
 
-	function clearRoutingResultsOnTable() {
-		$('.nav').remove();
-		$('.tab-content').remove();
-	}
+	 function clearRoutingResultsOnTable() {
+	 	$('.nav').remove();
+	 	$('.tab-content').remove();
+	 }
 
-	function clearAlerts() {
-		$('.alert').remove();
-	}
+	 function clearAlerts() {
+	 	$('.alert').remove();
+	 }
 
-	function clearSecondaryAlerts() {
-		$('.alert.alert-secondary').fadeOut();
-	}
+	 function clearSecondaryAlerts() {
+	 	$('.alert.alert-secondary').fadeOut();
+	 }
 
-	function clearStartFinishMarker() {
-		if (map.getLayer('start')) map.removeLayer('start');
-		if (map.getSource('start')) map.removeSource('start');
-		if (map.hasImage('startPoint')) map.removeImage('startPoint');
-		
-		if (map.getLayer('finish')) map.removeLayer('finish');
-		if (map.getSource('finish')) map.removeSource('finish');
-		if (map.hasImage('finishPoint')) map.removeImage('finishPoint');
-	}
+	 function clearStartFinishMarker() {
+	 	if (map.getLayer('start')) map.removeLayer('start');
+	 	if (map.getSource('start')) map.removeSource('start');
+	 	if (map.hasImage('startPoint')) map.removeImage('startPoint');
+
+	 	if (map.getLayer('finish')) map.removeLayer('finish');
+	 	if (map.getSource('finish')) map.removeSource('finish');
+	 	if (map.hasImage('finishPoint')) map.removeImage('finishPoint');
+	 }
 
 	/**
 	 * A function that will be called when find route button is clicked
 	 * (or triggered by another means)
 	 */
-	function findRouteClicked() {
+	 function findRouteClicked() {
 		// Validate
 		var cancel = false;
 		$.each(['start', 'finish'], function (sfIndex, sfValue) {
@@ -239,13 +239,13 @@ $(document).ready(function () {
 			}
 		});
 		if (cancel) {
-			showAlert('<?=$this->lang->line('Fill both')?>', 'alert');
+			showAlert('<?=$this->lang->line("Fill both")?>', 'alert');
 			return;
 		}
 
 		clearAlerts();
 		clearRoutingResultsOnTable();
-		showAlert('<img src="images/loading.gif" alt="... "/> ' + '<?=$this->lang->line('Please wait')?>...', 'secondary');
+		showAlert('<img src="images/loading.gif" alt="... "/> ' + '<?=$this->lang->line("Please wait")?>...', 'secondary');
 
 		var completedLatLon = 0;
 		$.each(['start', 'finish'], function (sfIndex, sfValue) {
@@ -271,9 +271,9 @@ $(document).ready(function () {
 										$.each(result.searchresult, function (index, value) {
 											var placeSelect = $('#' + sfValue + 'Select');
 											placeSelect
-												.append($('<option></option>')
-													.attr('value', value['location'])
-													.text(value['placename']));
+											.append($('<option></option>')
+												.attr('value', value['location'])
+												.text(value['placename']));
 											placeSelect.removeClass('hidden');
 										});
 										coordinates[sfValue] = result.searchresult[0]['location'];
@@ -281,12 +281,12 @@ $(document).ready(function () {
 									} else {
 										clearSecondaryAlerts();
 										clearRoutingResultsOnMap();
-										showAlert(placeInput.val() + ' <?=$this->lang->line('not found')?>', 'alert');
+										showAlert(placeInput.val() + ' <?=$this->lang->line("not found")?>', 'alert');
 									}
 								} else {
 									clearSecondaryAlerts();
 									clearRoutingResultsOnMap();
-									showAlert('<?=$this->lang->line('Connection problem')?>', 'alert');
+									showAlert('<?=$this->lang->line("Connection problem")?>', 'alert');
 								}
 							});
 					} else {
@@ -369,7 +369,7 @@ $(document).ready(function () {
 		$('#routingresults').append(sectionContainer);
 		$.each(results.routingresults, function(resultIndex, result) {
 			var resultHTML1 = resultIndex === 0 ? '<li><a class="nav-link active active-tabs ' : '<li><a class="nav-link ';
-			resultHTML1 += 'text-decoration-none" data-toggle="tab" href="#panel1-' + (resultIndex + 1) + '" role="tab">' + (result.traveltime === null ? '<?=$this->lang->line('Oops')?>' : result.traveltime) + '</a></li>';
+			resultHTML1 += 'text-decoration-none" data-toggle="tab" href="#panel1-' + (resultIndex + 1) + '" role="tab">' + (result.traveltime === null ? '<?=$this->lang->line("Oops")?>' : result.traveltime) + '</a></li>';
 			var resultHTML2 = '<div id="panel1-' + (resultIndex + 1) + '"';
 			resultHTML2 += resultIndex === 0 ? ' class="tab-pane active" role="tabpanel"><table class="table-striped">' : ' class="x tab-pane" role="tabpanel"><table class="table-striped">';
 			$.each(result.steps, function (stepIndex, step) {
@@ -392,7 +392,7 @@ $(document).ready(function () {
 			$(".tab-pane").removeClass("active");
 			$(this).addClass("active");
 			$($(this).attr("href")).addClass("active");
-		 });
+		});
 
 		$.each(results.routingresults, function(resultIndex, result) {
 			$('a[href="#panel1-' + (resultIndex + 1) + '"]').click(function() {
@@ -401,14 +401,14 @@ $(document).ready(function () {
 		});
 		showSingleRoutingResultOnMap(results.routingresults[0]);
 	}
-/**
- * Drawing a path between two coord1 and coord2
- **/
-function drawPath(color,coord1,coord2, stepIndex, i, coordinates){
-	coordinates.push([coord1[0], coord1[1]], [coord2[0], coord2[1]]);
-	map.addSource('route' + stepIndex + i, {
-		'type': 'geojson',
-		'data': {
+	/**
+	 * Drawing a path between two coord1 and coord2
+	 */
+	function drawPath(color,coord1,coord2, stepIndex, i, coordinates){
+		coordinates.push([coord1[0], coord1[1]], [coord2[0], coord2[1]]);
+		map.addSource('route' + stepIndex + i, {
+			'type': 'geojson',
+			'data': {
 				'type': 'Feature',
 				'properties': {
 					'color': colorList[color]
@@ -416,8 +416,8 @@ function drawPath(color,coord1,coord2, stepIndex, i, coordinates){
 				'geometry': {
 					'type': 'LineString',
 					'coordinates': [
-						[coord1[0],coord1[1]],
-						[coord2[0],coord2[1]]
+					[coord1[0],coord1[1]],
+					[coord2[0],coord2[1]]
 					]
 				}
 			}
@@ -434,73 +434,72 @@ function drawPath(color,coord1,coord2, stepIndex, i, coordinates){
 				'line-color': ['get', 'color'],
 				'line-width': 5
 			}
-		}
-	);
-}
+		});
+	}
 
-/**
- * Shows a single routing result on map
- * @param result the JSON array for one result
- */
-function showSingleRoutingResultOnMap(result) {
-	clearRoutingResultsOnMap();
-	var trackCounter = 0;
-	var startVector = "";
-	var curColor = 0;
-	var curAngkot = 0;
-	var coordinates = [];
-	$.each(result.steps, function (stepIndex, step) {
-		if (step[0] === 'none') {
-			// Don't draw line
-		} else {
-			for ($i = 0; $i < step[2].length - 1; $i += 1) {
-				if (step[0]==""){
-					if(step[0]=='walk'){
-						curColor = 0;
+	/**
+	 * Shows a single routing result on map
+	 * @param result the JSON array for one result
+	**/
+	function showSingleRoutingResultOnMap(result) {
+		clearRoutingResultsOnMap();
+		var trackCounter = 0;
+		var startVector = "";
+		var curColor = 0;
+		var curAngkot = 0;
+		var coordinates = [];
+		$.each(result.steps, function (stepIndex, step) {
+			if (step[0] === 'none') {
+				// Don't draw line
+			} else {
+				for ($i = 0; $i < step[2].length - 1; $i += 1) {
+					if (step[0]==""){
+						if(step[0]=='walk'){
+							curColor = 0;
+						} else {
+							curColor=1;
+						}
+					}
+					// 0=walk, 1=angkot1, 2=angkot2, 3=angkot3
+					// #CC3333, #339933, #8BB33B, #267373
+					else if (step[0]!="walk"){
+						if(startVector!=step[0]){
+							if (curColor==0){
+								curColor = curAngkot;
+							}
+							if (curColor<3){
+								curColor ++;
+								curAngkot = curColor;
+							} else if (curColor==3) {
+								curColor = 1;
+								curAngkot = curColor;
+							}
+						}
 					} else {
-						curColor=1;
+						curColor = 0
 					}
+					startVector = step[0];
+					var coord1 = stringToLonLat(step[2][$i]);
+					var coord2 = stringToLonLat(step[2][$i + 1]);
+					ids.push('route' + stepIndex + $i);
+					drawPath(curColor,coord1,coord2,stepIndex,$i, coordinates);
 				}
-				// 0=walk, 1=angkot1, 2=angkot2, 3=angkot3
-				// #CC3333, #339933, #8BB33B, #267373
-				else if (step[0]!="walk"){
-					if(startVector!=step[0]){
-						if (curColor==0){
-							curColor = curAngkot;
-						}
-						if (curColor<3){
-							curColor ++;
-							curAngkot = curColor;
-						} else if (curColor==3) {
-							curColor = 1;
-							curAngkot = curColor;
-						}
-					}
-				} else {
-					curColor = 0
-				}
-				startVector = step[0];
-				var coord1 = stringToLonLat(step[2][$i]);
-				var coord2 = stringToLonLat(step[2][$i + 1]);
-				ids.push('route' + stepIndex + $i);
-				drawPath(curColor,coord1,coord2,stepIndex,$i, coordinates);
 			}
-		}
 
-		if (stepIndex === 0) {
-			var coord = stringToLonLat(step[2][0]);
-			if (map.hasImage('startPoint')) map.removeImage('startPoint');
-			if (map.getLayer('start')) map.removeLayer('start');
-			if (map.getSource('start')) map.removeSource('start');
-			ids.push('start');
-			map.loadImage('../../../images/start.png',
-				function(error, image) {
-					map.addImage('startPoint', image);
-					map.addSource('start', {
-						'type': 'geojson',
-						'data': {
-							'type': 'FeatureCollection',
-							'features': [
+			if (stepIndex === 0) {
+				var coord = stringToLonLat(step[2][0]);
+				if (map.hasImage('startPoint')) map.removeImage('startPoint');
+				if (map.getLayer('start')) map.removeLayer('start');
+				if (map.getSource('start')) map.removeSource('start');
+				ids.push('start');
+				map.loadImage('../../../images/start.png',
+					function(error, image) {
+						map.addImage('startPoint', image);
+						map.addSource('start', {
+							'type': 'geojson',
+							'data': {
+								'type': 'FeatureCollection',
+								'features': [
 								{
 									'type': 'Feature',
 									'geometry': {
@@ -508,80 +507,85 @@ function showSingleRoutingResultOnMap(result) {
 										'coordinates': [coord[0],coord[1]]
 									}
 								}
-							]
-						}
-					});
-					map.addLayer({
-						'id': 'start',
-						'type': 'symbol',
-						'source': 'start',
-						'layout': {
-							'icon-image': 'startPoint',
-							'icon-size': 1,
-							'icon-anchor': 'bottom-right'
-						}
-					});
-				}
-			);
-		} else {
-			var lonlat = stringToLonLat(step[2][0]);
-			if (step[0] != "walk") {
-				if (map.hasImage(step[0] + 'baloon' + step[1])) map.removeImage(step[0] + 'baloon' + step[1]);
-				if (map.getLayer(step[0] + 'baloon' + step[1])) map.removeLayer(step[0] + 'baloon' + step[1]);
-				if (map.getSource(step[0] + 'baloon' + step[1])) map.removeSource(step[0] + 'baloon' + step[1]);
-				ids.push(step[0] + 'baloon' + step[1]);
-				map.loadImage('../../../images/means/' + step[0] + '/baloon/' + step[1] + '.png',
-					function(error, image) {
-						map.addImage(step[0] + 'baloon' + step[1], image);
-						map.addSource(step[0] + 'baloon' + step[1], {
-							'type': 'geojson',
-							'data': {
-								'type': 'FeatureCollection',
-								'features': [
+								]
+							}
+						});
+						map.addLayer({
+							'id': 'start',
+							'type': 'symbol',
+							'source': 'start',
+							'layout': {
+								'icon-image': 'startPoint',
+								'icon-size': 1,
+								'icon-anchor': 'bottom-right'
+							}
+						});
+					}
+					);
+			} else {
+				var lonlat = stringToLonLat(step[2][0]);
+				if (step[0] != "walk") {
+					if (map.hasImage(step[0] + 'baloon' + step[1])) map.removeImage(step[0] + 'baloon' + step[1]);
+					if (map.getLayer(step[0] + 'baloon' + step[1])) map.removeLayer(step[0] + 'baloon' + step[1]);
+					if (map.getSource(step[0] + 'baloon' + step[1])) map.removeSource(step[0] + 'baloon' + step[1]);
+					ids.push(step[0] + 'baloon' + step[1]);
+					map.loadImage('../../../images/means/' + step[0] + '/baloon/' + step[1] + '.png',
+						function(error, image) {
+							map.addImage(step[0] + 'baloon' + step[1], image);
+							map.addSource(step[0] + 'baloon' + step[1], {
+								'type': 'geojson',
+								'data': {
+									'type': 'FeatureCollection',
+									'features': [
 									{
 										'type': 'Feature',
 										'geometry': {
 											'type': 'Point',
 											'coordinates': [lonlat[0],lonlat[1]]
-											
+
 										}
 									}
-								]
-							}
-						});
-						map.addLayer({
-							'id': step[0] + 'baloon' + step[1],
-							'type': 'symbol',
-							'source': step[0] + 'baloon' + step[1],
-							'layout': {
-								'icon-image': step[0] + 'baloon' + step[1],
-								'icon-size': 1,
-								'icon-anchor': 'bottom-left'
-							}
-						});
+									]
+								}
+							});
+							map.addLayer({
+								'id': step[0] + 'baloon' + step[1],
+								'type': 'symbol',
+								'source': step[0] + 'baloon' + step[1],
+								'layout': {
+									'icon-image': step[0] + 'baloon' + step[1],
+									'icon-size': 1,
+									'icon-anchor': 'bottom-left'
+								}
+							});
+						}
+						);
+				} else {
+					if (map.hasImage('walk' + stepIndex)) {
+						map.removeImage('walk' + stepIndex);
 					}
-				);
-			} else {
-				if (map.hasImage('walk' + stepIndex)) map.removeImage('walk' + stepIndex);
-				if (map.getLayer('walk' + stepIndex)) map.removeLayer('walk' + stepIndex);
-				if (map.getSource('walk' + stepIndex)) map.removeSource('walk' + stepIndex);
-				ids.push('walk' + stepIndex);
-				map.loadImage('../../../images/means/walk/baloon/walk.png',
-					function(error, image) {
+					if (map.getLayer('walk' + stepIndex)) {
+						map.removeLayer('walk' + stepIndex);
+					}
+					if (map.getSource('walk' + stepIndex)) {
+						map.removeSource('walk' + stepIndex);
+					}
+					ids.push('walk' + stepIndex);
+					map.loadImage('../../../images/means/walk/baloon/walk.png', function(error, image) {
 						map.addImage('walk' + stepIndex, image);
 						map.addSource('walk' + stepIndex, {
 							'type': 'geojson',
 							'data': {
 								'type': 'FeatureCollection',
 								'features': [
-									{
-										'type': 'Feature',
-										'geometry': {
-											'type': 'Point',
-											'coordinates': [lonlat[0],lonlat[1]]
-											
-										}
+								{
+									'type': 'Feature',
+									'geometry': {
+										'type': 'Point',
+										'coordinates': [lonlat[0],lonlat[1]]
+
 									}
+								}
 								]
 							}
 						});
@@ -595,32 +599,30 @@ function showSingleRoutingResultOnMap(result) {
 								'icon-anchor': 'bottom-right'
 							}
 						});
-					}
-				);
+					});
+				}
 			}
-		}
 
-		if (stepIndex === result.steps.length - 1) {
-			var lonlat = stringToLonLat(step[2][step[2].length - 1]);
-			if (map.hasImage('finishPoint')) map.removeImage('finishPoint');
-			if (map.getLayer('finish')) map.removeLayer('finish');
-			if (map.getSource('finish')) map.removeSource('finish');
-			ids.push('finish');
-			map.loadImage('../../../images/finish.png',
-				function(error, image) {
+			if (stepIndex === result.steps.length - 1) {
+				var lonlat = stringToLonLat(step[2][step[2].length - 1]);
+				if (map.hasImage('finishPoint')) map.removeImage('finishPoint');
+				if (map.getLayer('finish')) map.removeLayer('finish');
+				if (map.getSource('finish')) map.removeSource('finish');
+				ids.push('finish');
+				map.loadImage('../../../images/finish.png', function(error, image) {
 					map.addImage('finishPoint', image);
 					map.addSource('finish', {
 						'type': 'geojson',
 						'data': {
 							'type': 'FeatureCollection',
 							'features': [
-								{
-									'type': 'Feature',
-									'geometry': {
-										'type': 'Point',
-										'coordinates': [lonlat[0],lonlat[1]]
-									}
+							{
+								'type': 'Feature',
+								'geometry': {
+									'type': 'Point',
+									'coordinates': [lonlat[0],lonlat[1]]
 								}
+							}
 							]
 						}
 					});
@@ -635,85 +637,84 @@ function showSingleRoutingResultOnMap(result) {
 						}
 					});
 				}
-			);
+				);
+			}
+		});
+
+		var bounds = coordinates.reduce(function(bounds, coord) {
+			return bounds.extend(coord);
+		}, new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]));
+		map.fitBounds(bounds, {
+			padding: 20
+		});
+	}
+
+	/**
+	 * Converts "lat,lon" array into coordinate object array.
+	 * @return the converted Point array object
+	 * sudah tidak diperlukan lagi
+	 */
+	function stringArrayToPointArray(textArray) {
+		var lonlatArray = new Array();
+		$.each(textArray, function (index, value) {
+			lonlatArray[index] = ol.proj.transform(stringToLonLat(value), 'EPSG:4326', 'EPSG:3857');
+		});
+		return lonlatArray;
+	}
+
+	/**
+	 * Converts "lat,lng" into lonlat array
+	 * @return the converted lonlat array
+	 */
+	function stringToLonLat(text) {
+		var latlon = text.split(/,\s*/);
+		return [parseFloat(latlon[1]), parseFloat(latlon[0])];
+	}
+
+	/**
+	 * Swap the inputs
+	 */
+	function swapInput() {
+		var startInput = $('#startInput');
+		var finishInput = $('#finishInput');
+		var temp = startInput.val();
+		startInput.val(finishInput.val());
+		finishInput.val(temp);
+		coordinates['start'] = null;
+		coordinates['finish'] = null;
+
+		if (startInput.val() != '' && finishInput.val() != '') {
+			findRouteClicked();
 		}
-	});
-	
-	var bounds = coordinates.reduce(function(bounds, coord) {
-		return bounds.extend(coord);
-	}, new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]));
-	map.fitBounds(bounds, {
-		padding: 20
-	});
-}
-
-/**
- * Converts "lat,lon" array into coordinate object array.
- * @return the converted Point array object
- * sudah tidak diperlukan lagi
- */
-function stringArrayToPointArray(textArray) {
-	var lonlatArray = new Array();
-	$.each(textArray, function (index, value) {
-		lonlatArray[index] = ol.proj.transform(stringToLonLat(value), 'EPSG:4326', 'EPSG:3857');
-	});
-	return lonlatArray;
-}
-
-/**
- * Converts "lat,lng" into lonlat array
- * @return the converted lonlat array
- */
-function stringToLonLat(text) {
-	var latlon = text.split(/,\s*/);
-	return [parseFloat(latlon[1]), parseFloat(latlon[0])];
-}
-
-/**
- * Swap the inputs
- */
-function swapInput() {
-	var startInput = $('#startInput');
-	var finishInput = $('#finishInput');
-	var temp = startInput.val();
-	startInput.val(finishInput.val());
-	finishInput.val(temp);
-	coordinates['start'] = null;
-	coordinates['finish'] = null;
-	
-	if (startInput.val() != '' && finishInput.val() != '') {
-		findRouteClicked();
 	}
-}
 
-/**
- * Updates the region information in this page.
- */
-function updateRegion(newRegion, updateCookie) {
-	region = newRegion;
-	if (updateCookie) {
-		setCookie('region', region);
+	/**
+	 * Updates the region information in this page.
+	 */
+	function updateRegion(newRegion, updateCookie) {
+		region = newRegion;
+		if (updateCookie) {
+			setCookie('region', region);
+		}
+		var point = [regions[region].lon, regions[region].lat];
+		map.flyTo({ center: point, zoom: regions[region].zoom });
 	}
-	var point = [regions[region].lon, regions[region].lat];
-	map.flyTo({ center: point, zoom: regions[region].zoom });
-}
 
-/**
- * Computes distance between two position (from http://www.movable-type.co.uk/scripts/latlong.html)
- */
-function computeDistance(p1, p2) {
-	var R = 6371; // km
-	var p1Lat = p1[1] * Math.PI / 180;
-	var p2Lat = p2[1] * Math.PI / 180;
-	var dLat = (p2[1] - p1[1]) * Math.PI / 180;
-	var dLon = (p2[0] - p1[0]) * Math.PI / 180;
+	/**
+	 * Computes distance between two position (from http://www.movable-type.co.uk/scripts/latlong.html)
+	 */
+	function computeDistance(p1, p2) {
+		var R = 6371; // km
+		var p1Lat = p1[1] * Math.PI / 180;
+		var p2Lat = p2[1] * Math.PI / 180;
+		var dLat = (p2[1] - p1[1]) * Math.PI / 180;
+		var dLon = (p2[0] - p1[0]) * Math.PI / 180;
 
-	var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+		var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
 		Math.sin(dLon / 2) * Math.sin(dLon / 2) *
 		Math.cos(p1Lat) * Math.cos(p2Lat);
-	var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-	var d = R * c;
-	return d;
-}
+		var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+		var d = R * c;
+		return d;
+	}
 });
-
