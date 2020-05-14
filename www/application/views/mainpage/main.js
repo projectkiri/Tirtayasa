@@ -42,6 +42,15 @@ $(document).ready(function () {
 
 	var markers = { start: null, finish: null };
 
+	// Preload start and finish marker image
+	map.loadImage('../../../images/start.png', function(error, image) {
+		map.addImage('startPoint', image);
+	});
+	map.loadImage('../../../images/finish.png', function(error, image) {
+		map.addImage('finishPoint', image);
+	});
+
+
 	var focused = false;
 	$.each(['start', 'finish'], function (sfIndex, sfValue) {
 		var placeInput = $('#' + sfValue + 'Input');
@@ -103,68 +112,57 @@ $(document).ready(function () {
 	// Map click event
 	map.on('click', function (event) {
 		if ($('#startInput').val() === '') {
-			map.loadImage('../../../images/start.png',
-				function(error, image) {
-					map.addImage('startPoint', image);
-					map.addSource('start', {
-						'type': 'geojson',
-						'data': {
-							'type': 'FeatureCollection',
-							'features': [
-							{
-								'type': 'Feature',
-								'geometry': {
-									'type': 'Point',
-									'coordinates': [event.lngLat['lng'], event.lngLat['lat']]
-								}
-							}
-							]
+			map.addSource('start', {
+				'type': 'geojson',
+				'data': {
+					'type': 'FeatureCollection',
+					'features': [
+					{
+						'type': 'Feature',
+						'geometry': {
+							'type': 'Point',
+							'coordinates': [event.lngLat['lng'], event.lngLat['lat']]
 						}
-					});
-					map.addLayer({
-						'id': 'start',
-						'type': 'symbol',
-						'source': 'start',
-						'layout': {
-							'icon-image': 'startPoint',
-							'icon-size': 1
-						}
-					});
-					markers['start'] = map.getSource('start');
+					}
+					]
 				}
-				);
+			});
+			map.addLayer({
+				'id': 'start',
+				'type': 'symbol',
+				'source': 'start',
+				'layout': {
+					'icon-image': 'startPoint',
+					'icon-size': 1
+				}
+			});
 			$('#startInput').val(event.lngLat['lat'] + ',' + event.lngLat['lng']);
 		} else if ($('#finishInput').val() === '') {
-			map.loadImage('../../../images/finish.png',
-				function(error, image) {
-					map.addImage('finishPoint', image);
-					map.addSource('finish', {
-						'type': 'geojson',
-						'data': {
-							'type': 'FeatureCollection',
-							'features': [
-							{
-								'type': 'Feature',
-								'geometry': {
-									'type': 'Point',
-									'coordinates': [event.lngLat['lng'], event.lngLat['lat']]
-								}
-							}
-							]
+			map.addSource('finish', {
+				'type': 'geojson',
+				'data': {
+					'type': 'FeatureCollection',
+					'features': [
+					{
+						'type': 'Feature',
+						'geometry': {
+							'type': 'Point',
+							'coordinates': [event.lngLat['lng'], event.lngLat['lat']]
 						}
-					});
-					map.addLayer({
-						'id': 'finish',
-						'type': 'symbol',
-						'source': 'finish',
-						'layout': {
-							'icon-image': 'finishPoint',
-							'icon-size': 1
-						}
-					});
-					markers['finish'] = map.getSource('finish')
+					}
+					]
 				}
-				);
+			});
+			map.addLayer({
+				'id': 'finish',
+				'type': 'symbol',
+				'source': 'finish',
+				'layout': {
+					'icon-image': 'finishPoint',
+					'icon-size': 1
+				}
+			});
+			markers['finish'] = map.getSource('finish')
 			$('#finishInput').val(event.lngLat['lat'] + ',' + event.lngLat['lng']);
 		}
 	});
@@ -225,11 +223,9 @@ $(document).ready(function () {
 	 function clearStartFinishMarker() {
 	 	if (map.getLayer('start')) map.removeLayer('start');
 	 	if (map.getSource('start')) map.removeSource('start');
-	 	if (map.hasImage('startPoint')) map.removeImage('startPoint');
 
 	 	if (map.getLayer('finish')) map.removeLayer('finish');
 	 	if (map.getSource('finish')) map.removeSource('finish');
-	 	if (map.hasImage('finishPoint')) map.removeImage('finishPoint');
 	 }
 
 	/**
@@ -461,40 +457,34 @@ $(document).ready(function () {
 
 			if (stepIndex === 0) {
 				var coord = stringToLonLat(step[2][0]);
-				if (map.hasImage('startPoint')) map.removeImage('startPoint');
 				if (map.getLayer('start')) map.removeLayer('start');
 				if (map.getSource('start')) map.removeSource('start');
 				map_component_ids.push('start');
-				map.loadImage('../../../images/start.png',
-					function(error, image) {
-						map.addImage('startPoint', image);
-						map.addSource('start', {
-							'type': 'geojson',
-							'data': {
-								'type': 'FeatureCollection',
-								'features': [
-								{
-									'type': 'Feature',
-									'geometry': {
-										'type': 'Point',
-										'coordinates': [coord[0],coord[1]]
-									}
-								}
-								]
+				map.addSource('start', {
+					'type': 'geojson',
+					'data': {
+						'type': 'FeatureCollection',
+						'features': [
+						{
+							'type': 'Feature',
+							'geometry': {
+								'type': 'Point',
+								'coordinates': [coord[0],coord[1]]
 							}
-						});
-						map.addLayer({
-							'id': 'start',
-							'type': 'symbol',
-							'source': 'start',
-							'layout': {
-								'icon-image': 'startPoint',
-								'icon-size': 1,
-								'icon-anchor': 'bottom-right'
-							}
-						});
+						}
+						]
 					}
-					);
+				});
+				map.addLayer({
+					'id': 'start',
+					'type': 'symbol',
+					'source': 'start',
+					'layout': {
+						'icon-image': 'startPoint',
+						'icon-size': 1,
+						'icon-anchor': 'bottom-right'
+					}
+				});
 			} else {
 				var lonlat = stringToLonLat(step[2][0]);
 				if (step[0] != "walk") {
@@ -578,39 +568,34 @@ $(document).ready(function () {
 
 			if (stepIndex === result.steps.length - 1) {
 				var lonlat = stringToLonLat(step[2][step[2].length - 1]);
-				if (map.hasImage('finishPoint')) map.removeImage('finishPoint');
 				if (map.getLayer('finish')) map.removeLayer('finish');
 				if (map.getSource('finish')) map.removeSource('finish');
 				map_component_ids.push('finish');
-				map.loadImage('../../../images/finish.png', function(error, image) {
-					map.addImage('finishPoint', image);
-					map.addSource('finish', {
-						'type': 'geojson',
-						'data': {
-							'type': 'FeatureCollection',
-							'features': [
-							{
-								'type': 'Feature',
-								'geometry': {
-									'type': 'Point',
-									'coordinates': [lonlat[0],lonlat[1]]
-								}
+				map.addSource('finish', {
+					'type': 'geojson',
+					'data': {
+						'type': 'FeatureCollection',
+						'features': [
+						{
+							'type': 'Feature',
+							'geometry': {
+								'type': 'Point',
+								'coordinates': [lonlat[0],lonlat[1]]
 							}
-							]
 						}
-					});
-					map.addLayer({
-						'id': 'finish',
-						'type': 'symbol',
-						'source': 'finish',
-						'layout': {
-							'icon-image': 'finishPoint',
-							'icon-size': 1,
-							'icon-anchor': 'bottom-left'
-						}
-					});
-				}
-				);
+						]
+					}
+				});
+				map.addLayer({
+					'id': 'finish',
+					'type': 'symbol',
+					'source': 'finish',
+					'layout': {
+						'icon-image': 'finishPoint',
+						'icon-size': 1,
+						'icon-anchor': 'bottom-left'
+					}
+				});
 			}
 		});
 
