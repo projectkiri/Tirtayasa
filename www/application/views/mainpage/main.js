@@ -43,6 +43,12 @@ $(document).ready(function () {
 	var markers = { start: null, finish: null };
 
 	// Preload start and finish marker image
+	var startMarkerElement = document.createElement('img');
+	startMarkerElement.setAttribute('src', '../../../images/start.png');
+	startMarkerElement.setAttribute('alt', 'start marker');
+	var finishMarkerElement = document.createElement('img');
+	finishMarkerElement.setAttribute('src', '../../../images/finish.png');
+	finishMarkerElement.setAttribute('alt', 'start marker');
 	map.loadImage('../../../images/start.png', function(error, image) {
 		map.addImage('startPoint', image);
 	});
@@ -72,8 +78,8 @@ $(document).ready(function () {
 		placeInput.change(function () {
 			coordinates[sfValue] = null;
 			if (markers[sfValue] != null) {
-				map.removeLayer(sfValue);
-				map.removeSource(sfValue)
+				markers[sfValue].remove();
+				markers[sfValue] = null;
 			}
 		});
 		placeSelect.change(function () {
@@ -112,57 +118,20 @@ $(document).ready(function () {
 	// Map click event
 	map.on('click', function (event) {
 		if ($('#startInput').val() === '') {
-			map.addSource('start', {
-				'type': 'geojson',
-				'data': {
-					'type': 'FeatureCollection',
-					'features': [
-					{
-						'type': 'Feature',
-						'geometry': {
-							'type': 'Point',
-							'coordinates': [event.lngLat['lng'], event.lngLat['lat']]
-						}
-					}
-					]
-				}
+			markers['start'] = new mapboxgl.Marker({
+				element: startMarkerElement,
+				anchor: 'bottom-right'
 			});
-			map.addLayer({
-				'id': 'start',
-				'type': 'symbol',
-				'source': 'start',
-				'layout': {
-					'icon-image': 'startPoint',
-					'icon-size': 1
-				}
-			});
+			markers['start'].setLngLat([event.lngLat['lng'], event.lngLat['lat']]);
+			markers['start'].addTo(map);
 			$('#startInput').val(latLngToString(event.lngLat));
 		} else if ($('#finishInput').val() === '') {
-			map.addSource('finish', {
-				'type': 'geojson',
-				'data': {
-					'type': 'FeatureCollection',
-					'features': [
-					{
-						'type': 'Feature',
-						'geometry': {
-							'type': 'Point',
-							'coordinates': [event.lngLat['lng'], event.lngLat['lat']]
-						}
-					}
-					]
-				}
+			markers['finish'] = new mapboxgl.Marker({
+				element: finishMarkerElement,
+				anchor: 'bottom-left'
 			});
-			map.addLayer({
-				'id': 'finish',
-				'type': 'symbol',
-				'source': 'finish',
-				'layout': {
-					'icon-image': 'finishPoint',
-					'icon-size': 1
-				}
-			});
-			markers['finish'] = map.getSource('finish')
+			markers['finish'].setLngLat([event.lngLat['lng'], event.lngLat['lat']]);
+			markers['finish'].addTo(map);
 			$('#finishInput').val(latLngToString(event.lngLat));
 		}
 	});
@@ -207,26 +176,29 @@ $(document).ready(function () {
 	 	}
 	 }
 
-	 function clearRoutingResultsOnTable() {
-	 	$('.nav').remove();
-	 	$('.tab-content').remove();
-	 }
+	function clearRoutingResultsOnTable() {
+		$('.nav').remove();
+		$('.tab-content').remove();
+	}
 
-	 function clearAlerts() {
-	 	$('.alert').remove();
-	 }
+	function clearAlerts() {
+		$('.alert').remove();
+	}
 
-	 function clearSecondaryAlerts() {
-	 	$('.alert.alert-secondary').fadeOut();
-	 }
+	function clearSecondaryAlerts() {
+		$('.alert.alert-secondary').fadeOut();
+	}
 
-	 function clearStartFinishMarker() {
-	 	if (map.getLayer('start')) map.removeLayer('start');
-	 	if (map.getSource('start')) map.removeSource('start');
-
-	 	if (map.getLayer('finish')) map.removeLayer('finish');
-	 	if (map.getSource('finish')) map.removeSource('finish');
-	 }
+	function clearStartFinishMarker() {
+		if (markers['start'] != null) {
+			markers['start'].remove();
+			markers['start'] = null;
+		}
+		if (markers['finish'] != null) {
+			markers['finish'].remove();
+			markers['finish'] = null;
+		}
+	}
 
 	/**
 	 * A function that will be called when find route button is clicked
@@ -485,6 +457,7 @@ $(document).ready(function () {
 						'icon-anchor': 'bottom-right'
 					}
 				});
+
 			} else {
 				var lonlat = stringToLonLat(step[2][0]);
 				if (step[0] != "walk") {
