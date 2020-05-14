@@ -136,7 +136,7 @@ $(document).ready(function () {
 					'icon-size': 1
 				}
 			});
-			$('#startInput').val(event.lngLat['lat'] + ',' + event.lngLat['lng']);
+			$('#startInput').val(latLngToString(event.lngLat));
 		} else if ($('#finishInput').val() === '') {
 			map.addSource('finish', {
 				'type': 'geojson',
@@ -163,7 +163,7 @@ $(document).ready(function () {
 				}
 			});
 			markers['finish'] = map.getSource('finish')
-			$('#finishInput').val(event.lngLat['lat'] + ',' + event.lngLat['lng']);
+			$('#finishInput').val(latLngToString(event.lngLat));
 		}
 	});
 
@@ -309,7 +309,7 @@ $(document).ready(function () {
 	 * @return the lon/lat in string, 5 digits after '.'
 	 */
 	function latLngToString(lonLat) {
-		return lonLat[1].toFixed(5) + ',' + lonLat[0].toFixed(5);
+		return lonLat['lat'].toFixed(5) + ',' + lonLat['lng'].toFixed(5);
 	}
 
 	/**
