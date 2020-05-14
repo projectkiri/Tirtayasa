@@ -9,6 +9,9 @@ body > .row {
 	height: 100vh;
 	padding: 0px;
 }
+.mapboxgl-canvas-container.mapboxgl-interactive {
+	cursor: pointer;
+}
 #controlpanel {
 	top: 0px;
 	bottom: 0px;
