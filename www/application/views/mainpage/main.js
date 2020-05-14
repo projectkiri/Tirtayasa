@@ -41,6 +41,7 @@ $(document).ready(function () {
 	// End geolocation tracking routine
 
 	var markers = { start: null, finish: null };
+	var routingResultMarkers = [];
 
 	// Preload start and finish marker image
 	var startMarkerElement = document.createElement('img');
@@ -48,14 +49,10 @@ $(document).ready(function () {
 	startMarkerElement.setAttribute('alt', 'start marker');
 	var finishMarkerElement = document.createElement('img');
 	finishMarkerElement.setAttribute('src', '../../../images/finish.png');
-	finishMarkerElement.setAttribute('alt', 'start marker');
-	map.loadImage('../../../images/start.png', function(error, image) {
-		map.addImage('startPoint', image);
-	});
-	map.loadImage('../../../images/finish.png', function(error, image) {
-		map.addImage('finishPoint', image);
-	});
-
+	finishMarkerElement.setAttribute('alt', 'finish marker');
+	var walkMarkerElement = document.createElement('img');
+	walkMarkerElement.setAttribute('src', '../../../images/means/walk/baloon/walk.png');
+	walkMarkerElement.setAttribute('alt', 'walk marker');
 
 	var focused = false;
 	$.each(['start', 'finish'], function (sfIndex, sfValue) {
@@ -164,7 +161,7 @@ $(document).ready(function () {
 
 	 function clearRoutingResultsOnMap() {
 	 	updateRegion(region, false);
-	 	// Remove components in backward manner, because layer is dependant on source
+	 	// Remove layers in backward manner, because layer is dependant on source
 	 	// but source was created first
 	 	for (let i = map_component_ids.length; i >= 0; i--) {
 	 		if(map.getLayer(map_component_ids[i])) {
@@ -174,6 +171,11 @@ $(document).ready(function () {
 	 			map.removeSource(map_component_ids[i]);
 	 		}
 	 	}
+	 	// Remove markers
+	 	for (let i = 0; i < routingResultMarkers.length; i++) {
+	 		routingResultMarkers[i].remove();
+	 	}
+		routingResultMarkers = [];
 	 }
 
 	function clearRoutingResultsOnTable() {
@@ -428,147 +430,45 @@ $(document).ready(function () {
 			}
 
 			if (stepIndex === 0) {
-				var coord = stringToLonLat(step[2][0]);
-				if (map.getLayer('start')) map.removeLayer('start');
-				if (map.getSource('start')) map.removeSource('start');
-				map_component_ids.push('start');
-				map.addSource('start', {
-					'type': 'geojson',
-					'data': {
-						'type': 'FeatureCollection',
-						'features': [
-						{
-							'type': 'Feature',
-							'geometry': {
-								'type': 'Point',
-								'coordinates': [coord[0],coord[1]]
-							}
-						}
-						]
-					}
+				let marker = new mapboxgl.Marker({
+					element: startMarkerElement,
+					anchor: 'bottom-right'
 				});
-				map.addLayer({
-					'id': 'start',
-					'type': 'symbol',
-					'source': 'start',
-					'layout': {
-						'icon-image': 'startPoint',
-						'icon-size': 1,
-						'icon-anchor': 'bottom-right'
-					}
-				});
-
+				marker.setLngLat(stringToLonLat(step[2][0]));
+				marker.addTo(map);
+				routingResultMarkers.push(marker);
 			} else {
 				var lonlat = stringToLonLat(step[2][0]);
 				if (step[0] != "walk") {
-					if (map.hasImage(step[0] + 'baloon' + step[1])) map.removeImage(step[0] + 'baloon' + step[1]);
-					if (map.getLayer(step[0] + 'baloon' + step[1])) map.removeLayer(step[0] + 'baloon' + step[1]);
-					if (map.getSource(step[0] + 'baloon' + step[1])) map.removeSource(step[0] + 'baloon' + step[1]);
-					map_component_ids.push(step[0] + 'baloon' + step[1]);
-					map.loadImage('../../../images/means/' + step[0] + '/baloon/' + step[1] + '.png',
-						function(error, image) {
-							map.addImage(step[0] + 'baloon' + step[1], image);
-							map.addSource(step[0] + 'baloon' + step[1], {
-								'type': 'geojson',
-								'data': {
-									'type': 'FeatureCollection',
-									'features': [
-									{
-										'type': 'Feature',
-										'geometry': {
-											'type': 'Point',
-											'coordinates': [lonlat[0],lonlat[1]]
-
-										}
-									}
-									]
-								}
-							});
-							map.addLayer({
-								'id': step[0] + 'baloon' + step[1],
-								'type': 'symbol',
-								'source': step[0] + 'baloon' + step[1],
-								'layout': {
-									'icon-image': step[0] + 'baloon' + step[1],
-									'icon-size': 1,
-									'icon-anchor': 'bottom-left'
-								}
-							});
-						}
-						);
-				} else {
-					if (map.hasImage('walk' + stepIndex)) {
-						map.removeImage('walk' + stepIndex);
-					}
-					if (map.getLayer('walk' + stepIndex)) {
-						map.removeLayer('walk' + stepIndex);
-					}
-					if (map.getSource('walk' + stepIndex)) {
-						map.removeSource('walk' + stepIndex);
-					}
-					map_component_ids.push('walk' + stepIndex);
-					map.loadImage('../../../images/means/walk/baloon/walk.png', function(error, image) {
-						map.addImage('walk' + stepIndex, image);
-						map.addSource('walk' + stepIndex, {
-							'type': 'geojson',
-							'data': {
-								'type': 'FeatureCollection',
-								'features': [
-								{
-									'type': 'Feature',
-									'geometry': {
-										'type': 'Point',
-										'coordinates': [lonlat[0],lonlat[1]]
-
-									}
-								}
-								]
-							}
-						});
-						map.addLayer({
-							'id': 'walk' + stepIndex,
-							'type': 'symbol',
-							'source': 'walk' + stepIndex,
-							'layout': {
-								'icon-image': 'walk' + stepIndex,
-								'icon-size': 1,
-								'icon-anchor': 'bottom-right'
-							}
-						});
+					let angkotMarkerElement = document.createElement('img');
+					angkotMarkerElement.setAttribute('src', '../../../images/means/' + step[0] + '/baloon/' + step[1] + '.png');
+					angkotMarkerElement.setAttribute('alt', 'angkot marker');
+					let marker = new mapboxgl.Marker({
+						element: angkotMarkerElement,
+						anchor: 'bottom-left'
 					});
+					marker.setLngLat(lonlat);
+					marker.addTo(map);
+					routingResultMarkers.push(marker);
+				} else {
+					let marker = new mapboxgl.Marker({
+						element: walkMarkerElement,
+						anchor: 'bottom-right'
+					});
+					marker.setLngLat(lonlat);
+					marker.addTo(map);
+					routingResultMarkers.push(marker);
 				}
 			}
 
 			if (stepIndex === result.steps.length - 1) {
-				var lonlat = stringToLonLat(step[2][step[2].length - 1]);
-				if (map.getLayer('finish')) map.removeLayer('finish');
-				if (map.getSource('finish')) map.removeSource('finish');
-				map_component_ids.push('finish');
-				map.addSource('finish', {
-					'type': 'geojson',
-					'data': {
-						'type': 'FeatureCollection',
-						'features': [
-						{
-							'type': 'Feature',
-							'geometry': {
-								'type': 'Point',
-								'coordinates': [lonlat[0],lonlat[1]]
-							}
-						}
-						]
-					}
+				let marker = new mapboxgl.Marker({
+					element: finishMarkerElement,
+					anchor: 'bottom-left'
 				});
-				map.addLayer({
-					'id': 'finish',
-					'type': 'symbol',
-					'source': 'finish',
-					'layout': {
-						'icon-image': 'finishPoint',
-						'icon-size': 1,
-						'icon-anchor': 'bottom-left'
-					}
-				});
+				marker.setLngLat(stringToLonLat(step[2][step[2].length - 1]));
+				marker.addTo(map);
+				routingResultMarkers.push(marker);
 			}
 		});
 
