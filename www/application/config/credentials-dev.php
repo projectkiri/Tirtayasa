@@ -1,8 +1,10 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-$config['google-server-key'] = 'AIzaSyBa1bNBVkchvxSFd8U_Cn7HsHux6M-DIk4';
-$config['scheduled-secret'] = 'kuJ3uQYIHko0';
+$config['google-server-key'] = 'FILLME';
+$config['scheduled-secret'] = 'FILLME';
+$config['cicaheumledeng-key'] = 'FILLME';
+$config['mapbox-token'] = 'FILLME';
 
 // E-mail
 $config['email-config'] = Array(
