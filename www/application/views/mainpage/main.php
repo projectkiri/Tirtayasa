@@ -18,20 +18,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <body>
         <div class="container-fluid">
             <div class="row order-3">
-                <div id="controlpanel" class="col-lg-3 order-lg-9">
+                <div id="controlpanel" class="col-lg-3 col-md-6 order-md-9">
                     <div class="col">
                         <img class="mx-auto d-block" src="/images/kiri200.png" alt="KIRI logo"/>
                     </div>
 
                     <div class="row p-1 pb-3">
-                        <div class="col-sm-5">
+                        <div class="col-5">
                             <select id="regionselect" class="form-control">
                                 <?php foreach ($regions as $key => $value): ?>
                                     <option value="<?= $key ?>"<?= ($region == $key ? ' selected' : '') ?>><?= $value['name'] ?></option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
-                        <div class="col-sm-7">
+                        <div class="col-7">
                             <select id="localeselect" class="form-control">
                                 <?php foreach ($languages as $key => $value): ?>
                                     <option value="<?= $key ?>"<?= ($locale == $key ? ' selected' : '') ?>><?= $value['name'] ?></option>
@@ -41,10 +41,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     </div>
                     
                     <div class="row p-1">
-                        <div class="col-sm-2">
+                        <div class="col-2">
                             <span for="startInput" class="align-middle"><?= $this->lang->line('From') ?>:</span>
                         </div>
-                        <div class="col-sm-10">
+                        <div class="col-10">
                             <input type="text" id="startInput" class="form-control" value="" placeholder="<?= $this->lang->line('placeholder-from') ?>">
                         </div>
                     </div>
@@ -54,10 +54,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         </div>
                     </div>
                     <div class="row p-1">
-                        <div class="col-sm-2">
+                        <div class="col-2">
                             <span for="finishInput" class="align-middle"><?= $this->lang->line('To') ?>:</span>
                         </div>
-                        <div class="col-sm-10">
+                        <div class="col-10">
                             <input type="text" id="finishInput" class="form-control" value="" placeholder="<?= $this->lang->line('placeholder-to') ?>">
                         </div>
                     </div>
@@ -80,12 +80,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         </div>
                     </div>
                     <div class="row p-1">
-                        <div class="col-lg-12" id="routingresults">
+                        <div class="col-12" id="routingresults">
                             <div id="results-section-container"></div>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-12">
+                        <div class="col-12">
                             <footer>
                                 <a href="<?= $this->lang->line('url-legal') ?>"><?= $this->lang->line('Legal') ?></a> | 
                                 <a href="<?= $this->lang->line('url-feedback') ?>"><?= $this->lang->line('Feedback') ?></a> | 
@@ -101,7 +101,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         </div>
                     </div>
                 </div>
-                <div id="map" class="col-lg-9"></div>
+                <div id="map" class="col-md-6 col-lg-9"></div>
             </div>
         </div>
         <script src="/ext/bootstrap/js/vendor/jquery.js"></script>

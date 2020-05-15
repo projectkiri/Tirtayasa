@@ -350,10 +350,10 @@ $(document).ready(function () {
 			var resultHTML2 = '<div id="panel1-' + (resultIndex + 1) + '"';
 			resultHTML2 += resultIndex === 0 ? ' class="tab-pane active" role="tabpanel"><table class="table-striped">' : ' class="x tab-pane" role="tabpanel"><table class="table-striped">';
 			$.each(result.steps, function (stepIndex, step) {
-				resultHTML2 += '<tr><td><img src="../images/means/' + step[0] + '/' + step[1] + '.png" alt="' + step[1] + '"/></td><td>' + step[3];
+				resultHTML2 += '<tr><td class="p-1"><img src="../images/means/' + step[0] + '/' + step[1] + '.png" alt="' + step[1] + '"/></td><td class="p-1">' + step[3];
 				resultHTML2 += '</td></tr>';
 			});
-			resultHTML2 += "<tr><td class=\"center\" colspan=\"2\">";
+			resultHTML2 += "<tr><td class=\"p-1 center\" colspan=\"2\">";
 			resultHTML2 += "<a target=\"_blank\" href=\"https://www.facebook.com/sharer/sharer.php?u=" + kiriURL + "\"><img alt=\"Share to Facebook\" src=\"images/fb-large.png\"/></a> &nbsp; &nbsp; ";
 			resultHTML2 += "<a target=\"_blank\" href=\"https://twitter.com/intent/tweet?via=kiriupdate&text=" + kiriMessage + "+" + kiriURL + "\"><img alt=\"Tweet\" src=\"images/twitter-large.png\"/></a>";
 			resultHTML2 += "</td></tr>\n";

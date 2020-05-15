@@ -1,9 +1,6 @@
-html, body, body > .row {
+html, body {
 	width: 100%;
 	height: 100%;
-}
-body > .row {
-	max-width: 100%
 }
 #map {
 	height: 100vh;
@@ -16,7 +13,6 @@ body > .row {
 	top: 0px;
 	bottom: 0px;
 	overflow: auto;
-	height: 100vh;
 }
 .fullwidth {
 	width: 100%;
@@ -27,13 +23,13 @@ body > .row {
 img {
 	max-width: none;
 }
-@media only screen and (max-width: 64.063em) {
+@media only screen and (max-width: 720px) {
 	#controlpanel {
 		position: relative;
 		overflow: hidden;
 	}
 	#map {
-		height: 50%;
+		height: 50vh;
 	}
 }
 .hidden {
