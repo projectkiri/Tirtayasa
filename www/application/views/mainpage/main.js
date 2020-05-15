@@ -524,7 +524,7 @@ $(document).ready(function () {
 			setCookie('region', region);
 		}
 		var point = [regions[region].lon, regions[region].lat];
-		map.flyTo({ center: point, zoom: regions[region].zoom });
+		map.flyTo({ center: point, zoom: regions[region].zoom, bearing: 0, pitch: 0 });
 	}
 
 	/**

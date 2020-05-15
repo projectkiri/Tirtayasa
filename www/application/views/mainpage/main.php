@@ -23,7 +23,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <img class="mx-auto d-block" src="/images/kiri200.png" alt="KIRI logo"/>
                     </div>
 
-                    <div class="row paddingControl paddingBottom">
+                    <div class="row p-1 pb-3">
                         <div class="col-sm-5">
                             <select id="regionselect" class="form-control">
                                 <?php foreach ($regions as $key => $value): ?>
@@ -40,7 +40,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         </div>
                     </div>
                     
-                    <div class="row paddingControl">
+                    <div class="row p-1">
                         <div class="col-sm-2">
                             <span for="startInput" class="align-middle"><?= $this->lang->line('From') ?>:</span>
                         </div>
@@ -48,12 +48,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <input type="text" id="startInput" class="form-control" value="" placeholder="<?= $this->lang->line('placeholder-from') ?>">
                         </div>
                     </div>
-                    <div class="row paddingControl">
+                    <div class="row p-1">
                         <div class="col-lg-12">
                             <select id="startSelect" class="form-control hidden"></select>
                         </div>
                     </div>
-                    <div class="row paddingControl">
+                    <div class="row p-1">
                         <div class="col-sm-2">
                             <span for="finishInput" class="align-middle"><?= $this->lang->line('To') ?>:</span>
                         </div>
@@ -61,12 +61,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <input type="text" id="finishInput" class="form-control" value="" placeholder="<?= $this->lang->line('placeholder-to') ?>">
                         </div>
                     </div>
-                    <div class="row paddingControl">
+                    <div class="row p-1">
                         <div class="col-lg-12">
                             <select id="finishSelect" class="form-control hidden"></select>
                         </div>
                     </div>
-                    <div class="row paddingControl paddingBottom">
+                    <div class="row p-1 pb-3">
                         <div class="btn-group fullwidth" role="group">
                             <div class="col-sm-6">
                                 <a href="#" class="btn btn-primary btn-block" id="findbutton"><strong><?= $this->lang->line('Find') ?>!</strong></a>
@@ -79,7 +79,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             </div>
                         </div>
                     </div>
-                    <div class="row paddingControl">
+                    <div class="row p-1">
                         <div class="col-lg-12" id="routingresults">
                             <div id="results-section-container"></div>
                         </div>
