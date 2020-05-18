@@ -60,9 +60,13 @@ class Mainpage extends CI_Controller {
 		$this->lang->load('tirtayasa', $this->config->item('languages')[$locale]['file']);
 		switch ($name) {
 			case 'main.js':
+				$this->load->config('credentials');
+				$this->load->helper('url');
+				header('Content-type: text/javascript');
 				$this->load->view('mainpage/main.js', array('locale' => $locale));
 				break;
 			case 'protocol.js':
+				header('Content-type: text/javascript');
 				$this->load->view('mainpage/protocol.js');
 				break;
 			default:
