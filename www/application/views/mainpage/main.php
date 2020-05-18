@@ -111,7 +111,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			<div id="map" class="col-md-6 col-lg-9"></div>
 		</div>
 	</div>
-	<script src="/ext/bootstrap/js/vendor/jquery.js"></script>
+	<script src="/ext/jquery/jquery.min.js"></script>
 	<script src="/ext/bootstrap/js/bootstrap.min.js"></script>
 	<script src="https://api.mapbox.com/mapbox-gl-js/v1.10.0/mapbox-gl.js"></script>
 	<script>

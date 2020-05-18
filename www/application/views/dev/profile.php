@@ -44,7 +44,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			<div class="col-lg-3">&nbsp;</div>
 		</div>
 	</div>
-	<script src="/ext/bootstrap/js/vendor/jquery.js"></script>
+	<script src="/ext/jquery/jquery.min.js"></script>
 	<script src="/ext/bootstrap/js/bootstrap.min.js"></script>
 </body>
 </html>
