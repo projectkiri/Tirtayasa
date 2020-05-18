@@ -3,14 +3,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 ?><!DOCTYPE html>
 <html class="no-js" lang="en">
 <head>
+	<?php $this->load->view('dev/template_head') ?>
 	<title>Profile | KIRI Developers</title>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<meta name="author" content="Project Kiri (KIRI)" />
-	<meta name="google-site-verification" content="9AtqvB-LWohGnboiTyhtZUXAEcOql9B-8lDjo_wcUew" />
-	<link rel="stylesheet" href="/ext/bootstrap/css/bootstrap.min.css" />
-	<link rel="icon" href="/images/favicon.ico" type="image/x-icon">
-	<script src="/ext/bootstrap/js/vendor/modernizr.js"></script>
 </head>
 <body>
 	<?php $this->load->view('dev/template_topbar'); ?>
