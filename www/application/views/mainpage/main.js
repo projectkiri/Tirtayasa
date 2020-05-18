@@ -320,7 +320,7 @@ $(document).ready(function () {
 	/**
 	 * Show alert message
 	 * @param message the message
-	 * @param cssClass the foundation css class ('success', 'alert', 'secondary')
+	 * @param cssClass the bootstrap css class
 	 */
 	function showAlert(message, cssClass) {
 		if (cssClass === 'alert') {
