@@ -26,7 +26,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 						<label for="description">Description:</label>
 						<input class="form-control" type="text" name="description" id="description" value="<?= htmlspecialchars($description) ?>" size="256"/>
 					</div>
-					<div class="form-group">					
+					<div class="form-group">
 						<input class="btn btn-primary" type="submit" value="Update"/>
 						<a class="btn btn-secondary" href="/dev/apikeys/list">Cancel</a>
 					</div>
@@ -35,24 +35,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		</div>
 	</div>
 	<script src="/ext/bootstrap/js/vendor/jquery.js"></script>
-	<script src="/ext/bootstrap/js/vendor/fastclick.js"></script>
 	<script src="/ext/bootstrap/js/bootstrap.min.js"></script>
-	<script>
-		(function (i, s, o, g, r, a, m) {
-			i['GoogleAnalyticsObject'] = r;
-			i[r] = i[r] || function () {
-				(i[r].q = i[r].q || []).push(arguments)
-			}, i[r].l = 1 * new Date();
-			a = s.createElement(o),
-			m = s.getElementsByTagName(o)[0];
-			a.async = 1;
-			a.src = g;
-			m.parentNode.insertBefore(a, m)
-		})(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-
-		ga('create', 'UA-36656575-2', 'kiri.travel');
-		ga('require', 'displayfeatures');
-		ga('send', 'pageview');
-	</script>
 </body>
 </html>

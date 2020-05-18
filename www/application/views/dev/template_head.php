@@ -14,4 +14,3 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <meta name="author" content="Project Kiri (KIRI)" />
 <link rel="stylesheet" href="/ext/bootstrap/css/bootstrap.min.css" />
 <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
-<script src="/ext/bootstrap/js/vendor/modernizr.js"></script>

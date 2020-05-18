@@ -21,7 +21,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	<link href="https://api.mapbox.com/mapbox-gl-js/v1.10.0/mapbox-gl.css" rel="stylesheet" />
 	<link rel="stylesheet" href="/stylesheets/styleIndex.css" />
 	<link rel="icon" href="/images/favicon.ico" type="image/x-icon">
-	<script src="/ext/bootstrap/js/vendor/modernizr.js"></script>
 </head>
 <body>
 	<div class="container-fluid">
@@ -113,7 +112,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		</div>
 	</div>
 	<script src="/ext/bootstrap/js/vendor/jquery.js"></script>
-	<script src="/ext/bootstrap/js/vendor/fastclick.js"></script>
 	<script src="/ext/bootstrap/js/bootstrap.min.js"></script>
 	<script src="https://api.mapbox.com/mapbox-gl-js/v1.10.0/mapbox-gl.js"></script>
 	<script>
