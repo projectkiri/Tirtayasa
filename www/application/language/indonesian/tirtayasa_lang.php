@@ -21,6 +21,7 @@ $lang['kilometer'] = 'kilometer';
 $lang['Legal'] = 'Legal';
 $lang['meter'] = 'meter';
 $lang['minutes'] = 'minutes';
+$lang['newhome-message'] = 'KIRI sekarang ada di <a href="https://projectkiri.id">https://projectkiri.id</a>, dengan tampilan baru, terima kasih kepada beberapa mahasiswa <a href="https://github.com/ifunpar">@ifunpar</a>. Mohon perbarui <i>bookmark</i> Anda. Jika Anda tidak suka tampilan baru ini, <a href="https://kiri.travel?utm_source=projectkiri.id&utm_campaign=prefer_old">klik di sini untuk kembali ke tampilan lama</a> dan <a href="https://github.com/projectkiri/Tirtayasa/issues">beritahu kami</a>!';
 $lang['not found'] = 'tidak ditemukan';
 $lang['Oops'] = 'Ups';
 $lang['Please wait'] = 'Mohon tunggu';

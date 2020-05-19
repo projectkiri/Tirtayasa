@@ -49,7 +49,8 @@ class Mainpage extends CI_Controller {
 			'languages' => $this->config->item('languages'),
 			'locale' => $locale,
 			'inputText' => array('start' => $textual_endpoint['start'], 'finish' => $textual_endpoint['finish']),
-			'inputCoordinate' => array('start' => $coordinate_endpoint['start'], 'finish' => $coordinate_endpoint['finish'])
+			'inputCoordinate' => array('start' => $coordinate_endpoint['start'], 'finish' => $coordinate_endpoint['finish']),
+			'newhome_popup' => $this->input->get('utm_campaign') === 'newhome'
 		);
 		$this->load->view('mainpage/main', $data);
 	}

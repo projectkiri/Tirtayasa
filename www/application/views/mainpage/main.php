@@ -121,5 +121,30 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	</script>
 	<script src="/mainpage/js/protocol.js"></script>
 	<script src="/mainpage/js/main.js?locale=<?= $locale ?>"></script>
+	<?php if ($newhome_popup): ?>
+		<div class="modal fade" id="popupModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="modalodalLabel">KIRI has a new home</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<?= $this->lang->line('newhome-message') ?>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script>
+			$(document).ready(function() {
+				$('#popupModal').modal();
+			});
+		</script>
+	<?php endif; ?>
 </body>
 </html>

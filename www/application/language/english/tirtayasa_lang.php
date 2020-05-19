@@ -23,6 +23,7 @@ $lang['Login'] = 'Login';
 $lang['Login failed'] = 'Login failed';
 $lang['meter'] = 'meter';
 $lang['minutes'] = 'minutes';
+$lang['newhome-message'] = 'KIRI is now located at <a href="https://projectkiri.id">https://projectkiri.id</a>, with new User Interface, thanks to some students of <a href="https://github.com/ifunpar">@ifunpar</a>. Please update your bookmark. If you do not like this new interface, <a href="https://kiri.travel?utm_source=projectkiri.id&utm_campaign=prefer_old">click here to go back to old website</a> and <a href="https://github.com/projectkiri/Tirtayasa/issues">let us know</a>!';
 $lang['not found'] = 'not found';
 $lang['Oops'] = 'Oops';
 $lang['Please wait'] = 'Please wait';
