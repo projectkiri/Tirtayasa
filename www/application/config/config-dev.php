@@ -17,7 +17,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | environments.
 |
 */
-$config['base_url'] = 'https://kiri.travel';
+$config['base_url'] = 'https://projectkiri.id';
 
 /*
 |--------------------------------------------------------------------------

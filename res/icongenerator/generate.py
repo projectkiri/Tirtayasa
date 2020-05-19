@@ -9,7 +9,7 @@
 #                Luck
 # Modified by  : Pascal Alfadian Nugroho (pascalalfadian@live.com) to generate
 #                based on angkot id (alphanumeric), for Kiri project
-#                (http://kiri.travel)
+#                (https://projectkiri.id)
 #=============================================================================
 
 from xml.etree.ElementTree import ElementTree
