@@ -14,7 +14,7 @@ class Migration_Rekayasalalulintas2019 extends CI_Migration {
 				$linestring .= ",$lon $lat";
 			}
 			$linestring = substr($linestring, 1);
-			$this->db->query("UPDATE tracks SET geodata=GeomFromText('LINESTRING($linestring)') WHERE trackId='$trackId'");
+			$this->db->query("UPDATE tracks SET geodata=ST_GeomFromText('LINESTRING($linestring)') WHERE trackId='$trackId'");
 		}
 	}
 
