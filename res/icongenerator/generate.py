@@ -36,7 +36,7 @@ colours['brown'] =  '#883300'
 colours['grey'] =   '#CCCCCC'
 colours['cyan'] = '#00aeef'
 
-inkscape_path = "C:/Program Files (x86)/Inkscape/inkscape.exe"
+inkscape_path = "/usr/local/bin/inkscape"
 input_path = 'input/'
 base_out_path = 'out/'
 base_baloon_path = 'baloon/'
@@ -118,7 +118,7 @@ def generate_icons(track_type):
     filename = out_path + name 
     normalTree.write(filename + '.svg', encoding='unicode', xml_declaration='true')
     # Convert SVG file to PNG using inkscape, normal icon
-    args = [inkscape_path, filename + '.svg', "--export-png="+filename+".png", "-w50"]
+    args = [inkscape_path, filename + '.svg', "--export-filename="+filename+".png", "--export-width=50"]
     subprocess.check_call(args)
     os.remove(filename + '.svg')
   
@@ -126,7 +126,7 @@ def generate_icons(track_type):
     filename = baloon_path + name 
     baloonTree.write(filename + '.svg', encoding='unicode', xml_declaration='true')
     # Convert SVG file to PNG using inkscape, baloon version
-    args = [inkscape_path, filename + '.svg', "--export-png="+filename+".png", "-w50"]
+    args = [inkscape_path, filename + '.svg', "--export-filename="+filename+".png", "--export-width=50"]
     subprocess.check_call(args)
     os.remove(filename + '.svg')
 
