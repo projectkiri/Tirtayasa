@@ -19,26 +19,18 @@ $this->load->helper('url');
 	<meta name="description" content="<?= $this->lang->line('meta-description') ?>" />
 	<meta name="author" content="Project Kiri (KIRI)" />
 	<link rel="icon" href="/images/favicon.ico" type="image/x-icon">
-	<link rel="stylesheet" href="<?= base_url('/ext/pannellum/pannellum.css') ?>"/>
-	<script type="text/javascript" src="<?= base_url('/ext/pannellum/pannellum.js') ?>"></script>
 	<style>
 		html, body, #panorama {
-			width: 100%;
-			height: 100%;
 			margin: 0;
 		}
 	</style>
 </head>
 <body>
-	<div id="panorama"></div>
-	<script>
-		pannellum.viewer('panorama', {
-			"type": "equirectangular",
-			"panorama": "<?= base_url('/images/temanbus/360/' . $stop['id'] . '.jpg') ?>",
-			"autoLoad": true,
-			"title": "<?= $stop['name'] ?>",
-			"author": "<?= $stop['author'] ?>",
-		});
-	</script>
+	<img alt="Peta Transportasi Bandung Raya" src="<?= base_url("/images/temanbus/Peta-Transportasi-Bandung-Raya.png") ?>" usemap="#mapmap">
+	<map name="mapmap">
+<?php foreach ($stops as $id => $stop): ?>
+	<area shape="<?= $stop['area']->shape ?>" coords="<?= $stop['area']->coords ?>" alt="<?= $stop['name'] ?>" href="<?= site_url('/temanbus/threesixty/' . $id) ?>">
+<?php endforeach; ?>
+	</map>
 </body>
 </html>
