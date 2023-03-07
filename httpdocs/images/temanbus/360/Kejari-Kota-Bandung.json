@@ -1,7 +1,7 @@
 {
 	"author": "Rafael Hendrajat W",
 	"area": {
-		"shape": "rect",
-		"coords": "3395,1477,3580,1507"
+		"shape": "poly",
+		"coords": "3355,1428,3414,1482,3573,1489,3575,1509,3397,1506,3334,1448"
 	}
 }

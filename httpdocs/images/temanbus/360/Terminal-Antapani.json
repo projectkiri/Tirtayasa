@@ -1,7 +1,7 @@
 {
-	"author": "Yudith Dwi",
+	"author": "Yudith Dwi H",
 	"area": {
-		"shape": "rect",
-		"coords": "3497,1207,3637,1275"
+		"shape": "poly",
+		"coords": "3437,1215,3600,1215,3649,1260,3628,1282,3594,1259,3437,1257"
 	}
 }
