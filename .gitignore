@@ -1,3 +1,4 @@
+docker/
 /httpdocs/application/config/credentials.php
 /httpdocs/application/config/database-prod.php
 /httpdocs/application/config/database.php
