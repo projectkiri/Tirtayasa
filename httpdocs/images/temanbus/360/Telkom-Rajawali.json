@@ -1,7 +1,7 @@
 {
 	"author": "Reyga Elkigia Chaya Putra",
 	"area": {
-		"shape": "rect",
+		"shape": "poly",
 		"coords": "1284,1670,1357,1668,1339,1734,1305,1734"
 	}
 }
