@@ -111,6 +111,40 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			<div id="map" class="col-md-6 col-lg-9"></div>
 		</div>
 	</div>
+	<!-- Board Trip Modal -->
+	<div class="modal fade" id="boardModal" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title"><?= $this->lang->line('Board title') ?></h5>
+					<button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+				</div>
+				<div class="modal-body">
+					<div class="form-group mb-3">
+						<label for="board_passenger_name"><?= $this->lang->line('Board name label') ?></label>
+						<input type="text" class="form-control" id="board_passenger_name" />
+					</div>
+					<div class="form-group mb-3">
+						<label for="board_passenger_count"><?= $this->lang->line('Board count label') ?></label>
+						<input type="number" class="form-control" id="board_passenger_count" value="1" min="1" max="20" />
+					</div>
+					<input type="hidden" id="board_track_type" />
+					<input type="hidden" id="board_track_id" />
+					<input type="hidden" id="board_pickup_lat" />
+					<input type="hidden" id="board_pickup_lng" />
+					<input type="hidden" id="board_pickup_name" />
+					<input type="hidden" id="board_dropoff_lat" />
+					<input type="hidden" id="board_dropoff_lng" />
+					<input type="hidden" id="board_dropoff_name" />
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal"><?= $this->lang->line('Cancel') ?></button>
+					<button type="button" class="btn btn-success" id="boardSubmit"><?= $this->lang->line('Board confirm') ?></button>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<script src="/ext/jquery/jquery.min.js"></script>
 	<script src="/ext/bootstrap/js/bootstrap.min.js"></script>
 	<script src="https://api.mapbox.com/mapbox-gl-js/v1.10.0/mapbox-gl.js"></script>

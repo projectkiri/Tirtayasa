@@ -53,6 +53,10 @@ $config['routing-alternatives'] = array(
 );
 
 $config['searchplace-maxresult'] = 10;
+
+// Driver pricing (in IDR)
+$config['driver_base_fare'] = 5000;   // Tarif dasar per penumpang
+$config['driver_per_km_rate'] = 2000; // Tarif per km per penumpang
 $config['speed-walk'] = 5; // km/h
 $config['url-geocode'] = 'https://maps.googleapis.com/maps/api/geocode/json';
 $config['url-searchplace'] = 'https://maps.googleapis.com/maps/api/place/findplacefromtext/json';
