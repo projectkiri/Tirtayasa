@@ -12,6 +12,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			<li class="nav-item">
 				<a class="nav-link" href="<?= base_url('/dev/apikeys') ?>">API Keys <span class="sr-only">(current)</span></a>
 			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="<?= base_url('/dev/drivers') ?>">Drivers</a>
+			</li>
 			<li class="nav-item dropdown">
 				<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 					Account

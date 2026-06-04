@@ -53,6 +53,15 @@ $config['routing-alternatives'] = array(
 );
 
 $config['searchplace-maxresult'] = 10;
+
+// Driver pricing (in IDR)
+$config['driver_base_fare'] = 5000;   // Tarif dasar per penumpang
+$config['driver_per_km_rate'] = 2000; // Tarif per km per penumpang
+
+// Auto trip-status proximity thresholds, based on the driver's GPS (in km).
+// Generous defaults to tolerate GPS inaccuracy; the driver can always override manually.
+$config['driver_pickup_radius_km'] = 0.2;  // Within this radius of pickup -> trip becomes "onboard"
+$config['driver_dropoff_radius_km'] = 0.3; // Within this radius of dropoff -> trip becomes "completed"
 $config['speed-walk'] = 5; // km/h
 $config['url-geocode'] = 'https://maps.googleapis.com/maps/api/geocode/json';
 $config['url-searchplace'] = 'https://maps.googleapis.com/maps/api/place/findplacefromtext/json';

@@ -32,6 +32,9 @@ class Api extends CI_Controller {
 				case 'nearbytransports':
 					$this->_nearbytransports($version, $apikey);
 					break;
+				case 'boardtrip':
+					$this->_boardtrip();
+					break;
 				default:
 					throw new Exception('400 Mode not understood: ' . $mode);
 			}
@@ -82,7 +85,7 @@ class Api extends CI_Controller {
 					throw new Exception("There's an error while reading the menjangan response.");
 				}
 				$results[$result] = true;
-			}		
+			}
 		} else {
 			$result = file_get_contents($this->config->item('url-menjangan') . "/?start=$start&finish=$finish");
 			if ($result === FALSE) {
@@ -129,7 +132,7 @@ class Api extends CI_Controller {
 						$points[$i] = $finish;
 					}
 				}
-		
+
 				// Construct the human readable form of the walk
 				$humanized_from = $this->Api_model->humanizePoint($from);
 				$humanized_to = $this->Api_model->humanizePoint($to);
@@ -171,7 +174,7 @@ class Api extends CI_Controller {
 					$humanreadable = str_replace('%distance', $this->Api_model->formatDistance($distance), $humanreadable);
 					$humanreadable = str_replace('%trackname', $trackDetail->trackName, $humanreadable);
 					$humanreadable = str_replace('%tracktype', $trackDetail->trackTypeName, $humanreadable);
-					
+
 					$travel_time += $distance / intval($trackDetail->speed);
 					if (!is_null($trackDetail->ticketURL) && !is_null($trackDetail->extraParameters)) {
 						$booking_url = $trackDetail->ticketURL . $trackDetail->extraParameters;
@@ -185,17 +188,22 @@ class Api extends CI_Controller {
 					}
 				}
 				if (!is_null($humanreadable)) {
-					$route_output[] = array($means, $means_detail, $points, $humanreadable, $booking_url);
+					// Indices 5 & 6 carry the humanized names of THIS segment's own
+					// endpoints (e.g. the boarding/alighting street for a transit leg),
+					// so a driver only sees the part of the journey on their trayek,
+					// not the rider's full origin-destination. Appended at the end to
+					// stay backwards-compatible with older clients that read [0..4].
+					$route_output[] = array($means, $means_detail, $points, $humanreadable, $booking_url, $humanized_from, $humanized_to);
 				}
 			}
 			$routing_result['steps'] = $route_output;
 			$routing_result['traveltime'] = $this->Api_model->formatTravelTime($travel_time);
 			$routing_results[] = $routing_result;
 		}
-		
+
 		//input log statistic
 		$this->Logging_model->logStatistic($apikey, 'FINDROUTE', "$start/$finish/" . sizeof($results));
-		
+
 		if (!is_null($version) && $version >= 2) {
 			$json_output = array(
 					'status' => 'ok',
@@ -215,7 +223,7 @@ class Api extends CI_Controller {
 		$querystring = $this->Api_model->getInput('querystring');
 		$region = $this->Api_model->getInput('region', $version >= 2);
 		$region = is_null($region) ? 'bdo' : $region;
-		
+
 		// Check if there is region modifier from the query string
 		$regions = $this->config->item('regions');
 		foreach ($regions as $key => $value) {
@@ -225,7 +233,7 @@ class Api extends CI_Controller {
 				break;
 			}
 		}
-		
+
 		$querystring = urlencode($querystring);
 		$cached_searchplace = $this->Cache_model->get('searchplace', "$region/$querystring");
 		if (!is_null($cached_searchplace)) {
@@ -240,7 +248,7 @@ class Api extends CI_Controller {
 			if ($result === FALSE) {
 				throw new Exception("There's an error while reading the places response ($full_url).");
 			}
-		
+
 			$json_result = json_decode($result, true);
 			if ($json_result['status'] === 'OK' || $json_result['status'] === 'ZERO_RESULTS') {
 				$search_result = array();
@@ -264,7 +272,7 @@ class Api extends CI_Controller {
 					'searchresult' => $search_result,
 					'attributions' => isset($json_result['html_attributions'])?$json_result['html_attributions']:[]
 				);
-		
+
 				//input log statistic
 				$this->Logging_model->logStatistic("$apikey", "SEARCHPLACE",  "$querystring/$size");
 				// Store to cache
@@ -297,7 +305,7 @@ class Api extends CI_Controller {
 				);
 			}
 			usort($nearby_result, "_nearbytransports_result_compare");
-			$this->Logging_model->logStatistic($apikey, "NEARBYTRANSPORTS", "$start/" . sizeof($nearby_result));		
+			$this->Logging_model->logStatistic($apikey, "NEARBYTRANSPORTS", "$start/" . sizeof($nearby_result));
 			$json_output = array(
 					'status' => 'ok',
 					'nearbytransports' => $nearby_result
@@ -306,6 +314,49 @@ class Api extends CI_Controller {
 		} else {
 			throw new Exception("400 Nearby transit is not supported in version 1. Use higher version");
 		}
+	}
+
+	public function _boardtrip() {
+		$this->load->model('Driver_model');
+
+		$passengerName = $this->input->post('passenger_name');
+		$passengerCount = intval($this->input->post('passenger_count')) ?: 1;
+		$trackTypeId = $this->input->post('track_type_id');
+		$trackId = $this->input->post('track_id');
+		$pickupLat = $this->input->post('pickup_lat');
+		$pickupLng = $this->input->post('pickup_lng');
+		$pickupName = $this->input->post('pickup_name');
+		$dropoffLat = $this->input->post('dropoff_lat');
+		$dropoffLng = $this->input->post('dropoff_lng');
+		$dropoffName = $this->input->post('dropoff_name');
+
+		if (empty($passengerName) || empty($trackTypeId) || empty($trackId) || empty($pickupLat) || empty($dropoffLat)) {
+			throw new Exception('400 Missing required fields');
+		}
+
+		$tripId = $this->Driver_model->addTrip(array(
+			'trackTypeId' => $trackTypeId,
+			'trackId' => $trackId,
+			'passengerName' => $passengerName,
+			'passengerCount' => $passengerCount,
+			'pickupLat' => $pickupLat,
+			'pickupLng' => $pickupLng,
+			'pickupName' => $pickupName ?: "$pickupLat, $pickupLng",
+			'dropoffLat' => $dropoffLat,
+			'dropoffLng' => $dropoffLng,
+			'dropoffName' => $dropoffName ?: "$dropoffLat, $dropoffLng",
+		));
+
+		$this->Api_model->outputJson(array(
+			'status' => 'ok',
+			'tripId' => $tripId,
+			'price' => $this->Driver_model->formatPrice(
+				$this->Driver_model->calculatePrice(
+					$this->Driver_model->calculateDistance($pickupLat, $pickupLng, $dropoffLat, $dropoffLng),
+					$passengerCount
+				)
+			),
+		));
 	}
 }
 
