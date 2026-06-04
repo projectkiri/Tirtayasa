@@ -45,7 +45,7 @@
 
 		<div class="mb-3">
 			<h5>Trayek: <?= htmlspecialchars($trackLabel) ?></h5>
-			<small class="text-muted">Status trip diperbarui otomatis berdasarkan lokasi GPS Anda. Saat Anda mendekati titik naik penumpang, status berubah menjadi "Dalam Perjalanan". Saat mendekati titik turun, trip otomatis selesai.</small>
+			<small class="text-muted">Status trip diperbarui otomatis berdasarkan lokasi GPS Anda: saat mendekati titik naik, status menjadi "Dalam Perjalanan"; saat mendekati titik turun, trip otomatis selesai. Bila GPS kurang akurat, Anda bisa mengubah status manual lewat tombol Aksi.</small>
 		</div>
 
 		<!-- Summary Cards -->
@@ -53,7 +53,7 @@
 			<div class="col-md-4 mb-2">
 				<div class="card summary-card summary-passengers">
 					<div class="card-body">
-						<h6 class="text-muted">Total Penumpang</h6>
+						<h6 class="text-muted">Penumpang Hari Ini</h6>
 						<h3 id="sum-passengers"><?= intval($summary->totalPassengers) ?></h3>
 					</div>
 				</div>
@@ -69,7 +69,7 @@
 			<div class="col-md-4 mb-2">
 				<div class="card summary-card summary-revenue">
 					<div class="card-body">
-						<h6 class="text-muted">Total Pendapatan</h6>
+						<h6 class="text-muted">Pendapatan Hari Ini</h6>
 						<h3 id="sum-revenue"><?= $this->Driver_model->formatPrice(intval($summary->totalRevenue)) ?></h3>
 					</div>
 				</div>
@@ -94,6 +94,7 @@
 								<th>Harga</th>
 								<th>Waktu</th>
 								<th>Status</th>
+								<th>Aksi</th>
 							</tr>
 						</thead>
 						<tbody id="trip-tbody">
@@ -112,6 +113,15 @@
 											<span class="status-active">Menunggu</span>
 										<?php elseif ($trip->status === 'onboard'): ?>
 											<span class="status-onboard">Dalam Perjalanan</span>
+										<?php endif; ?>
+									</td>
+									<td>
+										<?php if ($trip->status === 'active'): ?>
+											<button class="btn btn-sm btn-primary trip-action" data-trip-id="<?= $trip->tripId ?>" data-status="onboard">Naik</button>
+											<button class="btn btn-sm btn-outline-danger trip-action" data-trip-id="<?= $trip->tripId ?>" data-status="cancelled">Batal</button>
+										<?php elseif ($trip->status === 'onboard'): ?>
+											<button class="btn btn-sm btn-success trip-action" data-trip-id="<?= $trip->tripId ?>" data-status="completed">Selesai</button>
+											<button class="btn btn-sm btn-outline-danger trip-action" data-trip-id="<?= $trip->tripId ?>" data-status="cancelled">Batal</button>
 										<?php endif; ?>
 									</td>
 								</tr>
@@ -136,6 +146,18 @@
 			return status;
 		}
 
+		function actionButtons(tripId, status) {
+			if (status === 'active') {
+				return '<button class="btn btn-sm btn-primary trip-action" data-trip-id="' + tripId + '" data-status="onboard">Naik</button> '
+					+ '<button class="btn btn-sm btn-outline-danger trip-action" data-trip-id="' + tripId + '" data-status="cancelled">Batal</button>';
+			}
+			if (status === 'onboard') {
+				return '<button class="btn btn-sm btn-success trip-action" data-trip-id="' + tripId + '" data-status="completed">Selesai</button> '
+					+ '<button class="btn btn-sm btn-outline-danger trip-action" data-trip-id="' + tripId + '" data-status="cancelled">Batal</button>';
+			}
+			return '';
+		}
+
 		function renderTrips(data) {
 			// Update summary
 			$('#sum-passengers').text(data.summary.totalPassengers);
@@ -151,7 +173,7 @@
 			}
 
 			var html = '<div class="table-responsive"><table class="table table-striped">';
-			html += '<thead class="thead-dark"><tr><th>#</th><th>Nama Penumpang</th><th>Jumlah</th><th>Naik</th><th>Turun</th><th>Jarak</th><th>Harga</th><th>Waktu</th><th>Status</th></tr></thead><tbody>';
+			html += '<thead class="thead-dark"><tr><th>#</th><th>Nama Penumpang</th><th>Jumlah</th><th>Naik</th><th>Turun</th><th>Jarak</th><th>Harga</th><th>Waktu</th><th>Status</th><th>Aksi</th></tr></thead><tbody>';
 			$.each(trips, function(i, t) {
 				html += '<tr>';
 				html += '<td>' + (i + 1) + '</td>';
@@ -163,6 +185,7 @@
 				html += '<td><strong>' + t.price + '</strong></td>';
 				html += '<td><small>' + t.createdAt + '</small></td>';
 				html += '<td>' + statusBadge(t.status) + '</td>';
+				html += '<td>' + actionButtons(t.tripId, t.status) + '</td>';
 				html += '</tr>';
 			});
 			html += '</tbody></table></div>';
@@ -176,6 +199,43 @@
 				}
 			}, 'json');
 		}
+
+		// Manual status change (driver-confirmed boarding / drop-off / cancel).
+		var statusConfirm = { onboard: 'Konfirmasi penumpang sudah naik?', completed: 'Tandai trip selesai (penumpang turun)?', cancelled: 'Batalkan trip ini?' };
+		$(document).on('click', '.trip-action', function() {
+			var btn = $(this);
+			var tripId = btn.data('trip-id');
+			var newStatus = btn.data('status');
+			if (!confirm(statusConfirm[newStatus] || 'Ubah status trip?')) return;
+			$('.trip-action').prop('disabled', true);
+			$.post('/driver/update_trip_status', { tripId: tripId, newStatus: newStatus }, function(data) {
+				if (data.status === 'ok') {
+					renderTrips(data);
+				} else {
+					alert('Gagal mengubah status: ' + (data.message || 'tidak diketahui'));
+					$('.trip-action').prop('disabled', false);
+				}
+			}, 'json').fail(function() {
+				alert('Gagal terhubung ke server.');
+				$('.trip-action').prop('disabled', false);
+			});
+		});
+
+		// Keep the screen awake while driving so GPS tracking keeps running.
+		var wakeLock = null;
+		async function requestWakeLock() {
+			try {
+				if ('wakeLock' in navigator) {
+					wakeLock = await navigator.wakeLock.request('screen');
+				}
+			} catch (e) { /* wake lock not critical; ignore */ }
+		}
+		requestWakeLock();
+		document.addEventListener('visibilitychange', function() {
+			if (wakeLock !== null && document.visibilityState === 'visible') {
+				requestWakeLock();
+			}
+		});
 
 		// Start GPS tracking
 		if (navigator.geolocation) {

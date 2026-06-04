@@ -198,6 +198,53 @@ class Dev extends CI_Controller {
     	}
     }
 
+    /**
+     * Driver verification panel. Route admins (privilegeRoute = 1) approve or
+     * reject driver sign-ups here, since the public /driver/register endpoint
+     * has no automated phone verification.
+     */
+    public function drivers($action = 'list') {
+        $admin = $this->_requireRouteAdmin();
+        if (!$admin) {
+            return;
+        }
+        $this->load->model('Driver_model');
+        try {
+            if ($action === 'approve' || $action === 'reject') {
+                $driverId = intval($this->input->get('driverId'));
+                $newStatus = $action === 'approve' ? 'approved' : 'rejected';
+                $this->Driver_model->setDriverStatus($driverId, $newStatus);
+                $this->session->set_flashdata('message', 'Driver #' . $driverId . ' set to ' . $newStatus);
+                redirect('/dev/drivers');
+                return;
+            }
+            $drivers = $this->Driver_model->getDriversByStatus(null);
+            $this->load->view('dev/drivers_list', array('drivers' => $drivers));
+        } catch (Exception $e) {
+            $this->session->set_flashdata('message', $e->getMessage());
+            redirect('/dev');
+        }
+    }
+
+    /**
+     * Ensures a logged-in user with route-admin privilege. Returns the user row,
+     * or null after issuing a redirect when not allowed.
+     */
+    private function _requireRouteAdmin() {
+        if (!$this->session->has_userdata('email')) {
+            $this->session->set_flashdata('message', 'Please login');
+            redirect('/dev');
+            return null;
+        }
+        $user = $this->db->get_where('users', array('email' => $this->session->userdata('email')))->row();
+        if (!$user || intval($user->privilegeRoute) !== 1) {
+            $this->session->set_flashdata('message', 'You do not have permission to manage drivers.');
+            redirect('/dev/apikeys');
+            return null;
+        }
+        return $user;
+    }
+
     // TODO unify with Mainpage->_getValidatedLocale()
     private function _getValidatedLocale($locale) {
     	if (is_null($locale) || !isset($this->config->item('languages')[$locale])) {

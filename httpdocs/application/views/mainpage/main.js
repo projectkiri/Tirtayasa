@@ -354,11 +354,21 @@ $(document).ready(function () {
 				if (step[0] !== 'walk' && step[0] !== 'none') {
 					var pickupCoord = step[2][0];
 					var dropoffCoord = step[2][step[2].length - 1];
+					// Names for THIS leg only, so the driver sees the relevant segment of
+					// their trayek (e.g. UNPAR -> Wastukencana), not the rider's full trip.
+					// If a leg starts/ends at the rider's own origin/destination, prefer the
+					// place they typed; otherwise use the API's geocoded segment name (step[5]/[6]).
+					var segPickupName = (pickupCoord === coordinates['start'] && $('#startInput').val())
+						? $('#startInput').val() : (step[5] || pickupCoord);
+					var segDropoffName = (dropoffCoord === coordinates['finish'] && $('#finishInput').val())
+						? $('#finishInput').val() : (step[6] || dropoffCoord);
 					resultHTML2 += ' <button class="btn btn-sm btn-success board-btn ml-1" '
 						+ 'data-track-type="' + step[0] + '" '
 						+ 'data-track-id="' + step[1] + '" '
 						+ 'data-pickup="' + pickupCoord + '" '
-						+ 'data-dropoff="' + dropoffCoord + '"'
+						+ 'data-dropoff="' + dropoffCoord + '" '
+						+ 'data-pickup-name="' + encodeURIComponent(segPickupName) + '" '
+						+ 'data-dropoff-name="' + encodeURIComponent(segDropoffName) + '"'
 						+ '><?=$this->lang->line("Board")?></button>';
 				}
 				resultHTML2 += '</td></tr>';
@@ -564,10 +574,10 @@ $(document).ready(function () {
 		$('#board_track_id').val(btn.data('track-id'));
 		$('#board_pickup_lat').val(pickup[0]);
 		$('#board_pickup_lng').val(pickup[1]);
-		$('#board_pickup_name').val($('#startInput').val());
+		$('#board_pickup_name').val(decodeURIComponent(btn.data('pickup-name') || '') || $('#startInput').val());
 		$('#board_dropoff_lat').val(dropoff[0]);
 		$('#board_dropoff_lng').val(dropoff[1]);
-		$('#board_dropoff_name').val($('#finishInput').val());
+		$('#board_dropoff_name').val(decodeURIComponent(btn.data('dropoff-name') || '') || $('#finishInput').val());
 		$('#boardModal').modal('show');
 	});
 

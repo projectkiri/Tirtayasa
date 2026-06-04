@@ -188,7 +188,12 @@ class Api extends CI_Controller {
 					}
 				}
 				if (!is_null($humanreadable)) {
-					$route_output[] = array($means, $means_detail, $points, $humanreadable, $booking_url);
+					// Indices 5 & 6 carry the humanized names of THIS segment's own
+					// endpoints (e.g. the boarding/alighting street for a transit leg),
+					// so a driver only sees the part of the journey on their trayek,
+					// not the rider's full origin-destination. Appended at the end to
+					// stay backwards-compatible with older clients that read [0..4].
+					$route_output[] = array($means, $means_detail, $points, $humanreadable, $booking_url, $humanized_from, $humanized_to);
 				}
 			}
 			$routing_result['steps'] = $route_output;
