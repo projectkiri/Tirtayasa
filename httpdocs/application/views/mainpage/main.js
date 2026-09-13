@@ -351,6 +351,26 @@ $(document).ready(function () {
 			resultHTML2 += resultIndex === 0 ? ' class="tab-pane active" role="tabpanel"><table class="table-striped">' : ' class="x tab-pane" role="tabpanel"><table class="table-striped">';
 			$.each(result.steps, function (stepIndex, step) {
 				resultHTML2 += '<tr><td class="p-1"><img src="../images/means/' + step[0] + '/' + step[1] + '.png" alt="' + step[1] + '"/></td><td class="p-1">' + step[3];
+				if (step[0] !== 'walk' && step[0] !== 'none') {
+					var pickupCoord = step[2][0];
+					var dropoffCoord = step[2][step[2].length - 1];
+					// Names for THIS leg only, so the driver sees the relevant segment of
+					// their trayek (e.g. UNPAR -> Wastukencana), not the rider's full trip.
+					// If a leg starts/ends at the rider's own origin/destination, prefer the
+					// place they typed; otherwise use the API's geocoded segment name (step[5]/[6]).
+					var segPickupName = (pickupCoord === coordinates['start'] && $('#startInput').val())
+						? $('#startInput').val() : (step[5] || pickupCoord);
+					var segDropoffName = (dropoffCoord === coordinates['finish'] && $('#finishInput').val())
+						? $('#finishInput').val() : (step[6] || dropoffCoord);
+					resultHTML2 += ' <button class="btn btn-sm btn-success board-btn ml-1" '
+						+ 'data-track-type="' + step[0] + '" '
+						+ 'data-track-id="' + step[1] + '" '
+						+ 'data-pickup="' + pickupCoord + '" '
+						+ 'data-dropoff="' + dropoffCoord + '" '
+						+ 'data-pickup-name="' + encodeURIComponent(segPickupName) + '" '
+						+ 'data-dropoff-name="' + encodeURIComponent(segDropoffName) + '"'
+						+ '><?=$this->lang->line("Board")?></button>';
+				}
 				resultHTML2 += '</td></tr>';
 			});
 			resultHTML2 += "<tr><td class=\"p-1 center\" colspan=\"2\">";
@@ -544,4 +564,52 @@ $(document).ready(function () {
 		var d = R * c;
 		return d;
 	}
+
+	// Board trip handler
+	$(document).on('click', '.board-btn', function() {
+		var btn = $(this);
+		var pickup = btn.data('pickup').split(',');
+		var dropoff = btn.data('dropoff').split(',');
+		$('#board_track_type').val(btn.data('track-type'));
+		$('#board_track_id').val(btn.data('track-id'));
+		$('#board_pickup_lat').val(pickup[0]);
+		$('#board_pickup_lng').val(pickup[1]);
+		$('#board_pickup_name').val(decodeURIComponent(btn.data('pickup-name') || '') || $('#startInput').val());
+		$('#board_dropoff_lat').val(dropoff[0]);
+		$('#board_dropoff_lng').val(dropoff[1]);
+		$('#board_dropoff_name').val(decodeURIComponent(btn.data('dropoff-name') || '') || $('#finishInput').val());
+		$('#boardModal').modal('show');
+	});
+
+	$('#boardSubmit').click(function() {
+		var name = $('#board_passenger_name').val().trim();
+		var count = parseInt($('#board_passenger_count').val()) || 1;
+		if (!name) {
+			alert('<?=$this->lang->line("Board name required")?>');
+			return;
+		}
+		$(this).prop('disabled', true).text('...');
+		protocol.boardTrip({
+			passenger_name: name,
+			passenger_count: count,
+			track_type_id: $('#board_track_type').val(),
+			track_id: $('#board_track_id').val(),
+			pickup_lat: $('#board_pickup_lat').val(),
+			pickup_lng: $('#board_pickup_lng').val(),
+			pickup_name: $('#board_pickup_name').val(),
+			dropoff_lat: $('#board_dropoff_lat').val(),
+			dropoff_lng: $('#board_dropoff_lng').val(),
+			dropoff_name: $('#board_dropoff_name').val()
+		}, function(result) {
+			$('#boardModal').modal('hide');
+			$('#boardSubmit').prop('disabled', false).text('<?=$this->lang->line("Board confirm")?>');
+			$('#board_passenger_name').val('');
+			$('#board_passenger_count').val('1');
+			if (result.status === 'ok') {
+				showAlert('<?=$this->lang->line("Board success")?> (' + result.price + ')', 'success');
+			} else {
+				showAlert('<?=$this->lang->line("Board failed")?>', 'alert');
+			}
+		});
+	});
 });

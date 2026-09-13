@@ -25,6 +25,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			}
 		});
 	};
+	this.boardTrip = function(data, successHandler) {
+		$.ajax({
+			url: HANDLE_URL,
+			type: "POST",
+			data: $.extend({ mode: "boardtrip", version: "3", apikey: apikey }, data),
+			success: function(result) { successHandler(result); },
+			error: function() { errorHandler(); }
+		});
+	};
 	this.findRoute = function(start, finish, locale, successHandler) {
 		$.ajax({
 			url: HANDLE_URL,
