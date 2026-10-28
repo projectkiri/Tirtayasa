@@ -1,0 +1,6 @@
+#Add Etag and cache control
+FileETag INode MTime Size
+Header set Cache-control "max-age=15m, must-revalidate"
+
+# Disable PHP for asset folder
+php_flag engine off
