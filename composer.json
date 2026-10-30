@@ -1,0 +1,65 @@
+{
+	"name": "pndevworks/appstarter",
+	"type": "project",
+	"description": "PNDevWorks starter app",
+	"homepage": "https://dnartworks.co.id",
+	"license": "proprietary",
+    "require": {
+		"php": "^8.1",
+		"codeigniter4/framework": "^4"
+	},
+    "require-dev": {
+        "fakerphp/faker": "^1.24",
+        "mikey179/vfsstream": "^1.6.12",
+        "phpunit/phpunit": "^10.5.16 || ^11.2"
+    },
+    "suggest": {
+        "ext-curl": "If you use CURLRequest class",
+        "ext-dom": "If you use TestResponse",
+        "ext-exif": "If you run Image class tests",
+        "ext-fileinfo": "Improves mime type detection for files",
+        "ext-gd": "If you use Image class GDHandler",
+        "ext-imagick": "If you use Image class ImageMagickHandler",
+        "ext-libxml": "If you use TestResponse",
+        "ext-memcache": "If you use Cache class MemcachedHandler with Memcache",
+        "ext-memcached": "If you use Cache class MemcachedHandler with Memcached",
+        "ext-mysqli": "If you use MySQL",
+        "ext-oci8": "If you use Oracle Database",
+        "ext-pgsql": "If you use PostgreSQL",
+        "ext-readline": "Improves CLI::input() usability",
+        "ext-redis": "If you use Cache class RedisHandler",
+        "ext-simplexml": "If you format XML",
+        "ext-sodium": "If you use Encryption SodiumHandler",
+        "ext-sqlite3": "If you use SQLite3",
+        "ext-sqlsrv": "If you use SQL Server",
+        "ext-xdebug": "If you use CIUnitTestCase::assertHeaderEmitted()"
+    },
+    "autoload": {
+        "psr-4": {
+            "CodeIgniter\\": "system/"
+        },
+        "exclude-from-classmap": [
+            "**/Database/Migrations/**"
+        ]
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
+    },
+    "scripts": {
+		"test": "phpunit",
+		"analyze": "phpstan analyze"
+	},
+	"support": {
+		"forum": "http://forum.codeigniter.com/",
+		"source": "https://github.com/codeigniter4/CodeIgniter4",
+		"slack": "https://codeigniterchat.slack.com"
+	},
+	"repositories": {
+		"gl.dnartworks.co.id/50": {
+			"type": "composer",
+			"url": "https://gl.dnartworks.co.id/api/v4/group/50/-/packages/composer/packages.json"
+		}
+	}
+}
