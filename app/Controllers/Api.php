@@ -225,6 +225,7 @@ class Api extends BaseController {
             $city_lat = $regions[$region]['lat'];
             $city_lon = $regions[$region]['lon'];
             $city_radius = $regions[$region]['radius'];
+            $querystring = esc($querystring, 'url');
             $full_url = config('Tirtayasa')->url_searchplace . '?key=' . config('Credentials')->google_server_key . "&input=$querystring&inputtype=textquery&locationbias=circle:$city_radius@$city_lat,$city_lon&fields=name,geometry";
             $result = file_get_contents($full_url);
             if ($result === FALSE) {
